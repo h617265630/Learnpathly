@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private pages
+Disallow: /admin/
+Disallow: /account/
+Disallow: /my-*
+Disallow: /notification
+Disallow: /createpath
+Disallow: /deck
+Disallow: /ai-path-detail
+Disallow: /stack
+Disallow: /card-ui
+
+# Allow search engines to crawl public content
+Allow: /home
+Allow: /resources
+Allow: /resources-trend
+Allow: /learningpool
+Allow: /learningpool/category/
+Allow: /ai-path
+Allow: /tools
+Allow: /plan
+Allow: /about
+
+Sitemap: https://www.learnpathly.com/sitemap.xml

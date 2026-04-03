@@ -1,0 +1,582 @@
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Search, X } from 'lucide-react'
+import { Button } from '@/components/ui/Button'
+import { Badge } from '@/components/ui/Badge'
+import {
+  deleteMyResource,
+  listMyResources,
+  type DbResource,
+} from '@/api/resource'
+import { formatPlatform } from '@/utils/platform'
+
+const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'
+
+type UiResource = {
+  id: number
+  title: string
+  summary: string
+  category: string
+  categoryColor: string
+  platform: string
+  thumbnail: string
+  type: 'video' | 'document' | 'article'
+  addedDate?: string
+  is_system_public?: boolean
+  manual_weight?: number | null
+  user_seq?: number | null
+}
+
+function getCategoryColor(category?: string): string {
+  const key = String(category || '').trim().toLowerCase() || 'other'
+  const palette = ['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316', '#84cc16']
+  let hash = 0
+  for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) >>> 0
+  return palette[hash % palette.length]
+}
+
+function formatDate(iso?: string | null) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  if (Number.isNaN(d.getTime())) return ''
+  return d.toLocaleDateString()
+}
+
+function mapDbToUi(r: DbResource): UiResource {
+  const platform = String((r as any).platform || '').trim() || '—'
+  const rawType = String((r as any).resource_type || '').trim().toLowerCase()
+  const type: UiResource['type'] = rawType === 'document' || rawType === 'article' ? rawType : 'video'
+  const category = String((r as any).category_name || '').trim() || 'Other'
+  return {
+    id: r.id,
+    title: r.title,
+    summary: String((r as any).summary || '').trim(),
+    category,
+    categoryColor: getCategoryColor(category),
+    platform,
+    thumbnail: String(r.thumbnail || '').trim() || FALLBACK_THUMB,
+    type,
+    addedDate: formatDate(r.created_at),
+    is_system_public: Boolean((r as any).is_system_public),
+    manual_weight: (r as any).manual_weight ?? null,
+    user_seq: (r as any).user_seq ?? null,
+  }
+}
+
+function getWeightCardClass(resource: UiResource) {
+  const w = Number(resource.manual_weight)
+  if (w >= 5) return 'weight-gold'
+  if (w === 4) return 'weight-silver'
+  if (w === 3) return 'weight-bronze'
+  if (w === 2) return 'weight-iron'
+  return ''
+}
+
+export default function MyResource() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const [resources, setResources] = useState<UiResource[]>([])
+  const [searchKeyword, setSearchKeyword] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [publicUpdatingId, setPublicUpdatingId] = useState<number | null>(null)
+  const [expandAll, setExpandAll] = useState(true)
+  const [clickedDeck, setClickedDeck] = useState<number | null>(null)
+
+  const [activeResourceId, setActiveResourceId] = useState<number | null>(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState<UiResource | null>(null)
+  const [deleteError, setDeleteError] = useState('')
+
+  const activeResource = useMemo(() => {
+    if (activeResourceId === null) return null
+    return resources.find(r => r.id === activeResourceId) || null
+  }, [activeResourceId, resources])
+
+  const filteredResources = useMemo(() => {
+    const q = searchKeyword.trim().toLowerCase()
+    return resources.filter(r => {
+      if (['xiaohongshu', 'xhs'].includes(String(r.platform || '').trim().toLowerCase())) return false
+      if (!q) return true
+      return (
+        r.title.toLowerCase().includes(q) ||
+        r.summary.toLowerCase().includes(q) ||
+        r.category.toLowerCase().includes(q) ||
+        r.platform.toLowerCase().includes(q)
+      )
+    })
+  }, [resources, searchKeyword])
+
+  type Deck = { key: string; name: string; cards: UiResource[] }
+
+  const decks = useMemo<Deck[]>(() => {
+    const map = new Map<string, UiResource[]>()
+    for (const r of filteredResources) {
+      const key = String(r.category || '').trim() || 'Other'
+      const list = map.get(key)
+      if (list) list.push(r)
+      else map.set(key, [r])
+    }
+    return Array.from(map.entries())
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .map(([name, cards]) => ({ key: name, name, cards }))
+  }, [filteredResources])
+
+  const totalCards = useMemo(() => decks.reduce((sum, d) => sum + d.cards.length, 0), [decks])
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const data = await listMyResources()
+      setResources((data || []).map(mapDbToUi))
+    } catch {
+      setResources([])
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    load()
+    window.addEventListener('focus', load)
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') load()
+    })
+    return () => {
+      window.removeEventListener('focus', load)
+    }
+  }, [load])
+
+  useEffect(() => {
+    setExpandAll(true)
+    setClickedDeck(null)
+  }, [location.pathname])
+
+  function isDeckExpanded(deckIndex: number) {
+    return expandAll || clickedDeck === deckIndex
+  }
+
+  function toggleDeck(deckIndex: number) {
+    setClickedDeck(clickedDeck === deckIndex ? null : deckIndex)
+  }
+
+  function openCard(resource: UiResource) {
+    setActiveResourceId(resource.id)
+  }
+
+  function closeActiveResource() {
+    setActiveResourceId(null)
+  }
+
+  function seeDetail(resource: UiResource) {
+    closeActiveResource()
+    viewResource(resource)
+  }
+
+  function editFromModal(resource: UiResource) {
+    closeActiveResource()
+    navigate(`/my-resources/${resource.id}/edit`)
+  }
+
+  function deleteFromModal(resource: UiResource) {
+    closeActiveResource()
+    setDeleteTarget(resource)
+    setShowDeleteConfirm(true)
+  }
+
+  function viewResource(resource: UiResource) {
+    const name = resource.type === 'video' ? 'my-resource-video' : resource.type === 'document' ? 'my-resource-document' : 'my-resource-article'
+    navigate(`/${name.replace('my-', 'my-resources/').replace('resource-', '')}`.replace('my-resources/video', 'my-resources/video').replace('my-resources/document', 'my-resources/document').replace('my-resources/article', 'my-resources/article'))
+    navigate(`/my-resources/${resource.type}/${resource.id}`)
+  }
+
+  function closeDeleteConfirm() {
+    if (deletingId !== null) return
+    setShowDeleteConfirm(false)
+    setDeleteTarget(null)
+    setDeleteError('')
+  }
+
+  async function confirmDelete() {
+    if (!deleteTarget || deletingId !== null) return
+    setDeleteError('')
+    setDeletingId(deleteTarget.id)
+    try {
+      await deleteMyResource(deleteTarget.id)
+      setResources(prev => prev.filter(r => r.id !== deleteTarget.id))
+      setShowDeleteConfirm(false)
+      setDeleteTarget(null)
+    } catch (e: any) {
+      setDeleteError(String(e?.response?.data?.detail || e?.message || 'Failed to delete'))
+    } finally {
+      setDeletingId(null)
+    }
+  }
+
+  async function togglePublic(resource: UiResource) {
+    setPublicUpdatingId(resource.id)
+    setResources(prev => prev.map(r => {
+      if (r.id !== resource.id) return r
+      return { ...r, is_system_public: !Boolean(r.is_system_public) }
+    }))
+    setPublicUpdatingId(null)
+  }
+
+  return (
+    <div className="min-h-screen bg-stone-50">
+      {/* Masthead */}
+      <header className="border-b border-stone-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="h-px w-8 bg-indigo-500"></span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">Personal</span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-black tracking-tight text-stone-900 leading-[0.92]">
+                My<br /><span className="text-indigo-600">Resources.</span>
+              </h1>
+            </div>
+            <div className="hidden md:flex flex-col items-end gap-2">
+              <span className="text-xs text-stone-400">
+                <span className="font-semibold text-stone-700">{totalCards}</span> resources ·
+                <span className="font-semibold text-stone-700">{decks.length}</span> decks
+              </span>
+            </div>
+          </div>
+
+          {/* Toolbar */}
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+            {/* Search */}
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400" />
+              <input
+                type="text"
+                value={searchKeyword}
+                onChange={e => setSearchKeyword(e.target.value)}
+                placeholder="Search your resources..."
+                className="h-10 w-full rounded-none border border-stone-200 bg-white pl-10 pr-4 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-colors"
+              />
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setExpandAll(!expandAll)}
+                className="h-10 px-4 text-xs font-semibold uppercase tracking-wider border border-stone-200 bg-white text-stone-600 hover:border-stone-400 hover:text-stone-900 transition-all rounded-none"
+              >
+                {expandAll ? 'Collapse all' : 'Expand all'}
+              </button>
+              <Button
+                size="sm"
+                className="rounded-none bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-xs uppercase tracking-wider px-5"
+                onClick={() => navigate('/my-resources/add')}
+              >
+                + Add
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Main content */}
+      <main className="mx-auto max-w-7xl px-4 py-8">
+        {/* Loading */}
+        {loading && (
+          <div className="py-20 text-center">
+            <div className="inline-flex items-center gap-3">
+              <div className="h-2 w-2 rounded-full bg-indigo-500 animate-pulse"></div>
+              <span className="text-sm text-stone-400">Loading your library…</span>
+            </div>
+          </div>
+        )}
+
+        {/* Empty */}
+        {!loading && filteredResources.length === 0 && (
+          <div className="py-20 text-center">
+            <div className="text-5xl mb-4">📚</div>
+            <h3 className="text-base font-semibold text-stone-700 mb-1">No resources yet</h3>
+            <p className="text-sm text-stone-400 mb-5">Start by adding your first resource to build your personal library.</p>
+            <Button
+              className="rounded-none bg-indigo-600 text-white hover:bg-indigo-700 font-semibold text-sm"
+              onClick={() => navigate('/my-resources/add')}
+            >
+              + Add your first resource
+            </Button>
+          </div>
+        )}
+
+        {/* Decks */}
+        {!loading && filteredResources.length > 0 && decks.map((deck, deckIndex) => (
+          <div key={deck.key} className="mb-12">
+            {/* Deck header */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-1 h-6 bg-indigo-500 rounded-full"></div>
+                <h2 className="text-base font-bold text-stone-900 tracking-tight">{deck.name}</h2>
+                <span className="text-xs text-stone-400 font-medium">{deck.cards.length} cards</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => toggleDeck(deckIndex)}
+                className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 hover:text-stone-600 transition-colors"
+              >
+                {isDeckExpanded(deckIndex) ? 'Collapse' : 'Expand'}
+              </button>
+            </div>
+
+            {/* Expanded grid */}
+            {isDeckExpanded(deckIndex) && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                {deck.cards.map((resource) => (
+                  <article
+                    key={resource.id}
+                    onClick={() => openCard(resource)}
+                    className={`aspect-[4/5] rounded-md overflow-hidden bg-white border border-stone-100 hover:border-stone-200 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col ${getWeightCardClass(resource)}`}
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative bg-stone-100 overflow-hidden transition-transform duration-500" style={{ width: '100%', aspectRatio: '16 / 9' }}>
+                      <img
+                        src={resource.thumbnail}
+                        alt={resource.title}
+                        className="block w-full h-full object-contain"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#f7f7f7' }}
+                      />
+                      {/* Type badge */}
+                      <div className="absolute top-2 left-2">
+                        <Badge variant="secondary" className="text-[9px] uppercase tracking-wider">
+                          {resource.type}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 p-3.5 flex flex-col">
+                      <span
+                        className="text-[10px] font-semibold uppercase tracking-wider mb-1.5"
+                        style={{ color: resource.categoryColor }}
+                      >
+                        {resource.category}
+                      </span>
+                      <h3
+                        className="text-sm font-semibold text-stone-800 leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors"
+                        title={resource.title}
+                      >
+                        {resource.title}
+                      </h3>
+                      <p className="text-xs text-stone-400 mt-1 line-clamp-2 flex-1">{resource.summary}</p>
+                      <div className="flex items-center justify-between mt-3 pt-2 border-t border-stone-50">
+                        <span className="text-[10px] text-stone-400">{formatPlatform(resource.platform)}</span>
+                        <span className="text-[10px] font-semibold text-stone-400">#{resource.user_seq ?? resource.id}</span>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+
+            {/* Collapsed fan view */}
+            {!isDeckExpanded(deckIndex) && (
+              <div
+                className="relative h-64 overflow-visible cursor-pointer"
+                onClick={() => toggleDeck(deckIndex)}
+              >
+                <div className="inline-flex items-center h-full" style={{ paddingLeft: '16px' }}>
+                  {deck.cards.slice(0, 5).map((resource, cardIndex) => (
+                    <div
+                      key={resource.id}
+                      onClick={e => { e.stopPropagation(); openCard(resource) }}
+                      className={`shrink-0 w-52 rounded-md overflow-hidden bg-white border border-stone-100 shadow-sm transition-all duration-300 cursor-pointer hover:shadow-xl flex flex-col ${getWeightCardClass(resource)}`}
+                      style={{
+                        marginLeft: cardIndex === 0 ? '0' : '-208px',
+                        zIndex: cardIndex,
+                        transform: `rotate(${(5 - 1 - cardIndex) * 0.3}deg)`,
+                      }}
+                    >
+                      <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
+                        <img
+                          src={resource.thumbnail}
+                          alt={resource.title}
+                          className="block w-full h-full object-contain"
+                          style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#f7f7f7' }}
+                        />
+                        <div className="absolute top-2 left-2">
+                          <Badge variant="secondary" className="text-[9px] uppercase tracking-wider">
+                            {resource.type}
+                          </Badge>
+                        </div>
+                      </div>
+                      <div className="flex-1 p-3 flex flex-col">
+                        <span
+                          className="text-[10px] font-semibold uppercase tracking-wider mb-1"
+                          style={{ color: resource.categoryColor }}
+                        >
+                          {resource.category}
+                        </span>
+                        <h3 className="text-xs font-semibold text-stone-800 leading-snug line-clamp-2" title={resource.title}>
+                          {resource.title}
+                        </h3>
+                        <p className="text-[11px] text-stone-400 mt-1 line-clamp-2 flex-1">{resource.summary}</p>
+                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-stone-50">
+                          <span className="text-[10px] text-stone-400">{formatPlatform(resource.platform)}</span>
+                          <span className="text-[10px] text-stone-400">#{resource.user_seq ?? resource.id}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <p className="text-xs text-stone-400 mt-4">{deck.cards.length} cards</p>
+          </div>
+        ))}
+      </main>
+
+      {/* Detail modal */}
+      {activeResource && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={closeActiveResource}>
+          <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
+          <div
+            className="relative w-full max-w-md rounded-md overflow-hidden bg-white shadow-2xl border border-stone-100"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
+              <img
+                src={activeResource.thumbnail || FALLBACK_THUMB}
+                alt={activeResource.title}
+                className="block w-full h-full object-contain"
+                style={{ width: '100%', height: '100%', objectFit: 'contain', backgroundColor: '#f7f7f7' }}
+              />
+              <button
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center text-stone-500 hover:text-stone-900 transition"
+                onClick={closeActiveResource}
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                <span
+                  className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                  style={{ backgroundColor: activeResource.categoryColor + '18', color: activeResource.categoryColor }}
+                >
+                  {activeResource.category}
+                </span>
+                <span className="text-[10px] text-white/80">#{String(activeResource.id).padStart(3, '0')}</span>
+              </div>
+            </div>
+
+            <div className="p-5 border-b border-stone-100">
+              <h2 className="text-lg font-bold text-stone-900">{activeResource.title}</h2>
+            </div>
+
+            <div className="p-5">
+              <p className="text-sm text-stone-500 mb-4 leading-relaxed">{activeResource.summary}</p>
+              <div className="flex items-center gap-4 text-xs text-stone-400">
+                <span>{formatPlatform(activeResource.platform)}</span>
+                <span className="text-stone-200">·</span>
+                <span className="font-semibold text-stone-600 uppercase tracking-wider text-[10px]">{activeResource.type}</span>
+              </div>
+            </div>
+
+            <div className="p-5 border-t border-stone-100 flex flex-col gap-3">
+              <Button
+                onClick={() => seeDetail(activeResource)}
+                className="w-full rounded-full bg-stone-900 text-white hover:bg-stone-800 font-semibold text-sm transition-all"
+              >
+                View details
+              </Button>
+              <div className="flex items-center gap-2">
+                {/* Privacy toggle */}
+                <button
+                  type="button"
+                  onClick={() => togglePublic(activeResource)}
+                  disabled={publicUpdatingId === activeResource.id}
+                  className="relative inline-flex h-8 w-28 items-center rounded-full border border-stone-200 bg-stone-50 p-0.5 transition-colors"
+                  aria-label="Toggle privacy"
+                >
+                  <span
+                    className="absolute inset-y-0.5 left-0.5 w-[calc(50%-0.25rem)] rounded-full shadow-sm transition-transform duration-200"
+                    style={{
+                      transform: activeResource.is_system_public ? 'translateX(calc(100% + 0.25rem))' : 'translateX(0)',
+                      backgroundColor: activeResource.is_system_public ? '#f87171' : '#818cf8',
+                    }}
+                  />
+                  <span className="relative z-10 flex w-full text-[11px] font-semibold">
+                    <span className={`flex w-1/2 justify-center ${activeResource.is_system_public ? 'text-stone-400' : 'text-white'}`}>Private</span>
+                    <span className={`flex w-1/2 justify-center ${activeResource.is_system_public ? 'text-white' : 'text-stone-400'}`}>Public</span>
+                  </span>
+                </button>
+
+                <div className="flex-1"></div>
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-none h-8 text-xs"
+                  onClick={() => editFromModal(activeResource)}
+                >
+                  Edit
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="rounded-none h-8 text-xs text-red-500 border-red-200 hover:bg-red-50 hover:border-red-300"
+                  disabled={deletingId === activeResource.id}
+                  onClick={() => deleteFromModal(activeResource)}
+                >
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete confirm */}
+      {showDeleteConfirm && deleteTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-md bg-white shadow-2xl border border-stone-100 overflow-hidden">
+            <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
+              <h2 className="text-base font-bold text-stone-900">Delete resource?</h2>
+              <button
+                className="w-7 h-7 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-600 transition"
+                onClick={closeDeleteConfirm}
+                disabled={deletingId !== null}
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-6 space-y-3">
+              <p className="text-sm text-stone-600">This will permanently delete the resource. This action cannot be undone.</p>
+              <div className="rounded-md border border-stone-100 bg-stone-50/50 p-3">
+                <div className="text-sm font-semibold text-stone-800 line-clamp-1">{deleteTarget.title}</div>
+                <div className="text-xs text-stone-400 mt-0.5">ID: {deleteTarget.id}</div>
+              </div>
+              {deleteError && <p className="text-sm text-red-500">{deleteError}</p>}
+            </div>
+            <div className="px-6 py-4 border-t border-stone-100 flex justify-end gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="rounded-none h-8 text-xs"
+                onClick={closeDeleteConfirm}
+                disabled={deletingId !== null}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                className="rounded-none h-8 text-xs bg-red-500 text-white hover:bg-red-600 border-0"
+                onClick={confirmDelete}
+                disabled={deletingId !== null}
+              >
+                {deletingId !== null ? 'Deleting…' : 'Delete'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,13 @@
+/* App shell styles */
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-stone-50);
+  color: var(--color-stone-900);
+}
