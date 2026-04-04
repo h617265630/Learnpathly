@@ -256,14 +256,14 @@ export default function Plan() {
 
                 <div className="flex items-end gap-1 mb-1">
                   <span className="text-6xl font-black tracking-tight text-stone-900">
-                    {billingCycle === 'monthly' ? '$6' : '$60'}
+                    {billingCycle === 'monthly' ? '$0' : '$0'}
                   </span>
                   <span className="text-sm text-stone-400 mb-2.5">
                     {billingCycle === 'monthly' ? '/ month' : '/ year'}
                   </span>
                 </div>
                 <p className="text-xs text-stone-400 mb-8">
-                  {billingCycle === 'yearly' ? 'Billed annually · Save $12/year' : 'Billed monthly · $72/year'}
+                  {billingCycle === 'yearly' ? 'Billed annually · Save $0/year' : 'Billed monthly · $0/year'}
                 </p>
 
                 <div className="space-y-2 mb-8">
@@ -300,11 +300,11 @@ export default function Plan() {
                 <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Basic</span>
               </div>
               <div className="flex items-end gap-1 mb-1">
-                <span className="text-5xl font-black tracking-tight text-stone-900">$48</span>
+                <span className="text-5xl font-black tracking-tight text-stone-900">$0</span>
                 <span className="text-sm text-stone-400 mb-2">/ year</span>
               </div>
               <p className="text-xs text-stone-500 mb-6 leading-relaxed">
-                {billingCycle === 'yearly' ? 'Billed annually · Save $12/yr' : '$4/month'} · Pro features, simpler billing
+                {billingCycle === 'yearly' ? 'Billed annually · Save $0/yr' : '$0/month'} · Pro features, simpler billing
               </p>
 
               <div className="space-y-2 mb-8">

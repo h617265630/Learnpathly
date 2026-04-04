@@ -154,8 +154,8 @@ export default function About() {
         <div className="max-w-3xl">
           <blockquote className="text-2xl md:text-3xl font-light leading-snug text-stone-700">
             "Structure doesn't constrain creativity—it
-            <span className="font-semibold text-emerald-700">amplifies</span> it. A learning path isn't a rigid curriculum; it's a
-            <span className="font-semibold text-sky-700">map</span> that keeps you oriented when the terrain gets steep."
+            <span className="font-semibold text-emerald-700"> amplifies</span> it. A learning path isn't a rigid curriculum; it's a
+            <span className="font-semibold text-sky-700"> map</span> that keeps you oriented when the terrain gets steep."
           </blockquote>
           <p className="mt-6 text-sm text-stone-400">— Learnpathly, Design Principles</p>
         </div>
