@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Search, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
+import { ResourceCard, type UiResource as RcResource } from '@/components/ResourceCard'
 import {
   deleteMyResource,
   listMyResources,
@@ -70,6 +71,21 @@ function getWeightCardClass(resource: UiResource) {
   if (w === 3) return 'weight-bronze'
   if (w === 2) return 'weight-iron'
   return ''
+}
+
+function toRcResource(r: UiResource): RcResource {
+  return {
+    id: r.id,
+    title: r.title,
+    summary: r.summary,
+    categoryLabel: r.category,
+    categoryColor: r.categoryColor,
+    platform: r.platform,
+    platformLabel: formatPlatform(r.platform),
+    typeLabel: r.type,
+    thumbnail: r.thumbnail,
+    resource_type: r.type,
+  }
 }
 
 export default function MyResource() {
@@ -329,50 +345,17 @@ export default function MyResource() {
 
             {/* Expanded grid */}
             {isDeckExpanded(deckIndex) && (
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {deck.cards.map((resource) => (
-                  <article
-                    key={resource.id}
-                    onClick={() => openCard(resource)}
-                    className={`aspect-[4/5] rounded-sm overflow-hidden bg-white border border-stone-100 hover:border-stone-200 hover:shadow-md transition-all duration-200 cursor-pointer flex flex-col ${getWeightCardClass(resource)}`}
-                  >
-                    {/* Thumbnail */}
-                    <div className="relative bg-stone-100 overflow-hidden transition-transform duration-500" style={{ width: '100%', aspectRatio: '16 / 9' }}>
-                      <img
-                        src={resource.thumbnail}
-                        alt={resource.title}
-                        className="block w-full h-full object-contain bg-stone-50"
-                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                      />
-                      {/* Type badge */}
-                      <div className="absolute top-1.5 left-1.5">
-                        <Badge variant="secondary" className="text-[8px] uppercase tracking-wider px-1.5 py-0.5">
-                          {resource.type}
-                        </Badge>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="flex-1 p-2 flex flex-col">
-                      <span
-                        className="text-[9px] font-semibold uppercase tracking-wider mb-1"
-                        style={{ color: resource.categoryColor }}
-                      >
-                        {resource.category}
-                      </span>
-                      <h3
-                        className="text-[11px] font-semibold text-stone-800 leading-snug line-clamp-2 group-hover:text-amber-700 transition-colors"
-                        title={resource.title}
-                      >
-                        {resource.title}
-                      </h3>
-                      <p className="text-[10px] text-stone-400 mt-0.5 line-clamp-2 flex-1">{resource.summary}</p>
-                      <div className="flex items-center justify-between mt-2 pt-1.5 border-t border-stone-50">
-                        <span className="text-[9px] text-stone-400">{formatPlatform(resource.platform)}</span>
-                        <span className="text-[9px] font-semibold text-stone-400">#{resource.user_seq ?? resource.id}</span>
-                      </div>
-                    </div>
-                  </article>
+                  <div key={resource.id} className={getWeightCardClass(resource)}>
+                    <ResourceCard
+                      resource={toRcResource(resource)}
+                      onOpen={() => openCard(resource)}
+                      onAdd={() => {}}
+                      saving={false}
+                      saved={false}
+                    />
+                  </div>
                 ))}
               </div>
             )}
