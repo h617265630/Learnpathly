@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { ChevronDown, Search, X } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { ChevronDown, Search, X, User, LogOut, LayoutDashboard, BookOpen, CreditCard, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import {
   listMyResources,
@@ -12,6 +12,8 @@ import {
   addResourceToMyLearningPath,
 } from '@/api/learningPath'
 import { listCategories, type Category } from '@/api/category'
+import { useAuth } from '@/stores/auth'
+import { cn } from '@/utils/cn'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -65,6 +67,14 @@ function toAbsoluteImageUrl(raw: unknown): string {
   return url
 }
 
+const USER_MENU_ITEMS = [
+  { to: '/account/user-info', label: 'Account', icon: User },
+  { to: '/my-paths', label: 'My Paths', icon: LayoutDashboard },
+  { to: '/my-resources', label: 'My Resources', icon: BookOpen },
+  { to: '/account/plan', label: 'Plan & Billing', icon: CreditCard },
+  { to: '/account', label: 'Settings', icon: Settings },
+]
+
 // ─── Templates ─────────────────────────────────────────────────────────────────
 
 const TEMPLATES: Record<TemplateId, { label: string; description: string; meta: Partial<PathMeta> }> = {
@@ -94,6 +104,9 @@ const TEMPLATES: Record<TemplateId, { label: string; description: string; meta: 
 
 export default function CreatePath() {
   const navigate = useNavigate()
+  const { user, isAuthed, logout } = useAuth()
+
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
 
   // Path metadata
   const [pathMeta, setPathMeta] = useState<PathMeta>({
@@ -398,9 +411,66 @@ export default function CreatePath() {
                 <span className="text-sky-600">Learning Path.</span>
               </h1>
             </div>
-            <div className="hidden md:flex flex-col items-end gap-1">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">Step 1 · 2 · 3</span>
-            </div>
+
+            {/* User dropdown */}
+            {isAuthed && (
+              <div className="relative">
+                <button
+                  type="button"
+                  className="flex items-center gap-2 rounded-full border border-stone-200 bg-white px-2 py-1.5 hover:border-stone-300 hover:bg-stone-50 transition-all"
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  aria-expanded={userMenuOpen}
+                  aria-haspopup="menu"
+                >
+                  <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
+                    {user?.avatar_url ? (
+                      <img src={user.avatar_url} alt={user?.username || 'User'} referrerPolicy="no-referrer" className="h-full w-full object-cover" />
+                    ) : (
+                      (user?.username || 'U').slice(0, 2).toUpperCase()
+                    )}
+                  </div>
+                  <ChevronDown className={cn('w-3.5 h-3.5 text-stone-400 transition-transform', userMenuOpen ? 'rotate-180' : '')} />
+                </button>
+
+                {userMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setUserMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-2 w-52 rounded-md border border-stone-100 bg-white shadow-xl z-50 py-1">
+                      <div className="px-4 py-3 border-b border-stone-50 mb-1">
+                        <p className="text-sm font-semibold text-stone-900">{user?.username || 'User'}</p>
+                        <p className="text-xs text-stone-400 mt-0.5">{user?.email || ''}</p>
+                      </div>
+                      <div className="py-1">
+                        {USER_MENU_ITEMS.map((item) => (
+                          <Link
+                            key={item.to}
+                            to={item.to}
+                            className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
+                            onClick={() => setUserMenuOpen(false)}
+                          >
+                            <item.icon className="w-4 h-4 text-stone-400" />
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                      <div className="border-t border-stone-50 mt-1 pt-1 pb-1">
+                        <button
+                          type="button"
+                          className="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                          onClick={() => { logout(); setUserMenuOpen(false); navigate('/home') }}
+                        >
+                          <LogOut className="w-4 h-4" />
+                          Log out
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -667,7 +737,7 @@ export default function CreatePath() {
               </div>
 
               {/* Resource list */}
-              <div className="max-h-105 overflow-y-auto space-y-2 pr-1">
+              <div className="max-h-105 overflow-y-auto space-y-2 pr-1 mb-3">
                 {filteredResources.map((r) => (
                   <div
                     key={r.id}
@@ -706,8 +776,8 @@ export default function CreatePath() {
           {/* Right: selected resources */}
           <div className="col-span-12 lg:col-span-6">
             <div
-              className={`bg-white rounded-md border-2 p-5 min-h-100 ${
-                selected.length > 0 ? 'border-stone-200' : 'border-dashed border-stone-200'
+              className={`bg-white rounded-md p-5 h-full ${
+                selected.length > 0 ? 'border border-stone-100' : 'border border-dashed border-stone-100'
               }`}
               onDragOver={(e) => e.preventDefault()}
               onDrop={onDrop}
@@ -735,7 +805,7 @@ export default function CreatePath() {
                   <p className="text-sm text-stone-400 mt-2">Click a resource or drag it here</p>
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="max-h-150 overflow-y-auto space-y-2 pr-1 mb-3">
                   {selected.map((r, idx) => (
                     <div key={r.id} className="space-y-1.5">
                       {/* Resource card */}

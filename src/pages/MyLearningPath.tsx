@@ -184,13 +184,12 @@ export default function MyLearningPath() {
           </div>
 
           <div className="mt-6 flex items-center justify-end gap-4">
-            <Button
+            <Link
               to="/createpath"
-              size="sm"
-              className="bg-amber-500 text-white hover:bg-amber-600 font-semibold text-xs uppercase tracking-wider px-5"
+              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-8 px-5 text-xs rounded-md font-semibold bg-amber-500 text-white hover:bg-amber-600"
             >
               + New path
-            </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -219,12 +218,12 @@ export default function MyLearningPath() {
             <div className="text-5xl mb-4">🛤️</div>
             <h3 className="text-base font-semibold text-stone-700 mb-1">No learning paths yet</h3>
             <p className="text-sm text-stone-400 mb-5">Create your first learning path and start building.</p>
-            <Button
+            <Link
               to="/createpath"
-              className="bg-amber-500 text-white hover:bg-amber-600 font-semibold text-sm"
+              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-9 px-5 text-sm rounded-md font-semibold bg-amber-500 text-white hover:bg-amber-600"
             >
               Create your first path →
-            </Button>
+            </Link>
           </div>
         )}
 

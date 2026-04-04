@@ -122,7 +122,7 @@ export default function AIPath() {
                 disabled={loading || !query.trim()}
                 className="rounded-sm bg-amber-500 px-8 text-white hover:bg-amber-600"
               >
-                {loading ? 'Generating...' : 'Generate AI Path →'}
+                {loading ? 'Generating...' : 'Generate →'}
               </Button>
             </div>
 

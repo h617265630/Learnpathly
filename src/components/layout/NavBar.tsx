@@ -237,10 +237,10 @@ export function NavBar() {
             </nav>
 
             {/* Right actions */}
-            <div className="flex items-center gap-2">
-              {/* Search */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              {/* Search icon - visible on all screens */}
               {searchOpen ? (
-                <div className="hidden lg:flex items-center gap-2 h-9 rounded-full border border-slate-200 bg-white pl-3 pr-1">
+                <div className="flex items-center gap-2 h-9 rounded-full border border-slate-200 bg-white pl-3 pr-1">
                   <Search className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                   <input
                     ref={searchInputRef}
@@ -249,7 +249,7 @@ export function NavBar() {
                     type="text"
                     placeholder="Search..."
                     aria-label="Search"
-                    className="w-40 h-full text-xs text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
+                    className="w-24 sm:w-40 h-full text-xs text-slate-900 placeholder:text-slate-400 bg-transparent outline-none"
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') submitSearch()
                       if (e.key === 'Escape') closeSearch()
@@ -267,17 +267,15 @@ export function NavBar() {
               ) : (
                 <button
                   type="button"
-                  className="hidden lg:flex items-center gap-2 h-9 rounded-full border border-slate-200 bg-slate-50/50 pl-3 pr-4 text-xs text-slate-400 hover:border-slate-300 hover:text-slate-600 transition-all group"
+                  className="flex items-center justify-center h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-400 hover:border-slate-300 hover:text-slate-600 transition-all"
                   aria-label="Search"
                   onClick={openSearch}
                 >
-                  <Search className="w-3.5 h-3.5" />
-                  <span className="font-medium">Search</span>
-                  <kbd className="hidden xl:inline-flex items-center rounded border border-slate-200 bg-white px-1 py-0.5 text-[10px] text-slate-400 font-sans">⌘K</kbd>
+                  <Search className="w-4 h-4" />
                 </button>
               )}
 
-              {/* Auth: logged in */}
+              {/* Auth: logged in - desktop */}
               {isAuthed && (
                 <div
                   className="relative hidden md:block"
@@ -346,6 +344,24 @@ export function NavBar() {
                 </div>
               )}
 
+              {/* Auth: logged in - mobile avatar */}
+              {isAuthed && (
+                <button
+                  type="button"
+                  className="md:hidden flex items-center justify-center h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-white"
+                  aria-label="Account menu"
+                  onClick={() => setMobileMenuOpen(true)}
+                >
+                  <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-blue-500 flex items-center justify-center text-white text-[10px] font-bold">
+                    {user?.avatar_url ? (
+                      <img src={user.avatar_url} alt={displayName} referrerPolicy="no-referrer" className="h-full w-full object-cover" />
+                    ) : (
+                      userInitials
+                    )}
+                  </div>
+                </button>
+              )}
+
               {/* Auth: logged out */}
               {!isAuthed && (
                 <>
@@ -364,7 +380,7 @@ export function NavBar() {
                 </>
               )}
 
-              {/* CREATE button: always visible */}
+              {/* CREATE button: desktop only */}
               <div className="relative hidden md:inline-flex">
                 <button
                   type="button"
@@ -407,21 +423,24 @@ export function NavBar() {
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-100 bg-white">
             <div className="mx-auto max-w-7xl px-4 py-4 space-y-1">
-              {MAIN_NAV_LINKS.map((link) => (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={cn(
-                    'flex items-center justify-between px-3 py-2.5 rounded-sm text-sm font-semibold transition-colors',
-                    isActivePath(link.to, pathname)
-                      ? 'bg-slate-50 text-blue-600'
-                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                  )}
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <div className="pt-3 mt-3">
+                {MAIN_NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={cn(
+                      'flex items-center justify-between px-3 py-2.5 rounded-sm text-sm font-semibold transition-colors',
+                      isActivePath(link.to, pathname)
+                        ? 'bg-slate-50 text-blue-600'
+                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+
               <div className="border-t border-slate-100 pt-3 mt-3">
                 {CREATE_MENU_ITEMS.map((item) => (
                   <Link
@@ -435,6 +454,7 @@ export function NavBar() {
                   </Link>
                 ))}
               </div>
+
               {!isAuthed && (
                 <div className="border-t border-slate-100 pt-3 mt-3 space-y-1">
                   <Link
