@@ -1,7 +1,8 @@
 User-agent: *
 Allow: /
+Sitemap: https://www.learnpathly.com/sitemap.xml
 
-# Disallow admin and private pages
+# Disallow all private/admin routes
 Disallow: /admin/
 Disallow: /account/
 Disallow: /my-*
@@ -11,16 +12,30 @@ Disallow: /deck
 Disallow: /ai-path-detail
 Disallow: /stack
 Disallow: /card-ui
+Disallow: /login
+Disallow: /register
+Disallow: /resources/*/add-to-path
+Disallow: /learningpath/*/edit
+Disallow: /partical/
+Disallow: /my-partical/
 
-# Allow search engines to crawl public content
+# Allow public pages
 Allow: /home
 Allow: /resources
-Allow: /resources-trend
+Allow: /resources/video/
+Allow: /resources/document/
+Allow: /resources/article/
 Allow: /learningpool
 Allow: /learningpool/category/
 Allow: /ai-path
 Allow: /tools
 Allow: /plan
 Allow: /about
+Allow: /about/resources
+Allow: /about/learning-paths
+Allow: /about/progress
+Allow: /learningpath/
+Allow: /creator
 
-Sitemap: https://www.learnpathly.com/sitemap.xml
+# Crawl-delay for polite crawling
+Crawl-delay: 1

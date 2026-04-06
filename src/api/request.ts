@@ -86,9 +86,11 @@ request.interceptors.response.use(
       const detail = (error.response.data as any)?.detail
       const url = String(error?.config?.url || '')
       const isAuthRoute = url.includes('/users/login') || url.includes('/users/register')
+      // Public endpoints - don't redirect on 401, just reject the error
+      const isPublicRoute = url.includes('/resources') && !url.includes('/resources/me') || url.includes('/categories') || url.includes('/learning-paths/public') || url.includes('/learning-paths/')
       const isTokenExpired = typeof detail === 'string' && /token has expired/i.test(detail)
       const isUnauthorized = status === 401
-      if (!isAuthRoute && isUnauthorized) {
+      if (!isAuthRoute && !isPublicRoute && isUnauthorized) {
         // clear local auth state so UI doesn't think we're logged in
         clearAuth()
         if (isTokenExpired) {

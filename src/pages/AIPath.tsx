@@ -120,9 +120,16 @@ export default function AIPath() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || !query.trim()}
-                className="rounded-sm bg-amber-500 px-8 text-white hover:bg-amber-600"
+                className="rounded-sm bg-amber-500 px-6 py-2.5 text-sm font-bold text-white hover:bg-amber-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Generating...' : 'Generate →'}
+                {loading ? (
+                  'Generating...'
+                ) : (
+                  <>
+                    Generate
+                    <span className="ml-2">→</span>
+                  </>
+                )}
               </Button>
             </div>
 

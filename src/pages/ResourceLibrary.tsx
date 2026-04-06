@@ -12,6 +12,7 @@ import {
 } from '@/api/resource'
 import { listCategories, type Category } from '@/api/category'
 import { formatPlatform } from '@/utils/platform'
+import { useAuth } from '@/stores/auth'
 
 const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'
 
@@ -138,6 +139,7 @@ function HeroCard({
 
 export default function ResourceLibrary() {
   const navigate = useNavigate()
+  const { isAuthed } = useAuth()
 
   const [resources, setResources] = useState<DbResource[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -205,17 +207,19 @@ export default function ResourceLibrary() {
       })
       .finally(() => setLoading(false))
 
-    // Sync which resources are already added
-    listMyResources()
-      .then(mine => {
-        const next: Record<number, boolean> = {}
-        for (const r of mine || []) {
-          if (r?.id) next[r.id] = true
-        }
-        setAddedToMy(next)
-      })
-      .catch(() => {})
-  }, [])
+    // Sync which resources are already added (only if logged in)
+    if (isAuthed) {
+      listMyResources()
+        .then(mine => {
+          const next: Record<number, boolean> = {}
+          for (const r of mine || []) {
+            if (r?.id) next[r.id] = true
+          }
+          setAddedToMy(next)
+        })
+        .catch(() => {})
+    }
+  }, [isAuthed])
 
   function openCard(resource: UiResource) {
     setActiveResourceId(resource.id)
