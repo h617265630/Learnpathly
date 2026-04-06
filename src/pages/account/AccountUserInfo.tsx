@@ -24,6 +24,7 @@ export default function AccountUserInfo() {
 
   const [form, setForm] = useState({ display_name: '', bio: '' })
   const [saving, setSaving] = useState(false)
+  const [saveSuccess, setSaveSuccess] = useState(false)
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [error, setError] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -86,6 +87,8 @@ export default function AccountUserInfo() {
       })
       bumpAvatarBuster()
       await fetchProfile(true)
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
     } catch (e: any) {
       setError(String(e?.response?.data?.detail || e?.message || 'Failed to save'))
     } finally {
@@ -224,6 +227,10 @@ export default function AccountUserInfo() {
 
           {error && (
             <p className="text-xs text-red-500 py-2 px-3 border border-red-100 bg-red-50 rounded-sm">{error}</p>
+          )}
+
+          {saveSuccess && (
+            <p className="text-xs text-emerald-600 py-2 px-3 border border-emerald-100 bg-emerald-50 rounded-sm font-medium">Saved successfully!</p>
           )}
 
           <div className="flex items-center gap-3 pt-2">
