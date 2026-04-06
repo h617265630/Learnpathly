@@ -83,7 +83,7 @@ function HeroCard({
       {/* Thumbnail */}
       <div className="relative bg-stone-100 overflow-hidden shrink-0 w-full sm:w-1/2" style={{ aspectRatio: '16 / 9' }}>
         <img
-          src={resource.thumbnail}
+          src={resource.thumbnail || FALLBACK_THUMB}
           alt={resource.title}
           loading="lazy"
           decoding="async"

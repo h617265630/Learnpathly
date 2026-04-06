@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { createMyResourceFromUrl, extractVideoMetadata, type UrlExtractResponse } from '@/api/resource'
 import { listCategories, type Category } from '@/api/category'
 import { Button } from '@/components/ui/Button'
+import { ResourceCard, type UiResource as RcResource } from '@/components/ResourceCard'
 
 const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'
 
@@ -73,6 +74,23 @@ function getErrorMessage(e: any, fallback: string) {
   return e?.message || fallback
 }
 
+function getCategoryColor(category?: string): string {
+  const key = String(category || '').trim().toLowerCase() || 'other'
+  const palette = ['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316', '#84cc16']
+  let hash = 0
+  for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) >>> 0
+  return palette[hash % palette.length]
+}
+
+function getWeightCardClass(weight: string) {
+  const w = toManualWeight(weight)
+  if (w >= 5) return 'weight-gold'
+  if (w === 4) return 'weight-silver'
+  if (w === 3) return 'weight-bronze'
+  if (w === 2) return 'weight-iron'
+  return ''
+}
+
 export default function AddResource() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -115,6 +133,19 @@ export default function AddResource() {
     if (w === 'iron') return 'text-slate-500'
     return 'text-stone-500'
   })()
+
+  const previewResource: RcResource = {
+    id: 0,
+    title: extractedMeta?.title || 'Untitled',
+    summary: extractedMeta?.description || 'No description',
+    categoryLabel: dbCategories.find(c => c.id === Number(categoryId))?.name || 'Other',
+    categoryColor: getCategoryColor(dbCategories.find(c => c.id === Number(categoryId))?.name || 'Other'),
+    platform: selectedPlatform,
+    platformLabel: selectedPlatformLabel || 'video',
+    typeLabel: selectedPlatformLabel.toLowerCase() || 'video',
+    thumbnail: extractedMeta?.thumbnail_url || FALLBACK_THUMB,
+    resource_type: selectedPlatformLabel.toLowerCase() || 'video',
+  }
 
   // Load categories on mount
   useEffect(() => {
@@ -429,49 +460,15 @@ export default function AddResource() {
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Live preview</span>
               </div>
-              <article className={`group border overflow-hidden transition-all duration-500 rounded-md bg-white hover:shadow-md flex flex-col ${weightPreviewClass}`}>
-                {/* Thumbnail */}
-                <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
-                  {extractedMeta?.thumbnail_url ? (
-                    <img
-                      src={extractedMeta.thumbnail_url}
-                      alt={extractedMeta?.title || 'thumbnail'}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-lg font-black text-white bg-violet-600"
-                      >
-                        {(extractedMeta?.title || 'R').charAt(0)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Content */}
-                <div className="p-4 flex-1 flex flex-col">
-                  {/* Type & Platform row */}
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider rounded bg-violet-50 text-violet-700">
-                      {selectedPlatformLabel || 'video'}
-                    </span>
-                    <span className="text-[9px] font-semibold uppercase tracking-wider text-stone-400">
-                      {extractedMeta?.author || '—'}
-                    </span>
-                  </div>
-
-                  <h3
-                    className="text-sm font-semibold text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-600 transition-colors flex-1"
-                    title={extractedMeta?.title || 'Untitled'}
-                  >
-                    {extractedMeta?.title || 'Untitled'}
-                  </h3>
-                  <p className="text-xs text-stone-500 line-clamp-2 mt-2">
-                    {extractedMeta?.description || 'No description'}
-                  </p>
-                </div>
-              </article>
+              <div className={getWeightCardClass(selectedWeight)}>
+                <ResourceCard
+                  resource={previewResource}
+                  onOpen={() => {}}
+                  onAdd={() => {}}
+                  saving={false}
+                  saved={false}
+                />
+              </div>
             </div>
           </div>
         </div>

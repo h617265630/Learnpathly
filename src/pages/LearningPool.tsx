@@ -225,9 +225,11 @@ export default function LearningPool() {
                 className="w-full rounded-full border border-stone-200 bg-white pl-9 pr-4 py-2.5 text-sm text-stone-700 placeholder:text-stone-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
               />
             </div>
-            <Button to="/createpath" className="rounded-full bg-stone-900 text-white hover:bg-stone-800 px-5 py-2.5 text-xs font-semibold">
-              <Plus className="w-3.5 h-3.5" />
-              New path
+            <Button asChild to="/createpath" className="rounded-full bg-stone-900 text-white hover:bg-stone-800 px-5 py-2.5 text-xs font-semibold">
+              <>
+                <Plus className="w-3.5 h-3.5" />
+                New path
+              </>
             </Button>
           </div>
         </div>
@@ -366,8 +368,8 @@ export default function LearningPool() {
           <p className="text-sm text-stone-400">
             {searchQuery ? 'Try a different search term.' : 'Be the first to create one in this category.'}
           </p>
-          <Button to="/createpath" className="mt-4 rounded-none text-xs font-semibold bg-stone-900 hover:bg-stone-800">
-            Create a path →
+          <Button asChild to="/createpath" className="mt-4 rounded-none text-xs font-semibold bg-stone-900 hover:bg-stone-800">
+            <Link to="/createpath">Create a path →</Link>
           </Button>
         </section>
       )}

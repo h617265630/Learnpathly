@@ -266,14 +266,12 @@ export default function MyLearningPath() {
                         <p className="text-xs text-stone-400 mt-1 line-clamp-2 leading-relaxed">{path.description || 'No description.'}</p>
                       </div>
                       <div className="px-3 pb-3 flex gap-2" onClick={e => e.stopPropagation()}>
-                        <Button
+                        <Link
                           to={`/learningpath/${path.id}/edit`}
-                          size="sm"
-                          className="flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                          variant="outline"
+                          className="flex items-center justify-center flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900 transition-colors rounded-sm"
                         >
                           Edit
-                        </Button>
+                        </Link>
                         <button
                           type="button"
                           className="h-7 px-2.5 rounded-sm border border-stone-200 text-[10px] font-semibold text-red-400 hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all"
@@ -324,14 +322,12 @@ export default function MyLearningPath() {
                         <p className="text-xs text-stone-400 mt-1 line-clamp-2 leading-relaxed">{path.description || 'No description.'}</p>
                       </div>
                       <div className="px-3 pb-3 flex gap-2" onClick={e => e.stopPropagation()}>
-                        <Button
+                        <Link
                           to={`/learningpath/${path.id}/edit`}
-                          size="sm"
-                          className="flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                          variant="outline"
+                          className="flex items-center justify-center flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900 transition-colors rounded-sm"
                         >
                           Edit
-                        </Button>
+                        </Link>
                         <button
                           type="button"
                           className="h-7 px-2.5 rounded-sm border border-stone-200 text-[10px] font-semibold text-red-400 hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all"
@@ -382,14 +378,12 @@ export default function MyLearningPath() {
                         <p className="text-xs text-stone-400 mt-1 line-clamp-2 leading-relaxed">{path.description || 'No description.'}</p>
                       </div>
                       <div className="px-3 pb-3 flex gap-2" onClick={e => e.stopPropagation()}>
-                        <Button
+                        <Link
                           to={`/learningpath/${path.id}/edit`}
-                          size="sm"
-                          className="flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                          variant="outline"
+                          className="flex items-center justify-center flex-1 h-7 text-[10px] font-semibold uppercase tracking-wider border border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900 transition-colors rounded-sm"
                         >
                           Edit
-                        </Button>
+                        </Link>
                         <button
                           type="button"
                           className="h-7 px-2.5 rounded-sm border border-stone-200 text-[10px] font-semibold text-red-400 hover:bg-red-50 hover:border-red-200 hover:text-red-500 transition-all"

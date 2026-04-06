@@ -380,7 +380,7 @@ export default function MyResource() {
                     >
                       <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
                         <img
-                          src={resource.thumbnail}
+                          src={resource.thumbnail || FALLBACK_THUMB}
                           alt={resource.title}
                           className="block w-full h-full object-contain bg-stone-50/50"
                           style={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -418,10 +418,10 @@ export default function MyResource() {
 
       {/* Detail modal */}
       {activeResource && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={closeActiveResource}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4" onClick={closeActiveResource}>
           <div className="absolute inset-0 bg-stone-900/60 backdrop-blur-sm"></div>
           <div
-            className="relative w-full max-w-md rounded-md overflow-hidden bg-white shadow-2xl border border-stone-100"
+            className="relative w-full max-w-xs sm:max-w-sm md:max-w-md rounded-md overflow-hidden bg-white shadow-2xl border border-stone-100"
             onClick={e => e.stopPropagation()}
           >
             <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
@@ -432,15 +432,15 @@ export default function MyResource() {
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
               <button
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white flex items-center justify-center text-stone-500 hover:text-stone-900 hover:bg-stone-50 transition"
+                className="absolute top-2 right-2 sm:top-3 sm:right-3 w-8 h-8 rounded-full bg-white flex items-center justify-center text-stone-500 hover:text-stone-900 hover:bg-stone-50 transition"
                 onClick={closeActiveResource}
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
               </button>
-              <div className="absolute bottom-3 left-3 flex items-center gap-2">
+              <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 flex items-center gap-2">
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                  className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full"
                   style={{ backgroundColor: activeResource.categoryColor + '18', color: activeResource.categoryColor }}
                 >
                   {activeResource.category}
@@ -449,23 +449,23 @@ export default function MyResource() {
               </div>
             </div>
 
-            <div className="p-5 border-b border-stone-100">
-              <h2 className="text-lg font-bold text-stone-900">{activeResource.title}</h2>
+            <div className="p-4 sm:p-5 border-b border-stone-100">
+              <h2 className="text-base sm:text-lg font-bold text-stone-900">{activeResource.title}</h2>
             </div>
 
-            <div className="p-5">
-              <p className="text-sm text-stone-500 mb-4 leading-relaxed">{activeResource.summary}</p>
-              <div className="flex items-center gap-4 text-xs text-stone-400">
+            <div className="p-4 sm:p-5">
+              <p className="text-xs sm:text-sm text-stone-500 mb-3 sm:mb-4 leading-relaxed line-clamp-3 sm:line-clamp-none">{activeResource.summary}</p>
+              <div className="flex items-center gap-3 sm:gap-4 text-xs text-stone-400">
                 <span>{formatPlatform(activeResource.platform)}</span>
-                <span className="text-stone-200">·</span>
+                <span className="text-stone-200 hidden sm:inline">·</span>
                 <span className="font-semibold text-stone-600 uppercase tracking-wider text-[10px]">{activeResource.type}</span>
               </div>
             </div>
 
-            <div className="p-5 border-t border-stone-100 flex flex-col gap-3">
+            <div className="p-4 sm:p-5 border-t border-stone-100 flex flex-col gap-3">
               <Button
                 onClick={() => seeDetail(activeResource)}
-                className="w-full rounded-full bg-stone-900 text-white hover:bg-stone-800 font-semibold text-sm transition-all"
+                className="w-full rounded-full bg-stone-900 text-white hover:bg-stone-800 font-semibold text-xs sm:text-sm transition-all"
               >
                 View details
               </Button>
@@ -517,12 +517,12 @@ export default function MyResource() {
 
       {/* Delete confirm */}
       {showDeleteConfirm && deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-sm p-4">
-          <div className="w-full max-w-sm rounded-md bg-white shadow-2xl border border-stone-100 overflow-hidden">
-            <div className="px-6 py-5 border-b border-stone-100 flex items-center justify-between">
-              <h2 className="text-base font-bold text-stone-900">Delete resource?</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-stone-900/40 backdrop-blur-sm p-3 sm:p-4">
+          <div className="w-full max-w-xs sm:max-w-sm rounded-md bg-white shadow-2xl border border-stone-100 overflow-hidden">
+            <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-stone-100 flex items-center justify-between">
+              <h2 className="text-sm sm:text-base font-bold text-stone-900">Delete resource?</h2>
               <button
-                className="w-9 h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-600 transition"
+                className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-600 transition"
                 onClick={closeDeleteConfirm}
                 disabled={deletingId !== null}
                 aria-label="Close"
@@ -530,15 +530,15 @@ export default function MyResource() {
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-6 space-y-3">
-              <p className="text-sm text-stone-600">This will permanently delete the resource. This action cannot be undone.</p>
+            <div className="p-4 sm:p-6 space-y-3">
+              <p className="text-xs sm:text-sm text-stone-600">This will permanently delete the resource. This action cannot be undone.</p>
               <div className="rounded-md border border-stone-100 bg-stone-50/50 p-3">
                 <div className="text-sm font-semibold text-stone-800 line-clamp-1">{deleteTarget.title}</div>
                 <div className="text-xs text-stone-400 mt-0.5">ID: {deleteTarget.id}</div>
               </div>
-              {deleteError && <p className="text-sm text-red-500">{deleteError}</p>}
+              {deleteError && <p className="text-xs sm:text-sm text-red-500">{deleteError}</p>}
             </div>
-            <div className="px-6 py-4 border-t border-stone-100 flex justify-end gap-2">
+            <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 flex justify-end gap-2">
               <Button
                 size="sm"
                 variant="outline"

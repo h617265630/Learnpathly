@@ -39,7 +39,7 @@ export default function CardUI() {
             >
               <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
                 <img
-                  src={card.thumbnail}
+                  src={card.thumbnail || 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'}
                   alt={card.title}
                   className="block w-full h-full object-cover object-center"
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}

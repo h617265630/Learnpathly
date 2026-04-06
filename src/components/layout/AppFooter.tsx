@@ -46,7 +46,7 @@ export function AppFooter() {
             {/* Social */}
             <div className="flex items-center gap-3 mt-5">
               <a
-                href="https://github.com"
+                href="https://github.com/h617265630/contrail-react"
                 target="_blank"
                 rel="noopener"
                 aria-label="GitHub"

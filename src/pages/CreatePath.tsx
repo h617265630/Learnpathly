@@ -243,7 +243,7 @@ export default function CreatePath() {
 
   // Create resource from URL
   async function createResourceFromUrl() {
-    newResourceError.value = ''
+    setNewResourceError('')
     const raw = newResourceUrl.trim()
     if (!raw) return
     let parsed: URL
@@ -383,7 +383,7 @@ export default function CreatePath() {
           is_optional: false,
         })
       }
-      navigate(`/learningpath/${lpId}`, { query: { from: 'my-paths' } })
+      navigate(`/learningpath/${lpId}?from=my-paths`)
     } catch (e: any) {
       setCreateError(String(e?.response?.data?.detail || e?.message || 'Create failed'))
     } finally {
@@ -411,66 +411,6 @@ export default function CreatePath() {
                 <span className="text-sky-600">Learning Path.</span>
               </h1>
             </div>
-
-            {/* User dropdown */}
-            {isAuthed && (
-              <div className="relative">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 rounded-full border border-stone-200 bg-white px-2 py-1.5 hover:border-stone-300 hover:bg-stone-50 transition-all"
-                  onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  aria-expanded={userMenuOpen}
-                  aria-haspopup="menu"
-                >
-                  <div className="h-7 w-7 shrink-0 overflow-hidden rounded-full bg-sky-500 flex items-center justify-center text-white text-[10px] font-bold">
-                    {user?.avatar_url ? (
-                      <img src={user.avatar_url} alt={user?.username || 'User'} referrerPolicy="no-referrer" className="h-full w-full object-cover" />
-                    ) : (
-                      (user?.username || 'U').slice(0, 2).toUpperCase()
-                    )}
-                  </div>
-                  <ChevronDown className={cn('w-3.5 h-3.5 text-stone-400 transition-transform', userMenuOpen ? 'rotate-180' : '')} />
-                </button>
-
-                {userMenuOpen && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setUserMenuOpen(false)}
-                    />
-                    <div className="absolute right-0 top-full mt-2 w-52 rounded-md border border-stone-100 bg-white shadow-xl z-50 py-1">
-                      <div className="px-4 py-3 border-b border-stone-50 mb-1">
-                        <p className="text-sm font-semibold text-stone-900">{user?.username || 'User'}</p>
-                        <p className="text-xs text-stone-400 mt-0.5">{user?.email || ''}</p>
-                      </div>
-                      <div className="py-1">
-                        {USER_MENU_ITEMS.map((item) => (
-                          <Link
-                            key={item.to}
-                            to={item.to}
-                            className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 hover:text-stone-900 transition-colors"
-                            onClick={() => setUserMenuOpen(false)}
-                          >
-                            <item.icon className="w-4 h-4 text-stone-400" />
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                      <div className="border-t border-stone-50 mt-1 pt-1 pb-1">
-                        <button
-                          type="button"
-                          className="flex w-full items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
-                          onClick={() => { logout(); setUserMenuOpen(false); navigate('/home') }}
-                        >
-                          <LogOut className="w-4 h-4" />
-                          Log out
-                        </button>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
           </div>
         </div>
       </header>
