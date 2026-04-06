@@ -71,6 +71,19 @@ function DocumentTitle({ seo }: { seo?: SeoMeta }) {
   if (seo?.title) {
     document.title = seo.title
   }
+  // Update meta tags
+  const description = document.querySelector('meta[name="description"]')
+  if (description && seo?.description) {
+    description.setAttribute('content', seo.description)
+  }
+  const ogTitle = document.querySelector('meta[property="og:title"]')
+  if (ogTitle && seo?.title) {
+    ogTitle.setAttribute('content', seo.title)
+  }
+  const ogDesc = document.querySelector('meta[property="og:description"]')
+  if (ogDesc && seo?.description) {
+    ogDesc.setAttribute('content', seo.description)
+  }
   return null
 }
 
