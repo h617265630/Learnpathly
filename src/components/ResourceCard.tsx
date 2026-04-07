@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/Badge'
+import './card-ui.css'
 
 const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'
 
@@ -29,61 +30,116 @@ interface ResourceCardProps {
   onAdd: () => void
   saving: boolean
   saved: boolean
+  weight?: string  // e.g. 'default', 'tier-gold', 'gradient-emerald', 'glass-purple'
 }
 
-export function ResourceCard({ resource, onOpen, onAdd, saving, saved }: ResourceCardProps) {
+// Maps weight values to CardUI CSS classes
+function getCardWeightClass(weight?: string): string {
+  if (!weight) return 'border border-stone-200 bg-stone-50'
+
+  // Tier styles
+  if (weight === 'tier-gold') return 'tier-gold'
+  if (weight === 'tier-diamond') return 'tier-diamond'
+  if (weight === 'tier-prismatic') return 'tier-prismatic'
+  if (weight === 'tier-obsidian') return 'tier-obsidian'
+
+  // Gradient styles
+  if (weight.startsWith('gradient-')) return `gradient-card ${weight}`
+
+  // Neumorphism
+  if (weight === 'neu') return 'neu-card'
+
+  // Holographic
+  if (weight === 'holo') return 'holo-card'
+
+  // Sketch
+  if (weight === 'sketch') return 'sketch-card'
+
+  // Newspaper
+  if (weight === 'newspaper') return 'newspaper-card'
+
+  // Neon styles
+  if (weight.startsWith('neon-')) return `neon-card-${weight.split('-')[1]}`
+
+  // Metallic styles
+  if (weight.startsWith('metallic-')) return `metallic-card ${weight}`
+
+  // Papercut styles
+  if (weight.startsWith('papercut-')) return `papercut-card ${weight}`
+
+  // Default (default/iron/bronze/silver/gold/diamond/prismatic/obsidian)
+  const basicMap: Record<string, string> = {
+    default: 'border border-stone-200 bg-stone-50',
+    iron: 'border border-slate-300 bg-slate-50',
+    bronze: 'border-2 border-amber-400 bg-amber-50',
+    silver: 'border-2 border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100',
+    gold: 'tier-gold',
+    diamond: 'tier-diamond',
+    prismatic: 'tier-prismatic',
+    obsidian: 'tier-obsidian',
+  }
+
+  return basicMap[weight] || 'border border-stone-200 bg-stone-50'
+}
+
+export function ResourceCard({ resource, onOpen, onAdd, saving, saved, weight }: ResourceCardProps) {
+  const weightClass = getCardWeightClass(weight)
+  const isGradient = weight?.startsWith('gradient-')
+
   return (
-    <article
-      className="group border border-stone-200 bg-white hover:border-stone-300 shadow-lg hover:shadow-2xl transition-all duration-500 rounded-xl overflow-hidden flex flex-col cursor-pointer"
-      onClick={onOpen}
-    >
-      {/* Type & Category row - top */}
-      <div className="px-3 py-1.5 flex items-center justify-between border-b border-stone-100">
-        <Badge variant="secondary" className="text-[9px] uppercase tracking-wider">
-          {resource.typeLabel}
-        </Badge>
-        <span
-          className="text-[9px] font-bold uppercase tracking-wider"
-          style={{ color: resource.categoryColor || getCategoryColor(resource.categoryLabel) }}
-        >
-          {resource.categoryLabel}
-        </span>
-      </div>
+    <>
+      <article
+        className={`shrink-0 w-56 h-72 ${isGradient ? 'rounded-lg' : 'rounded-md'} shadow-sm cursor-pointer transition-all duration-300 hover:scale-105 overflow-hidden ${weightClass} ${isGradient ? 'p-0.5' : ''}`}
+        onClick={onOpen}
+      >
+      {/* Inner content - matches CardUI CardInner structure */}
+      <div className={`h-full flex flex-col overflow-hidden relative ${isGradient ? 'bg-white rounded-md' : ''}`} style={{ zIndex: 1 }}>
+        {/* Header: Category + ID */}
+        <div className="px-3 py-1.5 flex items-center justify-between border-b border-black/10">
+          <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
+            {resource.categoryLabel}
+          </span>
+          <span className="text-xs text-stone-400">#{String(resource.id).padStart(3, '0')}</span>
+        </div>
 
-      {/* Thumbnail */}
-      <div className="relative bg-white overflow-hidden p-2" style={{ width: '100%', aspectRatio: '16 / 9' }}>
-        <img
-          src={resource.thumbnail || FALLBACK_THUMB}
-          alt={resource.title}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover rounded-sm transition-transform duration-500 group-hover:scale-105"
-        />
-      </div>
+        {/* Thumbnail */}
+        <div className="relative h-24 bg-stone-100 overflow-hidden flex items-center justify-center">
+          {resource.thumbnail ? (
+            <img
+              src={resource.thumbnail}
+              alt={resource.title}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg font-bold text-stone-500">
+              {resource.title.charAt(0)}
+            </div>
+          )}
+        </div>
 
-      {/* Content */}
-      <div className="p-3 flex-1 flex flex-col border-t border-stone-100">
-        <h3
-          className="text-sm font-semibold text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-600 transition-colors flex-1"
-          title={resource.title}
-        >
-          {resource.title}
-        </h3>
-        <p className="text-xs text-stone-500 line-clamp-2 mt-2">{resource.summary || 'No description available.'}</p>
-        <div className="flex items-center justify-between mt-1 pt-1.5 border-t border-stone-100">
-          <span className="text-[10px] text-stone-500 font-medium">{resource.platformLabel}</span>
-          <button
-            type="button"
-            onClick={(e) => { e.stopPropagation(); onAdd() }}
-            disabled={saving || saved}
-            className={`text-[10px] font-semibold uppercase tracking-wider transition-colors ${
-              saved ? 'text-emerald-500' : 'text-amber-600 hover:text-amber-700'
-            } disabled:opacity-50`}
-          >
-            {saved ? 'Saved' : saving ? 'Saving…' : '+ Save'}
-          </button>
+        {/* Title */}
+        <div className="px-3 py-1.5 border-b border-black/10 bg-white">
+          <h3 className="text-sm font-bold text-stone-900 line-clamp-1">
+            {resource.title}
+          </h3>
+        </div>
+
+        {/* Summary */}
+        <div className="px-3 py-1.5 flex-1 overflow-hidden bg-stone-50">
+          <p className="text-xs text-stone-500 line-clamp-2">
+            {resource.summary || 'No description available.'}
+          </p>
+        </div>
+
+        {/* Footer: Platform + Type */}
+        <div className="px-3 py-1.5 border-t border-black/10 flex items-center justify-between">
+          <span className="text-xs text-stone-400">{resource.platformLabel}</span>
+          <span className="text-xs font-medium text-stone-600">{resource.typeLabel}</span>
         </div>
       </div>
     </article>
+    </>
   )
 }

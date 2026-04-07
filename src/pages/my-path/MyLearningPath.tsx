@@ -64,7 +64,9 @@ function mapToPoolPath(p: UiPath): PoolPath {
     category: String((p as any)?.category_name || '').trim() || 'General',
     typeLabel,
     level: 'Beginner',
+    items: Number((p as any).item_count ?? 0),
     thumbnail: p._coverUrl || FALLBACK_THUMB,
+    hotScore: 50,
   }
 }
 
@@ -202,7 +204,7 @@ export default function MyLearningPath() {
             </div>
           </div>
 
-          <div className="mt-6 flex items-center justify-end gap-4">
+          <div className="mt-6 flex items-center justify-end gap-6">
             <Link
               to="/createpath"
               className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-8 px-5 text-xs rounded-md font-semibold bg-amber-500 text-white hover:bg-amber-600"
@@ -252,14 +254,14 @@ export default function MyLearningPath() {
             {/* Linear */}
             {linearPaths.length > 0 && (
               <section>
-                <div className="flex items-center gap-4 mb-5">
+                <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
                     <div className={`w-1 h-5 ${coverAccent('linear path')} rounded-full`} />
                     <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Linear</h2>
                   </div>
                   <span className="text-xs text-stone-400 font-medium">{linearPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
                   {linearPaths.map(path => (
                     <PathCard
                       key={path.id}
@@ -275,14 +277,14 @@ export default function MyLearningPath() {
             {/* Structured */}
             {structuredPaths.length > 0 && (
               <section>
-                <div className="flex items-center gap-4 mb-5">
+                <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
                     <div className={`w-1 h-5 ${coverAccent('structured path')} rounded-full`} />
                     <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Structured</h2>
                   </div>
                   <span className="text-xs text-stone-400 font-medium">{structuredPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
                   {structuredPaths.map(path => (
                     <PathCard
                       key={path.id}
@@ -298,14 +300,14 @@ export default function MyLearningPath() {
             {/* Pool */}
             {poolPaths.length > 0 && (
               <section>
-                <div className="flex items-center gap-4 mb-5">
+                <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
                     <div className={`w-1 h-5 ${coverAccent('partical pool')} rounded-full`} />
                     <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Pool</h2>
                   </div>
                   <span className="text-xs text-stone-400 font-medium">{poolPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
                   {poolPaths.map(path => (
                     <PathCard
                       key={path.id}

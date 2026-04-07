@@ -9,15 +9,20 @@ const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1498050108023-c5249f4d
 
 function inferCategoryFromText(text: string): string {
   const t = text.toLowerCase()
-  if (t.includes('ai') || t.includes('llm') || t.includes('rag') || t.includes('agent')) return 'AI'
-  if (t.includes('front') || t.includes('vue') || t.includes('react') || t.includes('css')) return 'Frontend'
-  if (t.includes('back') || t.includes('api') || t.includes('fastapi') || t.includes('node')) return 'Backend'
-  if (t.includes('devops') || t.includes('docker') || t.includes('k8s') || t.includes('kubernetes') || t.includes('ci')) return 'DevOps'
-  if (t.includes('db') || t.includes('sql') || t.includes('database') || t.includes('postgres')) return 'Database'
-  if (t.includes('design') || t.includes('figma') || t.includes('ux')) return 'Design'
-  if (t.includes('product') || t.includes('pm') || t.includes('roadmap')) return 'Product'
-  if (t.includes('career') || t.includes('resume') || t.includes('interview')) return 'Career'
-  return 'Backend'
+  if (t.includes('ai') || t.includes('llm') || t.includes('rag') || t.includes('gpt') || t.includes('agent') || t.includes('claude') || t.includes('gemini')) return 'AI'
+  if (t.includes('front') || t.includes('vue') || t.includes('react') || t.includes('css') || t.includes('tailwind') || t.includes('html')) return 'Frontend'
+  if (t.includes('back') || t.includes('api') || t.includes('fastapi') || t.includes('node') || t.includes('django') || t.includes('flask') || t.includes('spring')) return 'Backend'
+  if (t.includes('devops') || t.includes('docker') || t.includes('k8s') || t.includes('kubernetes') || t.includes('ci') || t.includes('cicd') || t.includes('aws') || t.includes('cloud')) return 'DevOps'
+  if (t.includes('db') || t.includes('sql') || t.includes('database') || t.includes('postgres') || t.includes('mysql') || t.includes('mongodb') || t.includes('redis')) return 'Database'
+  if (t.includes('design') || t.includes('figma') || t.includes('ux') || t.includes('ui') || t.includes('sketch')) return 'Design'
+  if (t.includes('product') || t.includes('pm') || t.includes('roadmap') || t.includes('agile') || t.includes('scrum')) return 'Product'
+  if (t.includes('career') || t.includes('resume') || t.includes('interview') || t.includes('job')) return 'Career'
+  if (t.includes('mobile') || t.includes('ios') || t.includes('android') || t.includes('swift') || t.includes('kotlin')) return 'Mobile'
+  if (t.includes('security') || t.includes('cyber') || t.includes('penetration') || t.includes('owasp')) return 'Security'
+  if (t.includes('blockchain') || t.includes('web3') || t.includes('solidity') || t.includes('nft')) return 'Blockchain'
+  if (t.includes('data') || t.includes('analytics') || t.includes('ml') || t.includes('statistics') || t.includes('python')) return 'Data Science'
+  if (t.includes('game') || t.includes('unity') || t.includes('unreal') || t.includes('blender')) return 'Gaming'
+  return 'Other'
 }
 
 function mapDbToPool(p: PublicLearningPath): PoolPath {
@@ -37,10 +42,10 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
     id: base.id,
     title,
     description: description || '（无介绍）',
-    category: cat,
+    category: cat || 'Other',
     typeLabel,
     level: 'Beginner',
-    items: 0,
+    items: base.itemCount,
     thumbnail,
     hotScore: 50,
   }
@@ -222,7 +227,7 @@ export default function LearningPool() {
             </div>
             <span className="text-xs text-stone-400">{hotPaths.length} paths</span>
           </div>
-          <div className="flex gap-4 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
+          <div className="flex gap-6 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-hide">
             {hotPaths.map((p) => (
               <Link
                 key={p.id}
@@ -288,7 +293,7 @@ export default function LearningPool() {
       {/* Loading skeleton */}
       {loading && (
         <section>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {Array.from({ length: 10 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -299,7 +304,7 @@ export default function LearningPool() {
       {/* Path grid */}
       {!loading && filteredPaths.length > 0 && (
         <section>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {filteredPaths.map((p) => (
               <PathCard key={`${p.id}-${p.category}`} path={p} />
             ))}

@@ -30,7 +30,7 @@ const PLATFORM_PLACEHOLDERS: Record<string, string> = {
 }
 
 const WEIGHT_OPTIONS = [
-  { value: 'soil', label: 'Soil' },
+  { value: 'default', label: 'Default' },
   { value: 'iron', label: 'Iron' },
   { value: 'bronze', label: 'Bronze' },
   { value: 'silver', label: 'Silver' },
@@ -117,7 +117,7 @@ export default function AddResource() {
 
   const weightPreviewClass = (() => {
     const w = selectedWeight
-    if (w === 'soil') return 'border-stone-200 bg-stone-50'
+    if (w === 'default') return 'border-stone-200 bg-stone-50'
     if (w === 'iron') return 'border-slate-300 bg-slate-50'
     if (w === 'bronze') return 'border-amber-300 bg-amber-50'
     if (w === 'silver') return 'border-zinc-200 bg-zinc-50'

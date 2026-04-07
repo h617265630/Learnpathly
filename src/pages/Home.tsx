@@ -23,18 +23,7 @@ const BANNER_SLIDES = [
   },
 ] as const
 
-type FeaturedPath = {
-  id: string
-  title: string
-  description: string
-  thumbnail: string
-  level: string
-  duration: string
-  typeLabel: string
-  category: string
-}
-
-function mapDbToFeatured(p: PublicLearningPath): FeaturedPath {
+function mapDbToPool(p: PublicLearningPath): PoolPath {
   const lpType = String(p.type || '').trim().toLowerCase()
   let typeLabel = 'Path'
   if (lpType.includes('linear')) typeLabel = 'Linear'
@@ -50,6 +39,8 @@ function mapDbToFeatured(p: PublicLearningPath): FeaturedPath {
     duration: '',
     typeLabel,
     category: p.category_name || 'General',
+    items: Number((p as any).item_count ?? 0),
+    hotScore: 50,
   }
 }
 
@@ -96,8 +87,8 @@ function PoolSkeleton() {
 
 export default function Home() {
   const [activeBannerIndex, setActiveBannerIndex] = useState(0)
-  const [featuredPaths, setFeaturedPaths] = useState<FeaturedPath[]>([])
-  const [randomPoolPaths, setRandomPoolPaths] = useState<FeaturedPath[]>([])
+  const [featuredPaths, setFeaturedPaths] = useState<PoolPath[]>([])
+  const [randomPoolPaths, setRandomPoolPaths] = useState<PoolPath[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingPool, setLoadingPool] = useState(true)
   const [isPaused, setIsPaused] = useState(false)
@@ -123,7 +114,7 @@ export default function Home() {
       setLoadingPool(true)
       try {
         const db = await listPublicLearningPaths()
-        const mapped = (db || []).map(mapDbToFeatured)
+        const mapped = (db || []).map(mapDbToPool)
         setFeaturedPaths(mapped.slice(0, 4))
         setRandomPoolPaths(pickRandom(mapped, 12))
       } catch {
@@ -339,9 +330,9 @@ export default function Home() {
 
         {/* Pool grid */}
         {!loadingPool && randomPoolPaths.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {randomPoolPaths.map((path, idx) => (
-              <PathCard key={`${path.id}-${idx}`} path={path as PoolPath} />
+              <PathCard key={`${path.id}-${idx}`} path={path} />
             ))}
           </div>
         ) : !loadingPool ? (

@@ -9,27 +9,76 @@ import { formatPlatform } from '@/utils/platform'
 const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop'
 
 const WEIGHT_OPTIONS = [
-  { value: 'soil', label: 'Soil' },
-  { value: 'iron', label: 'Iron' },
-  { value: 'bronze', label: 'Bronze' },
-  { value: 'silver', label: 'Silver' },
-  { value: 'gold', label: 'Gold' },
+  // Tier styles
+  { value: 'tier-gold', label: 'Tier Gold' },
+  { value: 'tier-diamond', label: 'Tier Diamond' },
+  { value: 'tier-prismatic', label: 'Tier Prismatic' },
+  { value: 'tier-obsidian', label: 'Tier Obsidian' },
+  // Gradient styles
+  { value: 'gradient-emerald', label: 'Gradient Emerald' },
+  { value: 'gradient-sapphire', label: 'Gradient Sapphire' },
+  { value: 'gradient-ruby', label: 'Gradient Ruby' },
+  { value: 'gradient-amethyst', label: 'Gradient Amethyst' },
+  { value: 'gradient-gold', label: 'Gradient Gold' },
+  // Special styles
+  { value: 'neu', label: 'Neumorphism' },
+  { value: 'holo', label: 'Holographic' },
+  { value: 'sketch', label: 'Sketch' },
+  { value: 'newspaper', label: 'Newspaper' },
+  // Neon styles
+  { value: 'neon-cyan', label: 'Neon Cyan' },
+  { value: 'neon-pink', label: 'Neon Pink' },
+  { value: 'neon-green', label: 'Neon Green' },
+  { value: 'neon-purple', label: 'Neon Purple' },
+  { value: 'neon-gold', label: 'Neon Gold' },
+  // Metallic styles
+  { value: 'metallic-steel', label: 'Metallic Steel' },
+  { value: 'metallic-copper', label: 'Metallic Copper' },
+  { value: 'metallic-titanium', label: 'Metallic Titanium' },
+  { value: 'metallic-rose-gold', label: 'Metallic Rose Gold' },
+  { value: 'metallic-gunmetal', label: 'Metallic Gunmetal' },
+  // Papercut styles
+  { value: 'papercut-coral', label: 'Papercut Coral' },
+  { value: 'papercut-sky', label: 'Papercut Sky' },
+  { value: 'papercut-mint', label: 'Papercut Mint' },
+  { value: 'papercut-lavender', label: 'Papercut Lavender' },
+  { value: 'papercut-peach', label: 'Papercut Peach' },
+  // Default
+  { value: 'default', label: 'Default' },
 ]
 
 function toManualWeight(w: string): number {
-  if (w === 'gold') return 5
-  if (w === 'silver') return 4
-  if (w === 'bronze') return 3
-  if (w === 'iron') return 2
-  return 1
+  const weightMap: Record<string, number> = {
+    // Tier (1-4)
+    'tier-gold': 1, 'tier-diamond': 2, 'tier-prismatic': 3, 'tier-obsidian': 4,
+    // Gradient (5-9)
+    'gradient-emerald': 5, 'gradient-sapphire': 6, 'gradient-ruby': 7,
+    'gradient-amethyst': 8, 'gradient-gold': 9,
+    // Special (10-13)
+    'neu': 10, 'holo': 11, 'sketch': 12, 'newspaper': 13,
+    // Neon (14-18)
+    'neon-cyan': 14, 'neon-pink': 15, 'neon-green': 16, 'neon-purple': 17, 'neon-gold': 18,
+    // Metallic (19-23)
+    'metallic-steel': 19, 'metallic-copper': 20, 'metallic-titanium': 21, 'metallic-rose-gold': 22, 'metallic-gunmetal': 23,
+    // Papercut (24-28)
+    'papercut-coral': 24, 'papercut-sky': 25, 'papercut-mint': 26, 'papercut-lavender': 27, 'papercut-peach': 28,
+    'default': 100,
+  }
+  return weightMap[w] ?? 100
 }
 
 function fromManualWeight(w: number | null | undefined): string {
-  if (w === 5) return 'gold'
-  if (w === 4) return 'silver'
-  if (w === 3) return 'bronze'
-  if (w === 2) return 'iron'
-  return 'soil'
+  const reverseMap: Record<number, string> = {
+    1: 'tier-gold', 2: 'tier-diamond', 3: 'tier-prismatic', 4: 'tier-obsidian',
+    5: 'gradient-emerald', 6: 'gradient-sapphire', 7: 'gradient-ruby',
+    8: 'gradient-amethyst', 9: 'gradient-gold',
+    10: 'neu', 11: 'holo', 12: 'sketch', 13: 'newspaper',
+    14: 'neon-cyan', 15: 'neon-pink', 16: 'neon-green', 17: 'neon-purple', 18: 'neon-gold',
+    19: 'metallic-steel', 20: 'metallic-copper', 21: 'metallic-titanium', 22: 'metallic-rose-gold', 23: 'metallic-gunmetal',
+    24: 'papercut-coral', 25: 'papercut-sky', 26: 'papercut-mint', 27: 'papercut-lavender', 28: 'papercut-peach',
+    100: 'default',
+  }
+  return reverseMap[Number(w)] ?? 'default'
 }
 
 function getCategoryColor(category?: string): string {
@@ -42,28 +91,41 @@ function getCategoryColor(category?: string): string {
 
 function getWeightCardClass(weight: number | null | undefined) {
   const w = Number(weight)
-  if (w >= 5) return 'weight-gold'
-  if (w === 4) return 'weight-silver'
-  if (w === 3) return 'weight-bronze'
-  if (w === 2) return 'weight-iron'
-  return ''
+  // Tier (1-4)
+  if (w >= 1 && w <= 4) return `weight-tier-${['gold', 'diamond', 'prismatic', 'obsidian'][w - 1]}`
+  // Gradient (5-9)
+  if (w >= 5 && w <= 9) return `weight-gradient-${['emerald', 'sapphire', 'ruby', 'amethyst', 'gold'][w - 5]}`
+  // Special (10-13)
+  if (w === 10) return 'weight-neu'
+  if (w === 11) return 'weight-holo'
+  if (w === 12) return 'weight-sketch'
+  if (w === 13) return 'weight-newspaper'
+  // Neon (14-18)
+  if (w >= 14 && w <= 18) return `weight-neon-${['cyan', 'pink', 'green', 'purple', 'gold'][w - 14]}`
+  // Metallic (19-23)
+  if (w >= 19 && w <= 23) return `weight-metallic-${['steel', 'copper', 'titanium', 'rose-gold', 'gunmetal'][w - 19]}`
+  // Papercut (24-28)
+  if (w >= 24 && w <= 28) return `weight-papercut-${['coral', 'sky', 'mint', 'lavender', 'peach'][w - 24]}`
+  // Default
+  return 'weight-default'
 }
 
 function getWeightPreviewClass(w: string) {
-  if (w === 'soil') return 'border-stone-200 bg-stone-50'
-  if (w === 'iron') return 'border-slate-300 bg-slate-50'
-  if (w === 'bronze') return 'border-amber-300 bg-amber-50'
-  if (w === 'silver') return 'border-zinc-200 bg-zinc-50'
-  if (w === 'gold') return 'border-yellow-300 bg-yellow-50'
-  return 'border-stone-200 bg-white'
+  if (w.startsWith('tier-')) return 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-amber-50'
+  if (w.startsWith('gradient-')) return 'border-emerald-400 bg-gradient-to-br from-emerald-50 to-teal-50'
+  if (['neu', 'holo', 'sketch'].includes(w)) return 'border-gray-300 bg-gray-100'
+  if (w === 'newspaper') return 'border-black bg-gradient-to-br from-stone-100 to-white'
+  if (w.startsWith('neon-')) return 'border-cyan-400 bg-gray-900'
+  if (w.startsWith('metallic-')) return 'border-gray-400 bg-gradient-to-br from-gray-200 to-gray-300'
+  if (w.startsWith('papercut-')) return 'border-orange-300 bg-gradient-to-br from-orange-50 to-red-50'
+  return 'border-stone-200 bg-stone-50'
 }
 
 function getWeightTextClass(w: string) {
-  if (w === 'gold') return 'text-amber-600'
-  if (w === 'silver') return 'text-zinc-500'
-  if (w === 'bronze') return 'text-amber-700'
-  if (w === 'iron') return 'text-slate-500'
-  return 'text-stone-500'
+  if (w.startsWith('neon-')) return 'text-green-400'
+  if (w === 'newspaper') return 'text-black'
+  if (w.startsWith('metallic-')) return 'text-gray-600'
+  return 'text-stone-600'
 }
 
 export default function MyResourceEdit() {
@@ -84,7 +146,7 @@ export default function MyResourceEdit() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
-  const selectedWeight = manualWeight || 'soil'
+  const selectedWeight = manualWeight || 'default'
   const weightPreviewClass = getWeightPreviewClass(selectedWeight)
   const weightTextClass = getWeightTextClass(selectedWeight)
 
@@ -136,7 +198,11 @@ export default function MyResourceEdit() {
   }, [id])
 
   async function handleSubmit() {
-    if (!id || !title.trim()) return
+    console.log('handleSubmit called', { id, title, titleTrimmed: title.trim(), selectedWeight, manual_weight: toManualWeight(selectedWeight) })
+    if (!id || !title.trim()) {
+      console.log('Early return - id:', id, 'title:', title)
+      return
+    }
     setError('')
     setSaving(true)
     try {
@@ -144,10 +210,15 @@ export default function MyResourceEdit() {
         title: title.trim(),
         summary: summary.trim() || null,
         manual_weight: toManualWeight(selectedWeight),
+        is_public: isPublic,
       }
+
+      console.log('Sending payload:', payload)
       await updateMyResource(Number(id), payload)
+      console.log('Save success, navigating...')
       navigate('/my-resources')
     } catch (e: any) {
+      console.error('Save failed:', e)
       setError(String(e?.response?.data?.detail || e?.message || 'Save failed'))
     } finally {
       setSaving(false)
@@ -269,40 +340,45 @@ export default function MyResourceEdit() {
                   <p className="text-sm font-semibold text-stone-700">{categoryName || 'Other'}</p>
                 </div>
 
-                {/* Visibility (read-only display) */}
+                {/* Visibility toggle */}
                 <div>
                   <label className="block text-[11px] font-bold uppercase tracking-widest text-stone-400 mb-2">Visibility</label>
-                  <p className="text-sm font-semibold text-stone-700">{isPublic ? 'Public' : 'Private'}</p>
+                  <button
+                    type="button"
+                    onClick={() => setIsPublic(!isPublic)}
+                    className="relative inline-flex h-8 w-28 items-center rounded-full border border-stone-200 bg-stone-50 p-0.5 transition-colors"
+                    aria-label="Toggle privacy"
+                  >
+                    <span
+                      className="absolute inset-y-0.5 left-0.5 w-[calc(50%-0.25rem)] rounded-full shadow-sm transition-transform duration-200 bg-indigo-400"
+                      style={{ transform: isPublic ? 'translateX(56px)' : 'translateX(0px)' }}
+                    />
+                    <span className="relative z-10 flex w-full text-[11px] font-semibold">
+                      <span className={`flex w-1/2 justify-center ${isPublic ? 'text-stone-400' : 'text-white'}`}>Private</span>
+                      <span className={`flex w-1/2 justify-center ${isPublic ? 'text-white' : 'text-stone-400'}`}>Public</span>
+                    </span>
+                  </button>
                 </div>
               </div>
 
               {/* Weight */}
               <div>
                 <label className="block text-[11px] font-bold uppercase tracking-widest text-stone-400 mb-2">Weight</label>
-                <div className="flex gap-3 items-center">
-                  <div className="flex gap-2 flex-wrap">
-                    {WEIGHT_OPTIONS.map(w => (
-                      <button
-                        key={w.value}
-                        type="button"
-                        onClick={() => setManualWeight(w.value)}
-                        className={`h-8 px-3 rounded-full border text-[11px] font-bold uppercase tracking-wider transition-all ${
-                          selectedWeight === w.value
-                            ? 'border-stone-900 bg-stone-900 text-white'
-                            : 'border-stone-200 bg-white text-stone-500 hover:border-stone-400'
-                        }`}
-                      >
-                        {w.label}
-                      </button>
-                    ))}
-                  </div>
-                  {selectedWeight && (
-                    <div
-                      className={`ml-auto w-16 h-16 rounded-sm border-2 flex items-center justify-center text-[10px] font-black tracking-widest ${weightPreviewClass}`}
+                <div className="flex gap-2 flex-wrap">
+                  {WEIGHT_OPTIONS.map(w => (
+                    <button
+                      key={w.value}
+                      type="button"
+                      onClick={() => setManualWeight(w.value)}
+                      className={`h-8 px-3 rounded-full border text-[11px] font-bold uppercase tracking-wider transition-all ${
+                        selectedWeight === w.value
+                          ? 'border-stone-900 bg-stone-900 text-white'
+                          : 'border-stone-200 bg-white text-stone-500 hover:border-stone-400'
+                      }`}
                     >
-                      <span className={weightTextClass}>{selectedWeight.toUpperCase()}</span>
-                    </div>
-                  )}
+                      {w.label}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -329,13 +405,15 @@ export default function MyResourceEdit() {
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Live preview</span>
               </div>
-              <div className={getWeightCardClass(toManualWeight(selectedWeight))}>
+              {/* Card preview container - centered */}
+              <div className="flex items-center justify-center bg-white border border-stone-200 rounded-lg p-8" style={{ minHeight: '560px' }}>
                 <ResourceCard
                   resource={previewResource}
                   onOpen={() => {}}
                   onAdd={() => {}}
                   saving={false}
                   saved={false}
+                  weight={selectedWeight}
                 />
               </div>
             </div>

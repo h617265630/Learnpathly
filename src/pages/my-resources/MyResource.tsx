@@ -66,14 +66,21 @@ function mapDbToUi(r: DbResource): UiResource {
 
 function getWeightCardClass(resource: UiResource) {
   const w = Number(resource.manual_weight)
-  if (w >= 5) return 'weight-gold'
-  if (w === 4) return 'weight-silver'
-  if (w === 3) return 'weight-bronze'
-  if (w === 2) return 'weight-iron'
-  return ''
+  // Use same mapping as fromManualWeight for consistency
+  const map: Record<number, string> = {
+    1: 'tier-gold', 2: 'tier-diamond', 3: 'tier-prismatic', 4: 'tier-obsidian',
+    5: 'gradient-emerald', 6: 'gradient-sapphire', 7: 'gradient-ruby',
+    8: 'gradient-amethyst', 9: 'gradient-gold',
+    10: 'neu', 11: 'holo', 12: 'sketch', 13: 'newspaper',
+    14: 'neon-cyan', 15: 'neon-pink', 16: 'neon-green', 17: 'neon-purple', 18: 'neon-gold',
+    19: 'metallic-steel', 20: 'metallic-copper', 21: 'metallic-titanium', 22: 'metallic-rose-gold', 23: 'metallic-gunmetal',
+    24: 'papercut-coral', 25: 'papercut-sky', 26: 'papercut-mint', 27: 'papercut-lavender', 28: 'papercut-peach',
+    100: 'default',
+  }
+  return map[w] || 'border border-stone-200 bg-stone-50'
 }
 
-function toRcResource(r: UiResource): RcResource {
+function toRcResource(r: UiResource, weight: string): RcResource {
   return {
     id: r.id,
     title: r.title,
@@ -85,7 +92,23 @@ function toRcResource(r: UiResource): RcResource {
     typeLabel: r.type,
     thumbnail: r.thumbnail,
     resource_type: r.type,
+    weight,
   }
+}
+
+// Convert numeric manual_weight to string weight for ResourceCard
+function fromManualWeight(w: number | null | undefined): string {
+  const reverseMap: Record<number, string> = {
+    1: 'tier-gold', 2: 'tier-diamond', 3: 'tier-prismatic', 4: 'tier-obsidian',
+    5: 'gradient-emerald', 6: 'gradient-sapphire', 7: 'gradient-ruby',
+    8: 'gradient-amethyst', 9: 'gradient-gold',
+    10: 'neu', 11: 'holo', 12: 'sketch', 13: 'newspaper',
+    14: 'neon-cyan', 15: 'neon-pink', 16: 'neon-green', 17: 'neon-purple', 18: 'neon-gold',
+    19: 'metallic-steel', 20: 'metallic-copper', 21: 'metallic-titanium', 22: 'metallic-rose-gold', 23: 'metallic-gunmetal',
+    24: 'papercut-coral', 25: 'papercut-sky', 26: 'papercut-mint', 27: 'papercut-lavender', 28: 'papercut-peach',
+    100: 'default',
+  }
+  return reverseMap[Number(w)] ?? 'default'
 }
 
 export default function MyResource() {
@@ -98,6 +121,7 @@ export default function MyResource() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [publicUpdatingId, setPublicUpdatingId] = useState<number | null>(null)
   const [clickedDeck, setClickedDeck] = useState<number | null>(null)
+  const [locationKey, setLocationKey] = useState(location.key)
 
   const [activeResourceId, setActiveResourceId] = useState<number | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -168,6 +192,14 @@ export default function MyResource() {
       setLoading(false)
     }
   }, [])
+
+  // Reload when location.key changes (e.g., after navigating back from edit page)
+  useEffect(() => {
+    if (location.key !== locationKey) {
+      setLocationKey(location.key)
+      load()
+    }
+  }, [location.key, locationKey, load])
 
   useEffect(() => {
     load()
@@ -388,15 +420,15 @@ export default function MyResource() {
             {isDeckExpanded(deckIndex) && (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {deck.cards.map((resource) => (
-                  <div key={resource.id} className={getWeightCardClass(resource)}>
-                    <ResourceCard
-                      resource={toRcResource(resource)}
-                      onOpen={() => openCard(resource)}
-                      onAdd={() => {}}
-                      saving={false}
-                      saved={false}
-                    />
-                  </div>
+                  <ResourceCard
+                    key={resource.id}
+                    resource={toRcResource(resource, fromManualWeight(resource.manual_weight))}
+                    onOpen={() => openCard(resource)}
+                    onAdd={() => {}}
+                    saving={false}
+                    saved={false}
+                    weight={fromManualWeight(resource.manual_weight)}
+                  />
                 ))}
               </div>
             )}

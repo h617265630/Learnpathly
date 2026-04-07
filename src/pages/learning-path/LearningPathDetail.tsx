@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { BookOpen, Clock, Layers } from 'lucide-react'
 import { useAuth } from '@/stores/auth'
 import {
   getPublicLearningPathDetail,
@@ -8,7 +7,6 @@ import {
   attachPublicLearningPathToMe,
   type PublicLearningPathDetail,
 } from '@/api/learningPath'
-import { getResourceDetail, getMyResourceDetail, type DbResourceDetail } from '@/api/resource'
 import { Button } from '@/components/ui/Button'
 import { ResourceCard, type UiResource } from '@/components/ResourceCard'
 
@@ -25,6 +23,7 @@ type Module = {
   duration: string
   level: 'Beginner' | 'Intermediate' | 'Advanced'
   orderIndex: number
+  resourceData: any  // embedded resource_data from backend
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -52,55 +51,45 @@ function inferModuleType(item: unknown, r: unknown): ModuleType {
   return 'unknown'
 }
 
-function moduleToUiResource(m: Module, cache: Record<string, DbResourceDetail | null>): UiResource {
-  const r = cache[m.resourceId]
+function moduleToUiResource(m: Module): UiResource {
+  const r = m.resourceData
   return {
     id: Number(m.resourceId) || 0,
     title: m.title,
     summary: m.summary,
-    categoryLabel: '',
-    categoryColor: '',
-    platform: '',
-    platformLabel: '',
+    categoryLabel: r?.category_name || '',
+    categoryColor: getCategoryColor(r?.category_name),
+    platform: r?.platform || '',
+    platformLabel: formatPlatform(r?.platform),
     typeLabel: m.type,
-    thumbnail: moduleThumb(m, cache),
+    thumbnail: moduleThumb(m),
     resource_type: m.type,
   }
 }
 
-function moduleThumb(m: Module, cache: Record<string, DbResourceDetail | null>): string {
-  const r = cache[m.resourceId]
+function moduleThumb(m: Module): string {
+  const r = m.resourceData
   const url = String(r?.thumbnail || '').trim()
   return url || FALLBACK_THUMB
 }
 
-function typeBadgeClass(type: ModuleType): string {
-  switch (type) {
-    case 'video':
-      return 'bg-purple-50 text-purple-700'
-    case 'clip':
-      return 'bg-purple-50 text-purple-700'
-    case 'document':
-      return 'bg-blue-50 text-blue-700'
-    case 'article':
-      return 'bg-green-50 text-green-700'
-    case 'link':
-      return 'bg-stone-100 text-stone-700'
-    default:
-      return 'bg-stone-100 text-stone-700'
-  }
+function getCategoryColor(category?: string): string {
+  const key = String(category || '').trim().toLowerCase() || 'other'
+  const palette = ['#3b82f6', '#22c55e', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#f97316', '#84cc16']
+  let hash = 0
+  for (let i = 0; i < key.length; i += 1) hash = (hash * 31 + key.charCodeAt(i)) >>> 0
+  return palette[hash % palette.length]
 }
 
-async function fetchResourceDetail(resourceId: number): Promise<DbResourceDetail | null> {
-  try {
-    return await getResourceDetail(resourceId)
-  } catch {
-    try {
-      return await getMyResourceDetail(resourceId)
-    } catch {
-      return null
-    }
+function formatPlatform(platform?: string | null): string {
+  if (!platform) return ''
+  const map: Record<string, string> = {
+    youtube: 'YouTube', bilibili: 'Bilibili', jike: 'Jike',
+    github: 'GitHub', douyin: 'Douyin', xiaohongshu: '小红书',
+    wechat: 'WeChat', weibo: 'Weibo', podcast: 'Podcast',
+    website: 'Website',
   }
+  return map[platform.toLowerCase()] || platform
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────
@@ -117,8 +106,6 @@ export default function LearningPathDetail() {
   const [modules, setModules] = useState<Module[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-
-  const [resourceCache] = useState<Record<string, DbResourceDetail>>({})
 
   const [usingThisPath, setUsingThisPath] = useState(false)
   const [showUseModal, setShowUseModal] = useState(false)
@@ -144,22 +131,6 @@ export default function LearningPathDetail() {
 
       const items = Array.isArray(detail.path_items) ? detail.path_items : []
 
-      // Hydrate missing resource_data
-      const missing = items
-        .filter((it: any) => !it?.resource_data)
-        .map((it: any) => Number(it?.resource_id))
-        .filter((n: number) => Number.isFinite(n) && n > 0)
-
-      const uniq = Array.from(new Set(missing))
-      await Promise.allSettled(
-        uniq.map(async (rid) => {
-          const key = String(rid)
-          if (resourceCache[key]) return
-          const r = await fetchResourceDetail(rid)
-          if (r) (resourceCache as any)[key] = r
-        }),
-      )
-
       const mapped: Module[] = items.map((it: any) => {
         const r = (it?.resource_data || null) as any
         const uiType: ModuleType = inferModuleType(it, r)
@@ -172,6 +143,7 @@ export default function LearningPathDetail() {
           duration: '',
           level: 'Beginner' as const,
           orderIndex: Number(it.order_index) || 0,
+          resourceData: r,
         }
       })
 
@@ -181,7 +153,7 @@ export default function LearningPathDetail() {
     } finally {
       setLoading(false)
     }
-  }, [id, fromMyPaths, resourceCache])
+  }, [id, fromMyPaths])
 
   useEffect(() => {
     void loadDetail()
@@ -362,7 +334,7 @@ export default function LearningPathDetail() {
 
           {/* Cover */}
           {path.cover_image_url && (
-            <div className="relative h-44 bg-stone-100 overflow-hidden rounded-md">
+            <div className="relative h-72 bg-stone-100 overflow-hidden rounded-md">
               <img
                 src={path.cover_image_url}
                 alt={path.title}
@@ -391,7 +363,7 @@ export default function LearningPathDetail() {
               {modules.map(m => (
                 <ResourceCard
                   key={m.id}
-                  resource={moduleToUiResource(m, resourceCache)}
+                  resource={moduleToUiResource(m)}
                   onOpen={() => openResource(m)}
                   onAdd={() => {}}
                   saving={false}

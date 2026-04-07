@@ -125,6 +125,7 @@ export function updateMyResource(
     tags?: Record<string, unknown> | null
     raw_meta?: Record<string, unknown> | null
     manual_weight?: number | null
+    is_public?: boolean
   },
 ): Promise<DbResource> {
   return request.patch(`/resources/me/${resourceId}`, payload)

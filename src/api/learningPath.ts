@@ -19,6 +19,7 @@ export type LearningPathDisplayBase = {
   description: string
   thumbnail: string
   categoryName: string
+  itemCount: number
 }
 
 export function mapPublicLearningPathToDisplayBase(
@@ -29,12 +30,14 @@ export function mapPublicLearningPathToDisplayBase(
   const description = String(p.description || '').trim()
   const thumbnail = String(p.cover_image_url || '').trim()
   const categoryName = String(p.category_name || '').trim()
+  const itemCount = Number((p as any).item_count ?? 0)
   return {
     id,
     title,
     description,
     thumbnail,
     categoryName,
+    itemCount,
   }
 }
 

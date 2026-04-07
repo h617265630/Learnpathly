@@ -1,23 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { listPublicLearningPaths, mapPublicLearningPathToDisplayBase, type PublicLearningPath } from '@/api/learningPath'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
-
-type PoolPath = {
-  id: string
-  title: string
-  description: string
-  category: string
-  typeLabel: string
-  level: string
-  items: number
-  thumbnail: string
-  hotScore: number
-}
-
-const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=506&fit=crop'
+import { PathCard, type PoolPath } from '@/components/PathCard'
 
 function inferCategoryFromText(text: string): string {
   const t = text.toLowerCase()
@@ -43,7 +29,7 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
   const title = base.title
   const description = base.description
   const cat = base.categoryName || inferCategoryFromText(`${title}\n${description}`)
-  const thumbnail = base.thumbnail || FALLBACK_THUMB
+  const thumbnail = base.thumbnail
 
   return {
     id: base.id,
@@ -52,7 +38,7 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
     category: cat,
     typeLabel,
     level: 'Beginner',
-    items: 0,
+    items: base.itemCount,
     thumbnail,
     hotScore: 50,
   }
@@ -75,47 +61,6 @@ function SkeletonCard() {
   )
 }
 
-function PathCard({ path }: { path: PoolPath }) {
-  return (
-    <Link to={`/learningpath/${path.id}`} className="group block">
-      <article className="border border-stone-100 bg-white hover:border-stone-200 hover:shadow-md transition-all duration-500 rounded-xl overflow-hidden h-full flex flex-col">
-        {/* Thumbnail */}
-        <div className="relative bg-stone-100 overflow-hidden" style={{ width: '100%', aspectRatio: '16 / 9' }}>
-          <img
-            src={path.thumbnail || FALLBACK_THUMB}
-            alt={path.title}
-            loading="lazy"
-            decoding="async"
-            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-          />
-          {path.typeLabel && path.typeLabel !== 'Path' && (
-            <span className="absolute right-3 top-3 px-2 py-1 rounded-full border border-stone-200 bg-white/90 text-[10px] font-semibold tracking-[0.14em] uppercase text-stone-700">
-              {path.typeLabel}
-            </span>
-          )}
-        </div>
-
-        {/* Content */}
-        <div className="p-5 flex-1 flex flex-col">
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3
-              className="text-sm font-semibold text-stone-900 line-clamp-2 leading-snug group-hover:text-amber-600 transition-colors"
-              title={path.title}
-            >
-              {path.title}
-            </h3>
-          </div>
-          <p className="text-xs text-stone-500 line-clamp-2 mt-1 flex-1 whitespace-pre-wrap">{path.description}</p>
-          <div className="flex flex-wrap items-center gap-2 mt-4">
-            <Badge variant="secondary" className="text-[10px]">{path.category}</Badge>
-            <span className="text-[10px] text-stone-400">{path.level}</span>
-            <span className="text-[10px] text-stone-400">{path.items} items</span>
-          </div>
-        </div>
-      </article>
-    </Link>
-  )
-}
 
 export default function LearningPoolCategory() {
   const { category = '' } = useParams<{ category: string }>()
@@ -180,7 +125,7 @@ export default function LearningPoolCategory() {
 
         {/* Loading skeleton */}
         {loading && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
             {Array.from({ length: 6 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -189,7 +134,7 @@ export default function LearningPoolCategory() {
 
         {/* Path grid */}
         {!loading && filteredPaths.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
             {filteredPaths.map((p) => (
               <PathCard key={`${p.id}-${p.category}`} path={p} />
             ))}
