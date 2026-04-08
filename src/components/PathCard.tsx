@@ -14,6 +14,7 @@ export type PathCardProps = {
   items?: number
   thumbnail: string
   hotScore?: number
+  forkCount?: number
 }
 
 export type PoolPath = PathCardProps
@@ -96,18 +97,24 @@ export function PathCard({ path, onEdit, onDelete, showTypeLabel = true }: PoolP
             <Badge variant="outline" className="text-[10px] font-medium text-gray-600 bg-gray-100 border-none">
                 {path.level}
             </Badge>
-            {path.hotScore !== undefined && path.hotScore > 0 ? (
-              <span className="text-xs font-semibold text-amber-500 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-0.5 fill-current" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
-                </svg>
-                {path.hotScore}
-              </span>
-            ) : (
-              <span className="text-xs text-gray-500">
-                {path.level}
-              </span>
-            )}
+            <div className="flex items-center gap-3">
+              {path.forkCount !== undefined && path.forkCount > 0 && (
+                <span className="text-xs font-semibold text-stone-400 flex items-center gap-0.5" title={`${path.forkCount} forks`}>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 fill-current" viewBox="0 0 24 24">
+                    <path d="M6 3a1 1 0 0 0-2 0v2H2a1 1 0 0 0-1 1v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1h-2V3a1 1 0 0 0-2 0v2h-2V3a1 1 0 0 0-2 0v2H8V3a1 1 0 0 0-2 0zm10 4H8v2h8V7zM6 7H2v6h4V7zm8 0v6h4V7h-4z"/>
+                  </svg>
+                  {path.forkCount}
+                </span>
+              )}
+              {path.hotScore !== undefined && path.hotScore > 0 ? (
+                <span className="text-xs font-semibold text-amber-500 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-0.5 fill-current" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
+                  </svg>
+                  {path.hotScore}
+                </span>
+              ) : null}
+            </div>
           </div>
         </div>
       </Link>

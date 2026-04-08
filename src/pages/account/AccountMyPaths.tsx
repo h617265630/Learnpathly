@@ -12,6 +12,8 @@ type UiPath = {
   type: string
   category: string
   thumbnail: string
+  status?: string | null
+  forkCount?: number
 }
 
 function mapDb(p: MyLearningPath): UiPath {
@@ -23,6 +25,8 @@ function mapDb(p: MyLearningPath): UiPath {
     type: String(anyP.type || '').trim(),
     category: String(anyP.category_name || '').trim(),
     thumbnail: String(anyP.cover_image_url || '').trim() || FALLBACK_THUMB,
+    status: anyP.status ?? null,
+    forkCount: typeof anyP.fork_count === 'number' ? anyP.fork_count : undefined,
   }
 }
 
@@ -141,6 +145,26 @@ export default function AccountMyPaths() {
                 {p.type && (
                   <span className="inline-flex items-center rounded-sm border border-white/20 bg-black/30 backdrop-blur-sm px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
                     {p.type}
+                  </span>
+                )}
+                {p.status === 'published' && (
+                  <span className="inline-flex items-center rounded-sm bg-emerald-500 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                    Published
+                  </span>
+                )}
+                {p.status === 'draft' && (
+                  <span className="inline-flex items-center rounded-sm bg-stone-400 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                    Draft
+                  </span>
+                )}
+                {p.status === 'archived' && (
+                  <span className="inline-flex items-center rounded-sm bg-red-400 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
+                    Archived
+                  </span>
+                )}
+                {p.forkCount !== undefined && p.forkCount > 0 && (
+                  <span className="inline-flex items-center rounded-sm border border-white/20 bg-black/30 backdrop-blur-sm px-2 py-0.5 text-[9px] font-bold tracking-wider text-white">
+                    ↳ {p.forkCount} fork{p.forkCount > 1 ? 's' : ''}
                   </span>
                 )}
               </div>

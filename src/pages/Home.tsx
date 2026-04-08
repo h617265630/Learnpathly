@@ -36,7 +36,6 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
     description: p.description || '',
     thumbnail: p.cover_image_url || FALLBACK_THUMB,
     level: 'Beginner',
-    duration: '',
     typeLabel,
     category: p.category_name || 'General',
     items: Number((p as any).item_count ?? 0),

@@ -5,6 +5,7 @@ import {
   getPublicLearningPathDetail,
   getMyLearningPathDetail,
   attachPublicLearningPathToMe,
+  forkLearningPath,
   type PublicLearningPathDetail,
 } from '@/api/learningPath'
 import { Button } from '@/components/ui/Button'
@@ -109,10 +110,12 @@ export default function LearningPathDetail() {
 
   const [usingThisPath, setUsingThisPath] = useState(false)
   const [showUseModal, setShowUseModal] = useState(false)
-  const [useModalState, setUseModalState] = useState<'confirm' | 'done' | 'error'>('confirm')
+  const [useModalState, setUseModalState] = useState<'confirm' | 'done' | 'error' | 'fork_error'>('confirm')
   const [useModalTitle, setUseModalTitle] = useState('Use this path')
   const [useModalMessage, setUseModalMessage] = useState('Save this path to your My Paths?')
   const [useModalHint, setUseModalHint] = useState('')
+
+  const [forking, setForking] = useState(false)
 
   const loadDetail = useCallback(async () => {
     if (!id) return
@@ -246,6 +249,25 @@ export default function LearningPathDetail() {
     }
   }
 
+  async function handleFork() {
+    if (forking || !id) return
+    setForking(true)
+    try {
+      const nid = Number(id)
+      const res = await forkLearningPath(nid)
+      const forkedId = res?.id
+      navigate({ pathname: `/learningpath/${String(forkedId)}`, search: '?from=my-paths' })
+    } catch (e: any) {
+      setShowUseModal(true)
+      setUseModalState('fork_error')
+      setUseModalTitle('Fork failed')
+      setUseModalMessage(String(e?.response?.data?.detail || e?.message || 'Failed to fork this path'))
+      setUseModalHint('')
+    } finally {
+      setForking(false)
+    }
+  }
+
   return (
     <div className="mx-auto max-w-7xl space-y-10 px-4 py-8">
       {/* Header */}
@@ -304,16 +326,28 @@ export default function LearningPathDetail() {
                   </Button>
 
                   {!fromMyPaths && (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                      disabled={usingThisPath}
-                      onClick={openUseThisPath}
-                    >
-                      {usingThisPath ? 'Saving…' : 'Use this path'}
-                    </Button>
+                    <>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
+                        disabled={forking}
+                        onClick={handleFork}
+                      >
+                        {forking ? 'Forking…' : 'Fork'}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
+                        disabled={usingThisPath}
+                        onClick={openUseThisPath}
+                      >
+                        {usingThisPath ? 'Saving…' : 'Use this path'}
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>
@@ -431,7 +465,19 @@ export default function LearningPathDetail() {
                 </>
               )}
 
-              {useModalState !== 'confirm' && (
+              {useModalState === 'fork_error' && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="border-stone-200 text-stone-600 hover:border-stone-400"
+                  onClick={closeUseModal}
+                >
+                  OK
+                </Button>
+              )}
+
+              {useModalState !== 'confirm' && useModalState !== 'fork_error' && (
                 <Button
                   type="button"
                   variant="outline"

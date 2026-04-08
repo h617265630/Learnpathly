@@ -7,6 +7,7 @@ import { ResourceCard, type UiResource as RcResource } from '@/components/Resour
 import {
   deleteMyResource,
   listMyResources,
+  updateUserResourceProfile,
   type DbResource,
 } from '@/api/resource'
 import { formatPlatform } from '@/utils/platform'
@@ -26,6 +27,9 @@ type UiResource = {
   is_system_public?: boolean
   manual_weight?: number | null
   user_seq?: number | null
+  custom_notes?: string | null
+  personal_rating?: number | null
+  is_favorite?: boolean | null
 }
 
 function getCategoryColor(category?: string): string {
@@ -61,6 +65,9 @@ function mapDbToUi(r: DbResource): UiResource {
     is_system_public: Boolean((r as any).is_system_public),
     manual_weight: (r as any).manual_weight ?? null,
     user_seq: (r as any).user_seq ?? null,
+    custom_notes: (r as any).custom_notes ?? null,
+    personal_rating: (r as any).personal_rating ?? null,
+    is_favorite: (r as any).is_favorite ?? null,
   }
 }
 
@@ -80,7 +87,7 @@ function getWeightCardClass(resource: UiResource) {
   return map[w] || 'border border-stone-200 bg-stone-50'
 }
 
-function toRcResource(r: UiResource, weight: string): RcResource {
+function toRcResource(r: UiResource): RcResource {
   return {
     id: r.id,
     title: r.title,
@@ -92,7 +99,6 @@ function toRcResource(r: UiResource, weight: string): RcResource {
     typeLabel: r.type,
     thumbnail: r.thumbnail,
     resource_type: r.type,
-    weight,
   }
 }
 
@@ -120,6 +126,7 @@ export default function MyResource() {
   const [loading, setLoading] = useState(true)
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [publicUpdatingId, setPublicUpdatingId] = useState<number | null>(null)
+  const [favoritingId, setFavoritingId] = useState<number | null>(null)
   const [clickedDeck, setClickedDeck] = useState<number | null>(null)
   const [locationKey, setLocationKey] = useState(location.key)
 
@@ -286,6 +293,22 @@ export default function MyResource() {
     setPublicUpdatingId(null)
   }
 
+  async function toggleFavorite(resource: UiResource) {
+    setFavoritingId(resource.id)
+    try {
+      const newVal = !(resource.is_favorite ?? false)
+      await updateUserResourceProfile(resource.id, { is_favorite: newVal })
+      setResources(prev => prev.map(r => {
+        if (r.id !== resource.id) return r
+        return { ...r, is_favorite: newVal }
+      }))
+    } catch {
+      // silently fail
+    } finally {
+      setFavoritingId(null)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Masthead */}
@@ -422,7 +445,7 @@ export default function MyResource() {
                 {deck.cards.map((resource) => (
                   <ResourceCard
                     key={resource.id}
-                    resource={toRcResource(resource, fromManualWeight(resource.manual_weight))}
+                    resource={toRcResource(resource)}
                     onOpen={() => openCard(resource)}
                     onAdd={() => {}}
                     saving={false}
@@ -543,6 +566,42 @@ export default function MyResource() {
                 View details
               </Button>
               <div className="flex items-center gap-2">
+                {/* Favorite toggle */}
+                <button
+                  type="button"
+                  onClick={() => toggleFavorite(activeResource)}
+                  disabled={favoritingId === activeResource.id}
+                  className={`relative inline-flex h-8 w-20 items-center rounded-full border p-0.5 transition-colors ${activeResource.is_favorite ? 'border-amber-300 bg-amber-50' : 'border-stone-200 bg-stone-50'}`}
+                  aria-label="Toggle favorite"
+                >
+                  <span
+                    className={`absolute inset-y-0.5 left-0.5 w-[calc(50%-0.25rem)] rounded-full shadow-sm transition-transform duration-200 ${activeResource.is_favorite ? 'bg-amber-400' : 'bg-stone-200'}`}
+                    style={{
+                      transform: activeResource.is_favorite ? 'translateX(calc(100% + 0.25rem))' : 'translateX(0)',
+                    }}
+                  />
+                  <span className="relative z-10 flex w-full text-[11px] font-semibold">
+                    <span className={`flex w-1/2 justify-center ${activeResource.is_favorite ? 'text-stone-400' : 'text-stone-600'}`}>☆</span>
+                    <span className={`flex w-1/2 justify-center ${activeResource.is_favorite ? 'text-white' : 'text-stone-400'}`}>★</span>
+                  </span>
+                </button>
+
+                {/* Personal rating */}
+                {activeResource.personal_rating != null && activeResource.personal_rating > 0 && (
+                  <div className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className={`text-xs ${i < (activeResource.personal_rating ?? 0) ? 'text-amber-400' : 'text-stone-300'}`}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex-1"></div>
+
                 {/* Privacy toggle */}
                 <button
                   type="button"

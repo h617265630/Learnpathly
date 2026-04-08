@@ -11,6 +11,14 @@ export type PublicLearningPath = {
   cover_image_url?: string | null
   category_id?: number | null
   category_name?: string | null
+  // Fork lineage
+  parent_id?: number | null
+  root_id?: number | null
+  status?: string | null
+  published_at?: string | null
+  fork_count?: number
+  like_count?: number
+  view_count?: number
 }
 
 export type LearningPathDisplayBase = {
@@ -20,6 +28,8 @@ export type LearningPathDisplayBase = {
   thumbnail: string
   categoryName: string
   itemCount: number
+  forkCount?: number
+  status?: string | null
 }
 
 export function mapPublicLearningPathToDisplayBase(
@@ -31,6 +41,8 @@ export function mapPublicLearningPathToDisplayBase(
   const thumbnail = String(p.cover_image_url || '').trim()
   const categoryName = String(p.category_name || '').trim()
   const itemCount = Number((p as any).item_count ?? 0)
+  const forkCount = typeof p.fork_count === 'number' ? p.fork_count : undefined
+  const status = p.status ?? undefined
   return {
     id,
     title,
@@ -38,6 +50,8 @@ export function mapPublicLearningPathToDisplayBase(
     thumbnail,
     categoryName,
     itemCount,
+    forkCount,
+    status,
   }
 }
 
@@ -141,4 +155,8 @@ export function addResourceToMyLearningPath(
 
 export function removeResourceFromMyLearningPath(learningPathId: number, resourceId: number) {
   return request.delete(`/learning-paths/${learningPathId}/items/${resourceId}`)
+}
+
+export function forkLearningPath(id: number): Promise<PublicLearningPath> {
+  return request.post(`/learning-paths/${id}/fork`)
 }

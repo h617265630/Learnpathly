@@ -48,6 +48,7 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
     items: base.itemCount,
     thumbnail,
     hotScore: 50,
+    forkCount: base.forkCount,
   }
 }
 

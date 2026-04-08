@@ -323,7 +323,7 @@ function metallicIconStyle(type: string): React.CSSProperties {
 
 // ─── Card Components ───
 
-function CardInner({ card, children, className = '' }: { card: DemoCard; children: React.ReactNode; className?: string }) {
+function CardInner({ card, children, className = '' }: { card: DemoCard; children?: React.ReactNode; className?: string }) {
   return (
     <div className={`h-full flex flex-col overflow-hidden ${className}`}>
       <div className="px-3 py-2 flex items-center justify-between border-b border-black/10">

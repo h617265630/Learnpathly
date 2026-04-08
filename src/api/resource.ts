@@ -44,6 +44,14 @@ export interface DbResource {
   save_count?: number | null
   trending_score?: number | null
   user_seq?: number | null
+  visibility?: string | null  // "private" | "public" - 决定是否进入公共池
+  source?: string | null      // "created" | "saved"
+
+  // 用户个性化字段
+  custom_notes?: string | null
+  custom_tags?: Record<string, unknown> | null
+  personal_rating?: number | null
+  is_favorite?: boolean | null
 }
 
 export interface ChapterItem {
@@ -137,4 +145,19 @@ export function getMyResourceDetail(resourceId: number): Promise<DbResourceDetai
 
 export function getResourceDetail(resourceId: number): Promise<DbResourceDetail> {
   return request.get(`/resources/${resourceId}`)
+}
+
+export type UserResourceProfilePayload = {
+  category_id?: number | null
+  custom_notes?: string | null
+  custom_tags?: Record<string, unknown> | null
+  personal_rating?: number | null
+  is_favorite?: boolean | null
+}
+
+export function updateUserResourceProfile(
+  resourceId: number,
+  payload: UserResourceProfilePayload,
+): Promise<DbResource> {
+  return request.patch(`/resources/me/${resourceId}/profile`, payload)
 }
