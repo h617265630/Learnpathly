@@ -11,6 +11,8 @@ export type PublicLearningPath = {
   cover_image_url?: string | null
   category_id?: number | null
   category_name?: string | null
+  creator_id?: number | null
+  item_count?: number
   // Fork lineage
   parent_id?: number | null
   root_id?: number | null
@@ -139,6 +141,10 @@ export function deleteMyLearningPath(id: number) {
   return request.delete(`/learning-paths/${id}`)
 }
 
+export function detachMyLearningPath(id: number) {
+  return request.delete(`/learning-paths/me/${id}`)
+}
+
 export function addResourceToMyLearningPath(
   learningPathId: number,
   payload: {
@@ -148,6 +154,7 @@ export function addResourceToMyLearningPath(
     purpose?: string | null
     estimated_time?: number | null
     is_optional?: boolean
+    manual_weight?: number | null
   },
 ) {
   return request.post(`/learning-paths/${learningPathId}/items`, payload)

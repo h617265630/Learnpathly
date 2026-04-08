@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '@/stores/auth'
+import { useAuth, useAuthStore } from '@/stores/auth'
 import {
   listMyLearningPaths,
   getMyLearningPathDetail,
   deleteMyLearningPath,
+  detachMyLearningPath,
   type MyLearningPath,
 } from '@/api/learningPath'
 import { getResourceDetail, type DbResource } from '@/api/resource'
@@ -14,8 +15,12 @@ import { PathCard, type PoolPath } from '@/components/PathCard'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
+type PathSource = 'created' | 'forked' | 'saved'
+
 type UiPath = MyLearningPath & {
   _coverUrl?: string
+  _source?: PathSource
+  _status?: string
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -50,15 +55,49 @@ function coverAccent(raw: unknown): string {
 
 const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=506&fit=crop'
 
-function mapToPoolPath(p: UiPath): PoolPath {
+function classifyPath(p: UiPath, currentUserId: number): PathSource {
+  if (p.creator_id === currentUserId) {
+    if (p.parent_id != null) return 'forked'
+    return 'created'
+  }
+  return 'saved'
+}
+
+function sourceLabel(source: PathSource): string {
+  if (source === 'forked') return 'Forked'
+  if (source === 'saved') return 'Saved'
+  return 'Created'
+}
+
+function sourceBadgeBg(source: PathSource): string {
+  if (source === 'forked') return 'bg-violet-50'
+  if (source === 'saved') return 'bg-emerald-50'
+  return 'bg-amber-50'
+}
+
+function sourceBadgeText(source: PathSource): string {
+  if (source === 'forked') return 'text-violet-700'
+  if (source === 'saved') return 'text-emerald-700'
+  return 'text-amber-700'
+}
+
+function sourceAccent(source: PathSource): string {
+  if (source === 'forked') return 'bg-violet-500'
+  if (source === 'saved') return 'bg-emerald-500'
+  return 'bg-amber-500'
+}
+
+function mapToPoolPath(p: UiPath, fallbackIndex?: number): PoolPath {
   const lpType = normalizePathType((p as any)?.type)
   let typeLabel = 'Path'
   if (lpType.includes('linear')) typeLabel = 'Linear'
   else if (lpType.includes('struct')) typeLabel = 'Structured'
   else if (lpType.includes('partical') || lpType.includes('pool')) typeLabel = 'Pool'
 
+  const rawId = (p as any)?.id ?? p.id
+  const pathId = rawId != null ? String(rawId) : `fallback-${fallbackIndex ?? 'unknown'}`
   return {
-    id: String(p.id),
+    id: pathId,
     title: String(p.title || '').trim(),
     description: String(p.description || '').trim(),
     category: String((p as any)?.category_name || '').trim() || 'General',
@@ -67,6 +106,8 @@ function mapToPoolPath(p: UiPath): PoolPath {
     items: Number((p as any).item_count ?? 0),
     thumbnail: p._coverUrl || FALLBACK_THUMB,
     hotScore: 50,
+    source: p._source,
+    status: (p as UiPath)._status,
   }
 }
 
@@ -96,7 +137,9 @@ export default function MyLearningPath() {
     setError('')
     try {
       const data = await listMyLearningPaths()
+      console.log('[loadPaths] API raw response:', JSON.stringify(data).slice(0, 500))
       const rows: UiPath[] = Array.isArray(data) ? data : []
+      console.log('[loadPaths] rows count:', rows.length, 'first row keys:', rows[0] ? Object.keys(rows[0]) : 'none', 'first row:', rows[0])
 
       // Fetch cover thumbnails in parallel
       await Promise.allSettled(
@@ -133,6 +176,13 @@ export default function MyLearningPath() {
         }),
       )
 
+      // Classify source for each path
+      const currentUserId = useAuthStore.getState().user?.id
+      rows.forEach(p => {
+        p._source = classifyPath(p as UiPath, currentUserId ?? 0)
+        p._status = String((p as any).status || '').trim() || undefined
+      })
+
       setPaths(rows)
     } catch (e: any) {
       setError(String(e?.response?.data?.detail || e?.message || 'Failed to load paths'))
@@ -165,7 +215,12 @@ export default function MyLearningPath() {
     setDeleteConfirming(true)
     setDeleteError('')
     try {
-      await deleteMyLearningPath(deleteId)
+      const path = paths.find(p => p.id === deleteId)
+      if ((path as UiPath)._source === 'saved') {
+        await detachMyLearningPath(deleteId)
+      } else {
+        await deleteMyLearningPath(deleteId)
+      }
       await loadPaths()
       setDeleteId(null)
     } catch (e: any) {
@@ -175,9 +230,10 @@ export default function MyLearningPath() {
     }
   }
 
-  const linearPaths = paths.filter(p => normalizePathType((p as any)?.type) === 'linear path')
-  const structuredPaths = paths.filter(p => normalizePathType((p as any)?.type) === 'structured path')
-  const poolPaths = paths.filter(p => normalizePathType((p as any)?.type) === 'partical pool')
+  const draftPaths = paths.filter(p => (p as UiPath)._status === 'draft')
+  const createdPaths = paths.filter(p => (p as UiPath)._source === 'created' && (p as UiPath)._status !== 'draft')
+  const forkedPaths = paths.filter(p => (p as UiPath)._source === 'forked' && (p as UiPath)._status !== 'draft')
+  const savedPaths = paths.filter(p => (p as UiPath)._source === 'saved' && (p as UiPath)._status !== 'draft')
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -201,6 +257,10 @@ export default function MyLearningPath() {
               <span className="text-xs text-stone-400">
                 <span className="font-semibold text-stone-700">{paths.length}</span> learning paths
               </span>
+              {draftPaths.length > 0 && <span className="text-xs text-stone-500">{draftPaths.length} drafts</span>}
+              {createdPaths.length > 0 && <span className="text-xs text-amber-600">{createdPaths.length} created</span>}
+              {forkedPaths.length > 0 && <span className="text-xs text-violet-600">{forkedPaths.length} forked</span>}
+              {savedPaths.length > 0 && <span className="text-xs text-emerald-600">{savedPaths.length} saved</span>}
             </div>
           </div>
 
@@ -251,69 +311,96 @@ export default function MyLearningPath() {
         {/* Grid */}
         {!loading && !error && paths.length > 0 && (
           <div className="space-y-12">
-            {/* Linear */}
-            {linearPaths.length > 0 && (
+            {/* Drafts */}
+            {draftPaths.length > 0 && (
               <section>
                 <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
-                    <div className={`w-1 h-5 ${coverAccent('linear path')} rounded-full`} />
-                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Linear</h2>
+                    <div className="w-1 h-5 bg-stone-300 rounded-full" />
+                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Drafts</h2>
                   </div>
-                  <span className="text-xs text-stone-400 font-medium">{linearPaths.length} paths</span>
+                  <span className="text-xs text-stone-400 font-medium">{draftPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-                  {linearPaths.map(path => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+                  {draftPaths.map((path, idx) => (
                     <PathCard
-                      key={path.id}
-                      path={mapToPoolPath(path)}
-                      onEdit={(id) => navigate(`/learningpath/${id}/edit`)}
-                      onDelete={(id) => openDeleteConfirm(Number(id))}
+                      key={path.id ?? `draft-${idx}`}
+                      path={mapToPoolPath(path, idx)}
+                      onClick={() => navigate(`/learningpath/${path.id}?from=my-paths`)}
+                      onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
+                      onDelete={() => openDeleteConfirm(path.id)}
                     />
                   ))}
                 </div>
               </section>
             )}
 
-            {/* Structured */}
-            {structuredPaths.length > 0 && (
+            {/* Created */}
+            {createdPaths.length > 0 && (
               <section>
                 <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
-                    <div className={`w-1 h-5 ${coverAccent('structured path')} rounded-full`} />
-                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Structured</h2>
+                    <div className={`w-1 h-5 ${sourceAccent('created')} rounded-full`} />
+                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Created</h2>
                   </div>
-                  <span className="text-xs text-stone-400 font-medium">{structuredPaths.length} paths</span>
+                  <span className="text-xs text-stone-400 font-medium">{createdPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-                  {structuredPaths.map(path => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+                  {createdPaths.map((path, idx) => (
                     <PathCard
-                      key={path.id}
-                      path={mapToPoolPath(path)}
-                      onEdit={(id) => navigate(`/learningpath/${id}/edit`)}
-                      onDelete={(id) => openDeleteConfirm(Number(id))}
+                      key={path.id ?? `created-${idx}`}
+                      path={mapToPoolPath(path, idx)}
+                      onClick={() => navigate(`/learningpath/${path.id}?from=my-paths`)}
+                      onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
+                      onDelete={() => openDeleteConfirm(path.id)}
                     />
                   ))}
                 </div>
               </section>
             )}
 
-            {/* Pool */}
-            {poolPaths.length > 0 && (
+            {/* Forked */}
+            {forkedPaths.length > 0 && (
               <section>
                 <div className="flex items-center gap-6 mb-5">
                   <div className="flex items-center gap-2">
-                    <div className={`w-1 h-5 ${coverAccent('partical pool')} rounded-full`} />
-                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Pool</h2>
+                    <div className={`w-1 h-5 ${sourceAccent('forked')} rounded-full`} />
+                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Forked</h2>
                   </div>
-                  <span className="text-xs text-stone-400 font-medium">{poolPaths.length} paths</span>
+                  <span className="text-xs text-stone-400 font-medium">{forkedPaths.length} paths</span>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-6">
-                  {poolPaths.map(path => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+                  {forkedPaths.map((path, idx) => (
                     <PathCard
-                      key={path.id}
-                      path={mapToPoolPath(path)}
-                      onEdit={(id) => navigate(`/learningpath/${id}/edit`)}
-                      onDelete={(id) => openDeleteConfirm(Number(id))}
+                      key={path.id ?? `forked-${idx}`}
+                      path={mapToPoolPath(path, idx)}
+                      onClick={() => navigate(`/learningpath/${path.id}?from=my-paths`)}
+                      onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
+                      onDelete={() => openDeleteConfirm(path.id)}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Saved */}
+            {savedPaths.length > 0 && (
+              <section>
+                <div className="flex items-center gap-6 mb-5">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-1 h-5 ${sourceAccent('saved')} rounded-full`} />
+                    <h2 className="text-sm font-bold text-stone-900 uppercase tracking-widest">Saved</h2>
+                  </div>
+                  <span className="text-xs text-stone-400 font-medium">{savedPaths.length} paths</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+                  {savedPaths.map((path, idx) => (
+                    <PathCard
+                      key={path.id ?? `saved-${idx}`}
+                      path={mapToPoolPath(path, idx)}
+                      onClick={() => navigate(`/learningpath/${path.id}?from=my-paths`)}
+                      onEdit={undefined}
+                      onDelete={() => openDeleteConfirm(path.id)}
                     />
                   ))}
                 </div>
@@ -339,7 +426,11 @@ export default function MyLearningPath() {
               </button>
             </div>
             <div className="p-6 space-y-3">
-              <p className="text-sm text-stone-600">This will permanently delete the path. This action cannot be undone.</p>
+              <p className="text-sm text-stone-600">
+                {(paths.find(p => p.id === deleteId) as UiPath)?._source === 'saved'
+                  ? 'This will remove the path from your collection. The original path will not be deleted.'
+                  : 'This will permanently delete the path. This action cannot be undone.'}
+              </p>
               {deleteError && <p className="text-sm text-red-500">{deleteError}</p>}
             </div>
             <div className="px-6 py-4 border-t border-stone-100 flex justify-end gap-2">

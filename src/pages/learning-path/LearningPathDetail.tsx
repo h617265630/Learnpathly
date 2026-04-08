@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useAuth } from '@/stores/auth'
+import '@/components/card-ui.css'
 import {
   getPublicLearningPathDetail,
   getMyLearningPathDetail,
@@ -25,6 +26,7 @@ type Module = {
   level: 'Beginner' | 'Intermediate' | 'Advanced'
   orderIndex: number
   resourceData: any  // embedded resource_data from backend
+  manualWeight?: number | null  // for card UI weight
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -66,6 +68,20 @@ function moduleToUiResource(m: Module): UiResource {
     thumbnail: moduleThumb(m),
     resource_type: m.type,
   }
+}
+
+function fromManualWeight(w: number | null | undefined): string {
+  const reverseMap: Record<number, string> = {
+    1: 'tier-gold', 2: 'tier-diamond', 3: 'tier-prismatic', 4: 'tier-obsidian',
+    5: 'gradient-emerald', 6: 'gradient-sapphire', 7: 'gradient-ruby',
+    8: 'gradient-amethyst', 9: 'gradient-gold',
+    10: 'neu', 11: 'holo', 12: 'sketch', 13: 'newspaper',
+    14: 'neon-cyan', 15: 'neon-pink', 16: 'neon-green', 17: 'neon-purple', 18: 'neon-gold',
+    19: 'metallic-steel', 20: 'metallic-copper', 21: 'metallic-titanium', 22: 'metallic-rose-gold', 23: 'metallic-gunmetal',
+    24: 'papercut-coral', 25: 'papercut-sky', 26: 'papercut-mint', 27: 'papercut-lavender', 28: 'papercut-peach',
+    100: 'default',
+  }
+  return reverseMap[Number(w)] ?? 'default'
 }
 
 function moduleThumb(m: Module): string {
@@ -118,7 +134,11 @@ export default function LearningPathDetail() {
   const [forking, setForking] = useState(false)
 
   const loadDetail = useCallback(async () => {
-    if (!id) return
+    if (!id) {
+      setLoading(false)
+      setError('Path ID is missing.')
+      return
+    }
     setLoading(true)
     setError('')
     try {
@@ -147,6 +167,7 @@ export default function LearningPathDetail() {
           level: 'Beginner' as const,
           orderIndex: Number(it.order_index) || 0,
           resourceData: r,
+          manualWeight: (it as any).manual_weight ?? null,
         }
       })
 
@@ -288,81 +309,72 @@ export default function LearningPathDetail() {
 
       {!loading && !error && path && (
         <>
-          <section className="border-b border-border pb-8">
-            <div className="grid gap-6 md:grid-cols-12 md:items-end">
-              <div className="md:col-span-8">
-                <h1 className="text-xl font-semibold tracking-tight text-foreground md:text-2xl">
+          {/* Header section */}
+          <section className="pb-6">
+            {/* Title and meta row */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground leading-tight">
                   {path.title || 'Learning Path'}
                 </h1>
-                <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                <p className="mt-2 text-sm text-muted-foreground">
                   {path.description || 'No description.'}
                 </p>
               </div>
-              <div className="md:col-span-4 md:flex md:justify-end md:items-end">
-                <div className="flex gap-2">
-                  <Button
-                    asChild
-                    variant="outline"
-                    size="sm"
-                    className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                  >
-                    <Link to={fromMyPaths ? '/my-paths' : '/learningpool'}>
-                      {fromMyPaths ? 'Back to My Paths' : 'Back to LearningPool'}
-                    </Link>
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className={
-                      fromMyPaths
-                        ? 'bg-sky-300 text-white hover:bg-sky-300/90 hover:text-white border-0'
-                        : 'bg-foreground text-background hover:bg-foreground/90 hover:text-background'
-                    }
-                    disabled={fromMyPaths ? false : usingThisPath}
-                    onClick={fromMyPaths ? startLearning : startLearningFromPublic}
-                  >
-                    Start
-                  </Button>
 
-                  {!fromMyPaths && (
-                    <>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                        disabled={forking}
-                        onClick={handleFork}
-                      >
-                        {forking ? 'Forking…' : 'Fork'}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="border-stone-200 text-stone-600 hover:border-stone-400 hover:text-stone-900"
-                        disabled={usingThisPath}
-                        onClick={openUseThisPath}
-                      >
-                        {usingThisPath ? 'Saving…' : 'Use this path'}
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </div>
+              {/* Primary action - always visible */}
+              <Button
+                type="button"
+                size="lg"
+                className="shrink-0 bg-sky-500 text-white hover:bg-sky-600 shadow-lg shadow-sky-200/50 font-semibold"
+                onClick={fromMyPaths ? startLearning : startLearningFromPublic}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                Start Learning
+              </Button>
             </div>
 
-            <div className="mt-6 flex flex-wrap gap-2 text-xs">
-              <span className="px-2 py-1 border border-stone-200 bg-white text-stone-700 font-semibold">
+            {/* Meta pills row */}
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-stone-100 text-stone-700 text-xs font-medium">
                 {path.category_name || 'Learning Path'}
               </span>
-              <span className="px-2 py-1 border border-stone-200 bg-white text-stone-500">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-stone-100 text-stone-500 text-xs">
                 {path.is_public ? 'Public' : 'Private'}
               </span>
-              <span className="px-2 py-1 border border-stone-200 bg-white text-stone-500">
+              <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-stone-100 text-stone-500 text-xs">
                 {modules.length} items
               </span>
+
+              {/* Secondary actions */}
+              <div className="flex items-center gap-2 ml-auto">
+                {!fromMyPaths && (
+                  <>
+                    <Button
+                      type="button"
+                      size="sm"
+                      className="h-8 bg-violet-600 text-white hover:bg-violet-700 font-medium"
+                      disabled={usingThisPath}
+                      onClick={openUseThisPath}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                      {usingThisPath ? 'Saving…' : 'Save'}
+                    </Button>
+
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="h-8 border-stone-300 text-stone-700 hover:bg-stone-50 font-medium"
+                      disabled={forking}
+                      onClick={handleFork}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1.5"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v2c0 .6-.4 1-1 1H7c-.6 0-1-.4-1-1V9"/><path d="M12 12v3"/></svg>
+                      {forking ? 'Forking…' : 'Fork'}
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </section>
 
@@ -402,6 +414,7 @@ export default function LearningPathDetail() {
                   onAdd={() => {}}
                   saving={false}
                   saved={false}
+                  weight={fromManualWeight(m.manualWeight)}
                 />
               ))}
             </div>

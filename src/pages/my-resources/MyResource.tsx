@@ -534,18 +534,18 @@ export default function MyResource() {
               >
                 <X className="w-4 h-4" />
               </button>
-              <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 flex items-center gap-2">
+            </div>
+
+            <div className="p-4 sm:p-5 border-b border-stone-100">
+              <div className="flex items-center gap-2 mb-1.5">
                 <span
-                  className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full"
+                  className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm"
                   style={{ backgroundColor: activeResource.categoryColor + '18', color: activeResource.categoryColor }}
                 >
                   {activeResource.category}
                 </span>
-                <span className="text-[10px] text-white/80">#{String(activeResource.id).padStart(3, '0')}</span>
+                <span className="text-[10px] text-stone-400">#{String(activeResource.id).padStart(3, '0')}</span>
               </div>
-            </div>
-
-            <div className="p-4 sm:p-5 border-b border-stone-100">
               <h2 className="text-base sm:text-lg font-bold text-stone-900">{activeResource.title}</h2>
             </div>
 
@@ -663,7 +663,7 @@ export default function MyResource() {
               </button>
             </div>
             <div className="p-4 sm:p-6 space-y-3">
-              <p className="text-xs sm:text-sm text-stone-600">This will permanently delete the resource. This action cannot be undone.</p>
+              <p className="text-xs sm:text-sm text-stone-600">This will be removed from your My Resources. Are you sure you want to delete it?</p>
               <div className="rounded-md border border-stone-100 bg-stone-50/50 p-3">
                 <div className="text-sm font-semibold text-stone-800 line-clamp-1">{deleteTarget.title}</div>
                 <div className="text-xs text-stone-400 mt-0.5">ID: {deleteTarget.id}</div>

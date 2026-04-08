@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { ChevronDown, Search, X, User, LogOut, LayoutDashboard, BookOpen, CreditCard, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { ResourceCard, type UiResource as CardResource } from '@/components/ResourceCard'
+import '@/components/card-ui.css'
 import {
   listMyResources,
   createMyResourceFromUrl,
@@ -58,6 +60,74 @@ function toUiResource(r: DbResource): UiResource {
     platform: String((r as any).platform || '').trim(),
     thumbnail: String((r as any).thumbnail || '').trim(),
   }
+}
+
+function toCardResource(r: UiResource, weight: string): CardResource {
+  return {
+    id: r.id,
+    title: r.title,
+    summary: r.summary,
+    categoryLabel: 'Resource',
+    categoryColor: '#6b7280',
+    platform: r.platform,
+    platformLabel: r.platform || 'Web',
+    typeLabel: r.type === 'video' ? 'Video' : r.type === 'document' ? 'Doc' : r.type === 'article' ? 'Article' : r.type === 'clip' ? 'Clip' : 'Link',
+    thumbnail: r.thumbnail,
+    resource_type: r.type,
+  }
+}
+
+const WEIGHT_OPTIONS = [
+  // Tier
+  { value: 'tier-gold', label: 'Tier Gold' },
+  { value: 'tier-diamond', label: 'Tier Diamond' },
+  { value: 'tier-prismatic', label: 'Tier Prismatic' },
+  { value: 'tier-obsidian', label: 'Tier Obsidian' },
+  // Gradient
+  { value: 'gradient-emerald', label: 'Gradient Emerald' },
+  { value: 'gradient-sapphire', label: 'Gradient Sapphire' },
+  { value: 'gradient-ruby', label: 'Gradient Ruby' },
+  { value: 'gradient-amethyst', label: 'Gradient Amethyst' },
+  { value: 'gradient-gold', label: 'Gradient Gold' },
+  // Special
+  { value: 'neu', label: 'Neumorphism' },
+  { value: 'holo', label: 'Holographic' },
+  { value: 'sketch', label: 'Sketch' },
+  { value: 'newspaper', label: 'Newspaper' },
+  // Neon
+  { value: 'neon-cyan', label: 'Neon Cyan' },
+  { value: 'neon-pink', label: 'Neon Pink' },
+  { value: 'neon-green', label: 'Neon Green' },
+  { value: 'neon-purple', label: 'Neon Purple' },
+  { value: 'neon-gold', label: 'Neon Gold' },
+  // Metallic
+  { value: 'metallic-steel', label: 'Metallic Steel' },
+  { value: 'metallic-copper', label: 'Metallic Copper' },
+  { value: 'metallic-titanium', label: 'Metallic Titanium' },
+  { value: 'metallic-rose-gold', label: 'Metallic Rose Gold' },
+  { value: 'metallic-gunmetal', label: 'Metallic Gunmetal' },
+  // Papercut
+  { value: 'papercut-coral', label: 'Papercut Coral' },
+  { value: 'papercut-sky', label: 'Papercut Sky' },
+  { value: 'papercut-mint', label: 'Papercut Mint' },
+  { value: 'papercut-lavender', label: 'Papercut Lavender' },
+  { value: 'papercut-peach', label: 'Papercut Peach' },
+  // Basic
+  { value: 'default', label: 'Default' },
+]
+
+function toManualWeight(w: string): number {
+  const weightMap: Record<string, number> = {
+    'tier-gold': 1, 'tier-diamond': 2, 'tier-prismatic': 3, 'tier-obsidian': 4,
+    'gradient-emerald': 5, 'gradient-sapphire': 6, 'gradient-ruby': 7,
+    'gradient-amethyst': 8, 'gradient-gold': 9,
+    'neu': 10, 'holo': 11, 'sketch': 12, 'newspaper': 13,
+    'neon-cyan': 14, 'neon-pink': 15, 'neon-green': 16, 'neon-purple': 17, 'neon-gold': 18,
+    'metallic-steel': 19, 'metallic-copper': 20, 'metallic-titanium': 21, 'metallic-rose-gold': 22, 'metallic-gunmetal': 23,
+    'papercut-coral': 24, 'papercut-sky': 25, 'papercut-mint': 26, 'papercut-lavender': 27, 'papercut-peach': 28,
+    'default': 100,
+  }
+  return weightMap[w] ?? 100
 }
 
 function toAbsoluteImageUrl(raw: unknown): string {
@@ -142,6 +212,9 @@ export default function CreatePath() {
   const [uploadedCoverUrl, setUploadedCoverUrl] = useState<string>('')
   const [defaultCoverUrls, setDefaultCoverUrls] = useState<string[]>([])
   const coverFileInputRef = useRef<HTMLInputElement>(null)
+
+  // Weight
+  const [selectedWeight, setSelectedWeight] = useState('default')
 
   // Submit
   const [createError, setCreateError] = useState('')
@@ -377,21 +450,54 @@ export default function CreatePath() {
         throw new Error('Create failed: invalid learning path id')
       }
       for (let i = 0; i < selected.length; i++) {
-        await addResourceToMyLearningPath(lpId, {
-          resource_id: selected[i].id,
-          order_index: i + 1,
-          is_optional: false,
-        })
+        try {
+          await addResourceToMyLearningPath(lpId, {
+            resource_id: selected[i].id,
+            order_index: i + 1,
+            is_optional: false,
+            manual_weight: toManualWeight(selectedWeight),
+          })
+        } catch (e: any) {
+          const msg = e?.response?.data?.detail || e?.message || 'Unknown error'
+          throw new Error(`Failed to add resource "${selected[i].title}": ${msg}`)
+        }
       }
       navigate(`/learningpath/${lpId}?from=my-paths`)
     } catch (e: any) {
-      setCreateError(String(e?.response?.data?.detail || e?.message || 'Create failed'))
+      setCreateError(String(e?.message || e?.response?.data?.detail || 'Create failed'))
+    } finally {
+      setCreating(false)
+    }
+  }
+
+  async function handleSaveDraft() {
+    if (!pathMeta.title.trim() || pathMeta.categoryId == null) return
+    setCreateError('')
+    setCreating(true)
+    try {
+      const coverUrl = String(pathMeta.coverImageUrl || '').trim() || null
+      const created: any = await createLearningPathWithCategory({
+        title: pathMeta.title,
+        type: pathMeta.type,
+        description: pathMeta.description,
+        is_public: false,
+        cover_image_url: coverUrl,
+        category_id: pathMeta.categoryId,
+      })
+      const lpId = Number(created?.id)
+      if (!Number.isFinite(lpId) || lpId <= 0) {
+        throw new Error('Save draft failed: invalid learning path id')
+      }
+      navigate(`/learningpath/${lpId}?from=my-paths`)
+    } catch (e: any) {
+      setCreateError(String(e?.response?.data?.detail || e?.message || 'Save draft failed'))
     } finally {
       setCreating(false)
     }
   }
 
   const canSubmit = pathMeta.title.trim() && selected.length > 0 && pathMeta.categoryId != null && !creating
+  const canSaveDraft = pathMeta.title.trim() && pathMeta.categoryId != null && !creating
 
   return (
     <div className="min-h-screen bg-stone-50">
@@ -624,6 +730,27 @@ export default function CreatePath() {
                   </button>
                 </div>
               </div>
+
+              {/* Weight below cover */}
+              <div className="mt-4">
+                <label className="block text-[11px] font-bold uppercase tracking-widest text-stone-400 mb-2">Weight</label>
+                <div className="flex gap-2 flex-wrap">
+                  {WEIGHT_OPTIONS.map(w => (
+                    <button
+                      key={w.value}
+                      type="button"
+                      onClick={() => setSelectedWeight(w.value)}
+                      className={`h-8 px-3 rounded-full border text-[11px] font-bold uppercase tracking-wider transition-all ${
+                        selectedWeight === w.value
+                          ? 'border-stone-900 bg-stone-900 text-white'
+                          : 'border-stone-200 bg-white text-stone-500 hover:border-stone-400'
+                      }`}
+                    >
+                      {w.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -745,57 +872,40 @@ export default function CreatePath() {
                   <p className="text-sm text-stone-400 mt-2">Click a resource or drag it here</p>
                 </div>
               ) : (
-                <div className="max-h-150 overflow-y-auto space-y-2 pr-1 mb-3">
+                <div className="max-h-150 overflow-y-auto mb-3 grid grid-cols-3 gap-4">
                   {selected.map((r, idx) => (
-                    <div key={r.id} className="space-y-1.5">
-                      {/* Resource card */}
+                    <div key={r.id} className="relative group overflow-hidden rounded-md">
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        className="absolute top-1 right-1 z-10 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-md hover:bg-red-600 transition-all opacity-0 group-hover:opacity-100"
+                        onClick={(e) => { e.stopPropagation(); removeResource(r.id) }}
+                        aria-label="Remove"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      {/* Order badge */}
+                      <div className="absolute top-1 left-1 z-10 w-5 h-5 rounded-full bg-stone-900/80 text-white flex items-center justify-center">
+                        <span className="text-[9px] font-bold">{idx + 1}</span>
+                      </div>
+                      {/* Card (draggable) */}
                       <div
-                        className="flex gap-3 rounded-sm border border-stone-100 bg-white shadow-sm cursor-move transition-all hover:shadow-md"
                         draggable
                         onDragStart={(e) => onSelectedDragStart(e, r.id, idx)}
                         onDragEnd={onSelectedDragEnd}
                         onDragOver={(e) => { e.preventDefault(); onSelectedDragOver(idx) }}
                         onDrop={(e) => onSelectedDrop(e, idx)}
                       >
-                        {/* Order number */}
-                        <div className="w-8 h-full shrink-0 flex items-center justify-center bg-stone-50 rounded-l-lg">
-                          <span className="text-xs font-black text-stone-400">{idx + 1}</span>
-                        </div>
-                        <div className="w-16 h-14 shrink-0 rounded-none overflow-hidden bg-stone-100 my-2">
-                          <img
-                            src={r.thumbnail}
-                            alt={r.title}
-                            className="w-full h-full object-contain"
-                            style={{ objectFit: 'contain', backgroundColor: '#f7f7f7' }}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0 py-2.5 pr-3">
-                          <h3 className="text-xs font-bold text-stone-800 line-clamp-1 leading-snug">{r.title}</h3>
-                          <p className="text-[10px] text-stone-400 mt-0.5 line-clamp-1">{r.summary}</p>
-                        </div>
-                        <button
-                          type="button"
-                          className="self-center mr-2 shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 transition-all"
-                          onClick={() => removeResource(r.id)}
-                          aria-label="Remove"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
+                        <ResourceCard
+                          resource={toCardResource(r, selectedWeight)}
+                          onOpen={() => {}}
+                          onAdd={() => {}}
+                          saving={false}
+                          saved={false}
+                          weight={selectedWeight}
+                          compact
+                        />
                       </div>
-                      {/* Drop zone between items */}
-                      {idx !== selected.length - 1 && (
-                        <div
-                          className="flex justify-center py-0.5"
-                          onDragOver={(e) => { e.preventDefault(); onSelectedDragOver(idx + 1) }}
-                          onDrop={(e) => onSelectedDrop(e, idx + 1)}
-                        >
-                          <div
-                            className={`h-1 w-8 rounded-full bg-stone-100 transition-colors ${
-                              selectedDragState.overIndex === idx + 1 ? 'bg-emerald-300' : ''
-                            }`}
-                          />
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -805,7 +915,15 @@ export default function CreatePath() {
         </div>
 
         {/* Submit */}
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3">
+          <button
+            type="button"
+            className="rounded-full bg-stone-100 text-stone-600 hover:bg-stone-200 font-semibold text-sm px-8 py-3 transition-all hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none border border-stone-200"
+            disabled={!canSaveDraft}
+            onClick={handleSaveDraft}
+          >
+            {creating ? 'Saving…' : 'Save as Draft'}
+          </button>
           <button
             type="button"
             className="rounded-full bg-sky-600 text-white hover:bg-sky-700 font-semibold text-sm px-10 py-3 transition-all hover:-translate-y-px disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-sky-600/20"

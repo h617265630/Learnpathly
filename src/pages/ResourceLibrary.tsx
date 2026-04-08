@@ -356,30 +356,27 @@ export default function ResourceLibrary() {
               >
                 <X className="w-4 h-4" />
               </button>
-              {/* Category badge */}
-              <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3">
-                {(() => {
-                  const catLabel = String((activeResource as any).category_name || '').trim() || 'Other'
-                  const catColor = getCategoryColor(catLabel)
-                  return (
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-sm"
-                      style={{ backgroundColor: catColor + '18', color: catColor }}
-                    >
-                      {catLabel}
-                    </span>
-                  )
-                })()}
-              </div>
             </div>
 
             {/* Content */}
             <div className="p-4 sm:p-6">
-              <div className="flex items-start justify-between gap-3 mb-2 sm:mb-3">
-                <div>
+              <div className="mb-2 sm:mb-3">
+                <div className="flex items-center gap-2 mb-1.5">
+                  {(() => {
+                    const catLabel = String((activeResource as any).category_name || '').trim() || 'Other'
+                    const catColor = getCategoryColor(catLabel)
+                    return (
+                      <span
+                        className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-sm"
+                        style={{ backgroundColor: catColor + '18', color: catColor }}
+                      >
+                        {catLabel}
+                      </span>
+                    )
+                  })()}
                   <span className="text-[10px] text-stone-400">#{String(activeResource.id).padStart(3, '0')}</span>
-                  <h2 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 leading-tight mt-0.5 sm:mt-1">{activeResource.title}</h2>
                 </div>
+                <h2 className="text-base sm:text-lg md:text-xl font-bold text-stone-900 leading-tight line-clamp-4">{activeResource.title}</h2>
               </div>
               <p className="text-xs sm:text-sm leading-relaxed text-stone-600 line-clamp-3 sm:line-clamp-none">{activeResource.summary || 'No description available.'}</p>
 
@@ -402,7 +399,7 @@ export default function ResourceLibrary() {
               </Button>
               <Button
                 variant="outline"
-                onClick={() => seeDetail(mapDbToUi(activeResource))}
+                onClick={() => addToMyResources(mapDbToUi(activeResource))}
                 disabled={addingToMy[activeResource.id] || addedToMy[activeResource.id]}
                 className="w-full rounded-sm border border-stone-200 text-stone-600 hover:border-stone-900 hover:text-stone-900 font-semibold text-xs sm:text-sm transition-all"
               >
@@ -415,7 +412,7 @@ export default function ResourceLibrary() {
 
       {/* Toast */}
       {showToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] rounded-sm bg-stone-900 text-white px-6 py-3 shadow-2xl flex items-center gap-3 animate-fade-in">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-100 rounded-sm bg-stone-900 text-white px-6 py-3 shadow-2xl flex items-center gap-3 animate-fade-in">
           <div className="h-5 w-5 rounded-full bg-emerald-500 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </div>

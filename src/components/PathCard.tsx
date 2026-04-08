@@ -1,8 +1,5 @@
-import { Link } from 'react-router-dom'
-import './card-ui.css' // 假设这个文件包含了基础的卡片样式
-import { Badge } from '@/components/ui/Badge' // 引入您自己的 Badge 组件
-
-const FALLBACK_THUMB = 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=506&fit=crop';
+import { Badge } from '@/components/ui/Badge'
+import './card-ui.css'
 
 export type PathCardProps = {
   id: string
@@ -15,100 +12,170 @@ export type PathCardProps = {
   thumbnail: string
   hotScore?: number
   forkCount?: number
+  source?: string
+  status?: string
 }
 
 export type PoolPath = PathCardProps
 
 interface PoolPathCardProps {
   path: PathCardProps
-  onEdit?: (id: string) => void
-  onDelete?: (id: string) => void
+  onClick?: () => void
+  onEdit?: () => void
+  onDelete?: () => void
   showTypeLabel?: boolean
+  showSource?: boolean
 }
 
-// 辅助函数，根据类型标签返回对应的 Tailwind CSS 文本颜色类
 function typeTextColor(typeLabel: string): string {
   const t = typeLabel.toLowerCase()
   if (t.includes('linear')) return 'text-cyan-600'
   if (t.includes('struct')) return 'text-violet-600'
   if (t.includes('pool') || t.includes('partical')) return 'text-amber-600'
-  return 'text-stone-500' // 默认颜色稍微加深
+  return 'text-stone-500'
 }
 
-// 辅助函数，根据类型标签返回对应的 Tailwind CSS 徽章背景色类
 function typeBadgeBgColor(typeLabel: string): string {
-    const t = typeLabel.toLowerCase()
-    if (t.includes('linear')) return 'bg-cyan-50'
-    if (t.includes('struct')) return 'bg-violet-50'
-    if (t.includes('pool') || t.includes('partical')) return 'bg-amber-50'
-    return 'bg-stone-100' // 默认背景
+  const t = typeLabel.toLowerCase()
+  if (t.includes('linear')) return 'bg-cyan-50'
+  if (t.includes('struct')) return 'bg-violet-50'
+  if (t.includes('pool') || t.includes('partical')) return 'bg-amber-50'
+  return 'bg-stone-100'
 }
 
-export function PathCard({ path, onEdit, onDelete, showTypeLabel = true }: PoolPathCardProps) {
+function sourceBadgeStyle(source: string | undefined): { bg: string; text: string } {
+  if (source === 'forked') return { bg: 'bg-violet-50', text: 'text-violet-700' }
+  if (source === 'saved') return { bg: 'bg-emerald-50', text: 'text-emerald-700' }
+  if (source === 'created') return { bg: 'bg-amber-50', text: 'text-amber-700' }
+  return { bg: 'bg-stone-100', text: 'text-stone-600' }
+}
+
+export function PathCard({ path, onClick, onEdit, onDelete, showTypeLabel = true, showSource = false }: PoolPathCardProps) {
+  const handleCardClick = () => {
+    if (onClick) {
+      onClick()
+    } else {
+      window.location.href = `/learningpath/${path.id}`
+    }
+  }
+
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onEdit?.()
+  }
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
+    onDelete?.()
+  }
+
   return (
-    <article className="group shrink-0 w-full lg:w-72 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] overflow-hidden border border-gray-100 bg-white cursor-pointer relative">
-      {/* 使用 Link 包裹整个可点击区域，提供更好的可访问性 */}
-      <Link to={`/learningpath/${path.id}`} className="flex flex-col h-full">
-        {/* Thumbnail or Placeholder */}
-        <div className="relative h-36 md:h-36 bg-gray-50 overflow-hidden mt-8 md:mt-0 mb-4 md:mb-0">
+    <article
+      className="group w-full shadow-md hover:shadow-xl transition-all duration-200 overflow-hidden border border-stone-100 bg-white cursor-pointer rounded-none hover:scale-[1.02]"
+      onClick={handleCardClick}
+    >
+      <div className="flex flex-col">
+        {/* Thumbnail */}
+        <div className="relative bg-stone-100 overflow-hidden aspect-video">
           {path.thumbnail ? (
             <img
               src={path.thumbnail}
               alt={path.title}
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover"
             />
           ) : (
-            <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-              <span className="text-4xl font-extrabold text-gray-400">{path.title.charAt(0)}</span>
+            <div className="w-full h-full bg-gradient-to-br from-stone-100 to-stone-200 flex items-center justify-center">
+              <span className="text-4xl font-black text-stone-300">{path.title.charAt(0)}</span>
             </div>
           )}
 
-          {/* Type label overlay (using Badge for consistency) */}
           {showTypeLabel && path.typeLabel && path.typeLabel !== 'Path' && (
             <div className="absolute top-3 right-3 z-10">
-              <Badge variant="outline" className={`${typeBadgeBgColor(path.typeLabel)} ${typeTextColor(path.typeLabel)} border-none text-xs px-2 py-0.5 font-semibold`}>
+              <Badge variant="outline" className={`${typeBadgeBgColor(path.typeLabel)} ${typeTextColor(path.typeLabel)} border-none text-[10px] px-2 py-0.5 font-bold tracking-wide`}>
                 {path.typeLabel}
               </Badge>
             </div>
           )}
+          <div className="absolute top-3 left-3 z-10 flex flex-col gap-1">
+            {showSource && path.source && (
+              <Badge variant="outline" className={`${sourceBadgeStyle(path.source).bg} ${sourceBadgeStyle(path.source).text} border-none text-[10px] px-2 py-0.5 font-bold tracking-wide`}>
+                {path.source}
+              </Badge>
+            )}
+            {path.status === 'draft' && (
+              <Badge variant="outline" className="bg-stone-800 text-white border-none text-[10px] px-2 py-0.5 font-bold tracking-wide">
+                Draft
+              </Badge>
+            )}
+          </div>
+
+          {/* Edit / Delete action row — only visible on hover */}
+          {(onEdit || onDelete) && (
+            <div className="absolute bottom-3 right-3 flex items-center gap-1.5 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              {onEdit && (
+                <button
+                  type="button"
+                  onClick={handleEdit}
+                  title="Edit"
+                  className="flex items-center justify-center w-8 h-8 rounded-sm bg-white border border-stone-200 text-amber-600 hover:text-amber-700 hover:border-amber-300 transition-all duration-150 shadow-md hover:shadow-lg"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </svg>
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  title="Delete"
+                  className="flex items-center justify-center w-8 h-8 rounded-sm bg-white border border-stone-200 text-rose-600 hover:text-rose-700 hover:border-rose-300 transition-all duration-150 shadow-md hover:shadow-lg"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Card Content */}
-        <div className="p-4 flex flex-col flex-grow">
-          {/* Category */}
-          <Badge variant="secondary" className="mb-2 w-fit text-xs font-medium text-gray-500 bg-gray-100">
+        {/* Content */}
+        <div className="px-4 py-3 flex flex-col">
+          <Badge variant="secondary" className="mb-1.5 w-fit text-[10px] font-semibold text-stone-500 bg-stone-100 tracking-wide uppercase">
             {path.category}
           </Badge>
 
-          {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 line-clamp-2 mb-2 leading-tight">
+          <h3 className="text-sm font-bold text-stone-900 line-clamp-2 mb-1.5 leading-snug">
             {path.title}
           </h3>
 
-          {/* Description */}
-          <p className="text-sm text-gray-600 line-clamp-3 mb-3 flex-grow">
+          <p className="text-xs text-stone-400 line-clamp-2 mb-3">
             {path.description || '暂无描述。'}
           </p>
 
-          {/* Hot Score & Level */}
-          <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-50">
-            <Badge variant="outline" className="text-[10px] font-medium text-gray-600 bg-gray-100 border-none">
-                {path.level}
+          <div className="flex items-center justify-between">
+            <Badge variant="outline" className="text-[10px] font-medium text-stone-400 bg-stone-50 border-none tracking-wide">
+              {path.level}
             </Badge>
             <div className="flex items-center gap-3">
               {path.forkCount !== undefined && path.forkCount > 0 && (
-                <span className="text-xs font-semibold text-stone-400 flex items-center gap-0.5" title={`${path.forkCount} forks`}>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 fill-current" viewBox="0 0 24 24">
+                <span className="text-[11px] font-medium text-stone-400 flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 fill-current" viewBox="0 0 24 24">
                     <path d="M6 3a1 1 0 0 0-2 0v2H2a1 1 0 0 0-1 1v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1h-2V3a1 1 0 0 0-2 0v2h-2V3a1 1 0 0 0-2 0v2H8V3a1 1 0 0 0-2 0zm10 4H8v2h8V7zM6 7H2v6h4V7zm8 0v6h4V7h-4z"/>
                   </svg>
                   {path.forkCount}
                 </span>
               )}
               {path.hotScore !== undefined && path.hotScore > 0 ? (
-                <span className="text-xs font-semibold text-amber-500 flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-0.5 fill-current" viewBox="0 0 20 20" fill="currentColor">
+                <span className="text-[11px] font-semibold text-amber-500 flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-3 h-3 mr-0.5 fill-current" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.538 1.118l-2.8-2.034a1 1 0 00-1.176 0l-2.8 2.034c-.783.57-1.838-.197-1.538-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.381-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z" />
                   </svg>
                   {path.hotScore}
@@ -117,31 +184,7 @@ export function PathCard({ path, onEdit, onDelete, showTypeLabel = true }: PoolP
             </div>
           </div>
         </div>
-      </Link>
-
-      {/* Action buttons (only visible on hover for enhanced experience) */}
-      {(onEdit || onDelete) && (
-        <div className="absolute inset-x-0 bottom-0 py-2 px-4 bg-white bg-opacity-95 backdrop-blur-sm flex items-center gap-2 opacity-0 translate-y-full group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-20 border-t border-gray-100">
-          {onEdit && (
-            <button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onEdit(path.id); }}
-              className="flex-1 h-8 text-xs font-semibold uppercase tracking-wider border border-blue-200 bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors rounded-md shadow-sm"
-            >
-              edit
-            </button>
-          )}
-          {onDelete && (
-            <button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDelete(path.id); }}
-              className="flex-1 h-8 text-xs font-semibold uppercase tracking-wider border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-colors rounded-md shadow-sm"
-            >
-              delete
-            </button>
-          )}
-        </div>
-      )}
+      </div>
     </article>
   )
 }

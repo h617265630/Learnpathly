@@ -31,6 +31,7 @@ interface ResourceCardProps {
   saving: boolean
   saved: boolean
   weight?: string  // e.g. 'default', 'tier-gold', 'gradient-emerald', 'glass-purple'
+  compact?: boolean
 }
 
 // Maps weight values to CardUI CSS classes
@@ -82,9 +83,67 @@ function getCardWeightClass(weight?: string): string {
   return basicMap[weight] || 'border border-stone-200 bg-stone-50'
 }
 
-export function ResourceCard({ resource, onOpen, onAdd, saving, saved, weight }: ResourceCardProps) {
+function displayTitle(title: string, platform?: string): string {
+  if (platform === 'github') {
+    const afterSlash = title.split('/').pop() || title
+    const afterDash = afterSlash.replace(/^GitHub\s*-\s*/i, '')
+    return afterDash.split(':')[0]
+  }
+  return title
+}
+
+export function ResourceCard({ resource, onOpen, onAdd, saving, saved, weight, compact }: ResourceCardProps) {
   const weightClass = getCardWeightClass(weight)
   const isGradient = weight?.startsWith('gradient-')
+  const title = displayTitle(resource.title, resource.platform)
+
+  if (compact) {
+    return (
+      <article
+        className={`w-full cursor-pointer overflow-hidden rounded-none ${weightClass} ${isGradient ? 'p-0.5' : ''}`}
+        onClick={onOpen}
+      >
+        <div className={`h-full flex flex-col overflow-hidden ${isGradient ? 'bg-white rounded-none' : ''}`}>
+          {/* Header */}
+          <div className="px-3 py-1.5 flex items-center justify-between border-b border-black/10">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-stone-600">
+              {resource.categoryLabel}
+            </span>
+            <span className="text-[10px] text-stone-400">#{String(resource.id).padStart(3, '0')}</span>
+          </div>
+          {/* Thumbnail */}
+          <div className="relative h-16 bg-stone-100 overflow-hidden">
+            {resource.thumbnail ? (
+              <img
+                src={resource.thumbnail}
+                alt={resource.title}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-stone-100 to-stone-200 flex items-center justify-center">
+                <span className="text-2xl font-black text-stone-300">{title.charAt(0)}</span>
+              </div>
+            )}
+          </div>
+          {/* Title */}
+          <div className="px-3 py-1.5 border-b border-black/10 bg-white">
+            <h3 className="text-xs font-bold text-stone-900 truncate">{title}</h3>
+          </div>
+          {/* Summary */}
+          <div className="px-3 py-1.5 overflow-hidden bg-stone-50">
+            <p className="text-[10px] text-stone-400 line-clamp-3">{resource.summary || 'No description available.'}</p>
+          </div>
+          {/* Footer */}
+          <div className="px-3 py-1.5 border-t border-black/10 flex items-center justify-between">
+            <span className="text-[10px] text-stone-400">{resource.platformLabel}</span>
+            <span className="text-[10px] font-medium text-stone-500">{resource.typeLabel}</span>
+          </div>
+        </div>
+      </article>
+    )
+  }
 
   return (
     <>
@@ -122,13 +181,13 @@ export function ResourceCard({ resource, onOpen, onAdd, saving, saved, weight }:
         {/* Title */}
         <div className="px-3 py-1.5 border-b border-black/10 bg-white">
           <h3 className="text-sm font-bold text-stone-900 truncate">
-            {resource.title}
+            {title}
           </h3>
         </div>
 
         {/* Summary */}
         <div className="px-3 py-1.5 flex-1 overflow-hidden bg-stone-50">
-          <p className="text-xs text-stone-500">
+          <p className="text-xs text-stone-500 line-clamp-5">
             {resource.summary || 'No description available.'}
           </p>
         </div>

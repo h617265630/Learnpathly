@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { ChevronDown, Search, X, User, LogOut, LayoutDashboard, BookOpen, CreditCard, Settings } from 'lucide-react'
+import { ResourceCard, type UiResource as CardResource } from '@/components/ResourceCard'
+import '@/components/card-ui.css'
 import {
   listMyResources,
   createMyResourceFromUrl,
@@ -54,6 +56,21 @@ function toUiResource(r: DbResource): UiResource {
     type: normalizePresentedType((r as any).resource_type),
     platform: String((r as any).platform || '').trim(),
     thumbnail: String((r as any).thumbnail || '').trim(),
+  }
+}
+
+function toCardResource(r: UiResource): CardResource {
+  return {
+    id: r.id,
+    title: r.title,
+    summary: r.summary,
+    categoryLabel: 'Resource',
+    categoryColor: '#6b7280',
+    platform: r.platform,
+    platformLabel: r.platform || 'Web',
+    typeLabel: r.type === 'video' ? 'Video' : r.type === 'document' ? 'Doc' : r.type === 'article' ? 'Article' : r.type === 'clip' ? 'Clip' : 'Link',
+    thumbnail: r.thumbnail,
+    resource_type: r.type,
   }
 }
 
@@ -759,57 +776,35 @@ export default function LearningPathEdit() {
                   <p className="text-sm text-stone-400 mt-2">Click a resource or drag it here</p>
                 </div>
               ) : (
-                <div className="max-h-150 overflow-y-auto space-y-2 pr-1 mb-3">
+                <div className="max-h-150 overflow-y-auto mb-3 grid grid-cols-3 gap-4">
                   {selected.map((r, idx) => (
-                    <div key={r.id} className="space-y-1.5">
-                      {/* Resource card */}
+                    <div key={r.id} className="relative group overflow-hidden rounded-md">
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        className="absolute top-2 right-2 z-10 w-6 h-6 rounded-full bg-white/90 border border-stone-200 flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100 shadow-sm"
+                        onClick={() => removeResource(r.id)}
+                        aria-label="Remove"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      {/* Card (draggable) */}
                       <div
-                        className="flex gap-3 rounded-sm border border-stone-100 bg-white shadow-sm cursor-move transition-all hover:shadow-md"
                         draggable
                         onDragStart={(e) => onSelectedDragStart(e, r.id, idx)}
                         onDragEnd={onSelectedDragEnd}
                         onDragOver={(e) => { e.preventDefault(); onSelectedDragOver(idx) }}
                         onDrop={(e) => onSelectedDrop(e, idx)}
                       >
-                        {/* Order number */}
-                        <div className="w-8 h-full shrink-0 flex items-center justify-center bg-stone-50 rounded-l-lg">
-                          <span className="text-xs font-black text-stone-400">{idx + 1}</span>
-                        </div>
-                        <div className="w-16 h-14 shrink-0 rounded-none overflow-hidden bg-stone-100 my-2">
-                          <img
-                            src={r.thumbnail}
-                            alt={r.title}
-                            className="w-full h-full object-contain"
-                            style={{ objectFit: 'contain', backgroundColor: '#f7f7f7' }}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0 py-2.5 pr-3">
-                          <h3 className="text-xs font-bold text-stone-800 line-clamp-1 leading-snug">{r.title}</h3>
-                          <p className="text-[10px] text-stone-400 mt-0.5 line-clamp-1">{r.summary}</p>
-                        </div>
-                        <button
-                          type="button"
-                          className="self-center mr-2 shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-stone-400 hover:text-red-500 hover:bg-red-50 transition-all"
-                          onClick={() => removeResource(r.id)}
-                          aria-label="Remove"
-                        >
-                          <X className="w-3.5 h-3.5" />
-                        </button>
+                        <ResourceCard
+                          resource={toCardResource(r)}
+                          onOpen={() => {}}
+                          onAdd={() => {}}
+                          saving={false}
+                          saved={false}
+                          compact
+                        />
                       </div>
-                      {/* Drop zone between items */}
-                      {idx !== selected.length - 1 && (
-                        <div
-                          className="flex justify-center py-0.5"
-                          onDragOver={(e) => { e.preventDefault(); onSelectedDragOver(idx + 1) }}
-                          onDrop={(e) => onSelectedDrop(e, idx + 1)}
-                        >
-                          <div
-                            className={`h-1 w-8 rounded-full bg-stone-100 transition-colors ${
-                              selectedDragState.overIndex === idx + 1 ? 'bg-amber-300' : ''
-                            }`}
-                          />
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>

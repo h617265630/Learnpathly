@@ -233,14 +233,14 @@ export default function LearningPool() {
               <Link
                 key={p.id}
                 to={`/learningpath/${p.id}`}
-                className="group shrink-0 w-56 block"
+                className="group shrink-0 w-56 block hover:scale-105 transition-transform duration-300"
               >
-                <div className="bg-stone-100 rounded-md mb-3 overflow-hidden" style={{ width: '14rem', aspectRatio: '16 / 9' }}>
+                <div className="bg-stone-100 mb-3 shadow-md overflow-hidden" style={{ width: '14rem', aspectRatio: '16 / 9' }}>
                   <img
                     src={p.thumbnail || FALLBACK_THUMB}
                     alt={p.title}
                     loading="lazy"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="space-y-1">
