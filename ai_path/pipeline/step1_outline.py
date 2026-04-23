@@ -35,7 +35,7 @@ async def generate_queries(
     resource_count: str = "standard",
     content_type: str = "mixed",
 ) -> List[SearchQuery]:
-    """Generate diverse search queries based on topic and preferences."""
+    """Generate diverse search queries based on topic and preferences (template only, no LLM)."""
     n_queries = _QUERY_COUNTS.get(resource_count, 6)
 
     content_hints = {
@@ -45,7 +45,7 @@ async def generate_queries(
     }
     content_hint = content_hints.get(content_type, content_hints["mixed"])
 
-    # Build search queries
+    # Build search queries (template only, no LLM)
     queries = [
         f"{topic} {content_hint}",
         f"{topic} 入门 基础",
@@ -55,39 +55,6 @@ async def generate_queries(
         f"{topic} 官方文档",
     ][:n_queries]
 
-    # Use LLM to generate better queries
-    prompt = f"""为「{topic}」生成 {n_queries} 个精确的搜索查询。
-
-主题：{topic}
-难度：{level}
-内容类型：{content_type}
-
-要求：
-- 多样化角度：概述、入门教程、实战项目、官方文档、GitHub开源项目
-- 至少1个 GitHub 查询
-- 返回 JSON 数组：{{"query": "搜索词", "purpose": "目的"}}
-
-示例：
-[
-  {{"query": "Python asyncio tutorial for beginners", "purpose": "入门教程"}},
-  {{"query": "site:github.com python asyncio", "purpose": "GitHub项目"}}
-]"""
-
-    try:
-        llm = get_llm(temperature=0.5)
-        response = llm.invoke(prompt)
-        parsed = parse_json_response(response.content)
-
-        if isinstance(parsed, list):
-            return [
-                SearchQuery(query=item["query"], purpose=item.get("purpose", ""))
-                for item in parsed
-                if isinstance(item, dict) and "query" in item
-            ]
-    except Exception:
-        pass
-
-    # Fallback: simple queries
     return [
         SearchQuery(query=q, purpose="搜索")
         for q in queries
@@ -138,7 +105,7 @@ async def generate_outline(
     learning_depth: str = "standard",
     practical_ratio: str = "balanced",
 ) -> LearningOutline:
-    """Generate learning outline directly from search results (no page fetching)."""
+    """Generate learning outline with sub_nodes directly from search results (merged Step 1 + Step 2)."""
     # Section count by depth
     depth_sections = {"quick": (2, 3), "standard": (3, 5), "deep": (5, 7)}
     min_s, max_s = depth_sections.get(learning_depth, (3, 5))
@@ -156,7 +123,8 @@ async def generate_outline(
         for r in search_results[:10]
     ]) if search_results else "（暂无搜索结果）"
 
-    prompt = f"""根据搜索结果，为「{topic}」设计一个学习大纲。
+    # Merged prompt: generate outline + sub_nodes in one call
+    prompt = f"""根据搜索结果，为「{topic}」设计一个完整的学习大纲（包含子节点）。
 
 主题：{topic}
 难度级别：{level}
@@ -173,25 +141,65 @@ async def generate_outline(
   "sections": [
     {{
       "title": "第X章：章节标题",
-      "description": "本章学习内容概述",
-      "learning_goals": ["学习目标1", "学习目标2"],
-      "search_queries": ["本章内容相关的精确搜索词1", "搜索词2"],
+      "description": "本章学习内容概述（2-3句话）",
+      "learning_goals": ["学习目标1", "学习目标2", "学习目标3"],
+      "sub_nodes": [
+        {{
+          "title": "子节点标题1",
+          "description": "子节点详细说明",
+          "key_points": ["关键点1", "关键点2", "关键点3"]
+        }},
+        {{
+          "title": "子节点标题2",
+          "description": "子节点详细说明",
+          "key_points": ["关键点1", "关键点2"]
+        }}
+      ],
       "order": 序号（从0开始）
     }}
   ]
-}}"""
+}}
+
+要求：
+- 每个章节必须包含 2-4 个 sub_nodes（子知识点）
+- sub_nodes 要具体、可操作
+- 用中文回答"""
 
     try:
         llm = get_llm(temperature=0.4)
-        response = llm.invoke(prompt)
+        response = await llm.ainvoke(prompt)
         parsed = parse_json_response(response.content)
+
+        # Build sections with sub_nodes
+        sections = []
+        for s in parsed.get("sections", []):
+            # Build sub_nodes if present
+            sub_nodes = []
+            for sub in s.get("sub_nodes", []):
+                from ai_path.models.schemas import SubNode
+                sub_nodes.append(SubNode(
+                    title=sub.get("title", ""),
+                    description=sub.get("description", ""),
+                    key_points=sub.get("key_points", []),
+                    practical_exercise=sub.get("practical_exercise", ""),
+                    search_keywords=sub.get("search_keywords", []),
+                ))
+
+            sections.append(OutlineSection(
+                title=s.get("title", ""),
+                description=s.get("description", ""),
+                learning_goals=s.get("learning_goals", []),
+                sub_nodes=sub_nodes,
+                search_queries=s.get("search_queries", []),
+                order=s.get("order", len(sections)),
+            ))
 
         return LearningOutline(
             topic=topic,
             level=level,
             overview=parsed.get("overview", ""),
             total_duration_hours=float(parsed.get("total_duration_hours", 0)),
-            sections=[OutlineSection(**s) for s in parsed.get("sections", [])],
+            sections=sections,
         )
     except Exception:
         # Fallback: simple single-section outline
@@ -205,6 +213,7 @@ async def generate_outline(
                     title=f"第一章：{topic} 入门",
                     description=f"学习 {topic} 的基础知识",
                     learning_goals=[f"理解 {topic} 的基本概念"],
+                    sub_nodes=[],
                     search_queries=[topic],
                     order=0,
                 )

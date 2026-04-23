@@ -109,6 +109,10 @@ class SubNode(BaseModel):
     key_points: List[str]
     practical_exercise: str = ""
     search_keywords: List[str] = []
+    # Step 2.5: Detailed content (generated on demand)
+    detailed_content: str = ""  # Markdown content with detailed explanation
+    code_examples: List[str] = []  # Code snippets
+    related_resources: List[str] = []  # URLs of related resources
 
 
 class OutlineSection(BaseModel):

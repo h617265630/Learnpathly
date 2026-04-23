@@ -48,7 +48,7 @@ async def expand_section(
 
     try:
         llm = get_llm(temperature=0.3)
-        response = llm.invoke(prompt)
+        response = await llm.ainvoke(prompt)
         parsed = parse_json_response(response.content)
 
         sub_nodes = [

@@ -1,6 +1,6 @@
 """
 LLM provider factory.
-Default: MiniMax. Supports OpenAI via LLM_PROVIDER=openai.
+Default: MiniMax Token Plan (M2.7). Supports OpenAI via LLM_PROVIDER=openai.
 """
 
 from __future__ import annotations
@@ -20,10 +20,11 @@ def get_llm(temperature: float = 0.3) -> ChatOpenAI:
             temperature=temperature,
         )
 
-    # Default: MiniMax
+    # Default: MiniMax Token Plan
     # Docs: https://platform.minimaxi.com/document/ChatCompletion%20v1
+    # Models: MiniMax-M2.7 | MiniMax-M2.7-highspeed
     return ChatOpenAI(
-        model=os.getenv("MINIMAX_MODEL", "abab6.5s-chat"),
+        model=os.getenv("MINIMAX_MODEL", "MiniMax-M2.7"),
         api_key=os.environ["MINIMAX_API_KEY"],
         base_url="https://api.minimaxi.com/v1",
         temperature=temperature,
@@ -34,7 +35,14 @@ def parse_json_response(content: str) -> dict | list:
     """
     Parse JSON from LLM response content.
     Handles markdown code blocks and extracts JSON.
+    Also handles thinking tags from MiniMax M2.7.
     """
+    # Remove thinking tags (MiniMax M2.7 specific)
+    if "<think>" in content or "</think>" in content:
+        # Remove everything between <think> and </think>
+        import re as _re
+        content = _re.sub(r"<think>.*?</think>", "", content, flags=_re.DOTALL)
+
     # Remove markdown code blocks
     content = re.sub(r"```(?:json)?\s*", "", content.strip())
     content = re.sub(r"\s*```", "", content.strip())
@@ -45,11 +53,24 @@ def parse_json_response(content: str) -> dict | list:
     except json.JSONDecodeError:
         pass
 
-    # Try to extract JSON object from content
+    # Try to extract JSON object from content (more robust)
+    # Find the largest valid JSON object
     json_match = re.search(r"\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}", content, re.DOTALL)
     if json_match:
         try:
-            return json.loads(json_match.group())
+            result = json.loads(json_match.group())
+            if isinstance(result, dict) and result.get("sections"):
+                return result
+        except json.JSONDecodeError:
+            pass
+
+    # Try to find nested JSON with sections
+    sections_match = re.search(r'"sections"\s*:\s*\[.*?\]', content, re.DOTALL)
+    if sections_match:
+        try:
+            # Wrap in braces to make valid JSON
+            wrapped = "{" + sections_match.group() + "}"
+            return json.loads(wrapped)
         except json.JSONDecodeError:
             pass
 

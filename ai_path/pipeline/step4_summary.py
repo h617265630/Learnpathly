@@ -58,7 +58,7 @@ async def generate_final_summary(
 
     try:
         llm = get_llm(temperature=0.4)
-        response = llm.invoke(prompt)
+        response = await llm.ainvoke(prompt)
         parsed = parse_json_response(response.content)
         summary = parsed.get("summary", "")
     except Exception:
