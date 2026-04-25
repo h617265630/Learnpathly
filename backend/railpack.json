@@ -1,11 +1,5 @@
 {
-  "python": {
-    "version": "3.11"
-  },
-  "install": {
-    "commands": ["pip install -r requirements.txt"]
-  },
-  "start": {
-    "command": "chmod +x start.sh && ./start.sh"
+  "deploy": {
+    "startCommand": "export PYTHONPATH=/app/.. && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
   }
 }
