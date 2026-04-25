@@ -23,3 +23,31 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Environment files - contains sensitive data
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+*.egg
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# AI/ML
+*.pkl
+*.h5
+*.joblib

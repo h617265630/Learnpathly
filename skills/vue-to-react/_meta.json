@@ -1,0 +1,6 @@
+{
+  "name": "vue-to-react",
+  "version": "1.0.0",
+  "description": "Vue 3 to React conversion rules for Composition API components",
+  "author": "learnpathly"
+}

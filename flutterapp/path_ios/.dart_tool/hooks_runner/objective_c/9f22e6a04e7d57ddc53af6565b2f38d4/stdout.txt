@@ -1,0 +1,57 @@
+Running `(cd /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/; TMPDIR=/var/folders/x8/p1vzr63s4mx7n7zzq_wt9nl00000gn/T/ PATH=/Applications/Xcode.app/Contents/SharedFrameworks/SwiftBuild.framework/Versions/A/PlugIns/SWBBuildService.bundle/Contents/PlugIns/SWBUniversalPlatformPlugin.bundle/Contents/Frameworks/SWBUniversalPlatform.framework/Resources:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/libexec:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/usr/local/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/local/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/local/bin:/Users/burn/.opencode/bin:/Users/burn/.local/bin:/opt/anaconda3/bin:/opt/anaconda3/condabin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/homebrew/bin:/Users/burn/.windsurf/extensions/ms-python.debugpy-2025.18.0-darwin-arm64/bundled/scripts/noConfigScripts HOME=/Users/burn /opt/homebrew/share/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/burn/Code/path/flutterapp/path_ios/.dart_tool/package_config.json /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/objective_c/9f22e6a04e7d57ddc53af6565b2f38d4/hook.dill --config=/Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/objective_c/9f22e6a04e7d57ddc53af6565b2f38d4/input.json )`.
+INFO: 2026-02-10 00:02:33.975095: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+
+INFO: 2026-02-10 00:02:33.995835: Running `/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang --version`.
+
+INFO: 2026-02-10 00:02:34.009515: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/include/dart_api_dl.c -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-02-10 00:02:34.010364: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -x objective-c -fobjc-arc -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/input_stream_adapter.m -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-02-10 00:02:34.010469: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -x objective-c -fobjc-arc -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c.m -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c.m.o
+
+INFO: 2026-02-10 00:02:34.010662: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -x objective-c -fobjc-arc -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/ns_number.m -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/ns_number.m.o
+
+INFO: 2026-02-10 00:02:34.010775: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -x objective-c -fobjc-arc -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/protocol.m -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/protocol.m.o
+
+INFO: 2026-02-10 00:02:34.011036: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 -x objective-c -fobjc-arc -c /Users/burn/.pub-cache/hosted/pub.dev/objective_c-9.3.0/src/objective_c_bindings_generated.m -fpic -I src -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-02-10 00:02:34.149870: 
+INFO: 2026-02-10 00:02:34.150024: 
+
+INFO: 2026-02-10 00:02:34.150096: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/observer.m.o
+
+INFO: 2026-02-10 00:02:34.150581: 
+INFO: 2026-02-10 00:02:34.150613: 
+INFO: 2026-02-10 00:02:34.150625: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c.c.o
+
+INFO: 2026-02-10 00:02:34.150732: 
+INFO: 2026-02-10 00:02:34.150745: 
+INFO: 2026-02-10 00:02:34.150756: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-02-10 00:02:34.153746: 
+INFO: 2026-02-10 00:02:34.153795: 
+INFO: 2026-02-10 00:02:34.153817: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/protocol.m.o
+
+INFO: 2026-02-10 00:02:34.264860: 
+INFO: 2026-02-10 00:02:34.264948: 
+INFO: 2026-02-10 00:02:34.264970: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-02-10 00:02:34.266500: 
+INFO: 2026-02-10 00:02:34.266540: 
+INFO: 2026-02-10 00:02:34.266559: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/ns_number.m.o
+
+INFO: 2026-02-10 00:02:34.267481: 
+INFO: 2026-02-10 00:02:34.267505: 
+INFO: 2026-02-10 00:02:34.267517: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c.m.o
+
+INFO: 2026-02-10 00:02:34.290206: 
+INFO: 2026-02-10 00:02:34.290258: 
+INFO: 2026-02-10 00:02:34.290279: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-02-10 00:02:34.290735: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator18.5.sdk -target arm64-apple-ios-simulator -mios-version-min=12 /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/include/dart_api_dl.c.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c.c.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/input_stream_adapter.m.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c.m.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/observer.m.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/ns_number.m.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/protocol.m.o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/obj/src/objective_c_bindings_generated.m.o -o /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/objective_c.dylib
+
+INFO: 2026-02-10 00:02:34.331720: 
+INFO: 2026-02-10 00:02:34.331783: ld: warning: -undefined dynamic_lookup is deprecated on iOS-simulator
+
+INFO: 2026-02-10 00:02:34.331798: Generated /Users/burn/Code/path/flutterapp/path_ios/.dart_tool/hooks_runner/shared/objective_c/build/9f22e6a04e/objective_c.dylib
+
