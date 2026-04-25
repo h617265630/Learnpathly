@@ -1,0 +1,11 @@
+{
+  "python": {
+    "version": "3.11"
+  },
+  "install": {
+    "commands": ["pip install -r requirements.txt"]
+  },
+  "start": {
+    "command": "chmod +x start.sh && ./start.sh"
+  }
+}
