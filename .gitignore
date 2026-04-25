@@ -51,3 +51,14 @@ dist/
 *.pkl
 *.h5
 *.joblib
+
+# Flutter
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+*.apk
+*.ipa
+
+# pytest
+.pytest_cache/
