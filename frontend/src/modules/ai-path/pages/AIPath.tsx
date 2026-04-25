@@ -1,6 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { generateAiPath, type AiPathGenerateResponse } from "@/services/aiPath";
+import {
+  generateAiPath,
+  type AiPathGenerateResponse,
+  type AiPathNode,
+} from "@/services/aiPath";
 import { ArrowRight, Sparkles, FileText, Eye } from "lucide-react";
 
 const STORAGE_KEY = "learnsmart_ai_path_result_v1";
@@ -22,21 +26,21 @@ type Depth = "quick" | "standard" | "deep";
 type ContentType = "video" | "article" | "mixed";
 
 const LEVEL_OPTIONS = [
-  { value: "beginner", label: "Beginner", color: "#16a34a" },
-  { value: "intermediate", label: "Intermediate", color: "#ca8a04" },
-  { value: "advanced", label: "Advanced", color: "#dc2626" },
+  { value: "beginner", label: "Beginner" },
+  { value: "intermediate", label: "Intermediate" },
+  { value: "advanced", label: "Advanced" },
 ];
 
 const DEPTH_OPTIONS = [
-  { value: "quick", label: "Quick (2-3 stages)", color: "#2563eb" },
-  { value: "standard", label: "Standard (3-5 stages)", color: "#7c3aed" },
-  { value: "deep", label: "Deep (5-7 stages)", color: "#0891b2" },
+  { value: "quick", label: "Quick (2-3 stages)" },
+  { value: "standard", label: "Standard (3-5 stages)" },
+  { value: "deep", label: "Deep (5-7 stages)" },
 ];
 
 const CONTENT_OPTIONS = [
-  { value: "video", label: "Videos & Courses", color: "#ea580c" },
-  { value: "article", label: "Articles & Tutorials", color: "#7c3aed" },
-  { value: "mixed", label: "Mix Both", color: "#16a34a" },
+  { value: "video", label: "Videos & Courses" },
+  { value: "article", label: "Articles & Tutorials" },
+  { value: "mixed", label: "Mix Both" },
 ];
 
 function readLastResult(): AiPathGenerateResponse | null {
@@ -46,6 +50,20 @@ function readLastResult(): AiPathGenerateResponse | null {
   } catch {
     return null;
   }
+}
+
+function stageDescription(node: AiPathNode) {
+  return node.description || node.explanation || "No description yet.";
+}
+
+function nodeResourceCount(node: AiPathNode) {
+  return (
+    (node.resources?.length || 0) +
+    (node.sub_nodes || []).reduce(
+      (sum, subNode) => sum + (subNode.resources?.length || 0),
+      0
+    )
+  );
 }
 
 export default function AIPath() {
@@ -74,6 +92,7 @@ export default function AIPath() {
         content_type: contentType,
       });
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
+      setLastResult(result);
       navigate("/ai-path-detail");
     } catch (e: unknown) {
       const err = e as { response?: { data?: { detail?: string } }; message?: string };
@@ -83,50 +102,43 @@ export default function AIPath() {
     }
   }, [query, navigate, level, depth, contentType]);
 
+  const previewNodes = lastResult?.data.nodes || [];
+
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Header */}
-      <header className="border-b-2 border-black bg-white">
-        <div className="mx-auto max-w-6xl px-6 py-8">
-          <div className="grid md:grid-cols-2 gap-8 items-end">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="h-1 w-8 bg-purple-500" />
-                <span className="text-[10px] font-black uppercase tracking-[0.25em] text-purple-500">
-                  AI Guided
-                </span>
-              </div>
-              <h1 className="font-serif text-4xl md:text-5xl font-black tracking-tight text-stone-900 leading-[0.95]">
-                AI Path
-                <br />
-                <span className="text-purple-500">Generator.</span>
-                <span className="text-xs font-bold text-stone-400 ml-3">beta</span>
-              </h1>
-            </div>
-            <p className="text-sm leading-relaxed text-stone-500 max-w-md">
-              Enter your learning goal and let AI generate a structured learning path.
-              View stage descriptions, steps, and recommended resources.
+      <header className="bg-white border-b border-stone-100">
+        <div className="mx-auto max-w-5xl px-6 py-12">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500 mb-4 block">
+              AI Guided
+            </span>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+              AI Path Generator
+            </h1>
+            <p className="mt-4 text-base text-stone-500 leading-relaxed">
+              Enter your learning goal and let AI generate a structured learning path with stage descriptions, steps, and recommended resources.
             </p>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <main className="mx-auto max-w-5xl px-6 py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main form */}
-          <section className="lg:col-span-3 bg-white border-2 border-black rounded-memphis shadow-memphis p-6 md:p-8">
+          <section className="lg:col-span-2 bg-white rounded-lg shadow-sm p-8">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                   Prompt
                 </p>
-                <h2 className="mt-1 text-xl font-black tracking-tight text-stone-900">
+                <h2 className="mt-1 text-lg font-semibold text-stone-900">
                   Describe what you want to learn
                 </h2>
               </div>
               <Link
                 to="/ai-path-detail"
-                className="text-xs font-bold uppercase tracking-wider text-purple-500 hover:text-purple-600 transition-colors"
+                className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
               >
                 View recent →
               </Link>
@@ -135,10 +147,10 @@ export default function AIPath() {
             <textarea
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              rows={8}
+              rows={6}
               maxLength={2000}
               placeholder="Example: I want to learn React full-stack development systematically, launch a production-ready project in 3 months..."
-              className="w-full border border-black rounded-memphis bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-purple-500 focus:bg-white transition-colors"
+              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50 transition-all"
             />
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -147,9 +159,9 @@ export default function AIPath() {
                   key={preset}
                   type="button"
                   onClick={() => setQuery(preset)}
-                  className="rounded-memphis border border-stone-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-stone-500 transition-all hover:border-purple-500 hover:text-purple-600"
+                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-300 hover:text-amber-600"
                 >
-                  {preset.length > 40 ? preset.slice(0, 40) + "..." : preset}
+                  {preset.length > 35 ? preset.slice(0, 35) + "..." : preset}
                 </button>
               ))}
             </div>
@@ -157,11 +169,11 @@ export default function AIPath() {
             {/* Preferences */}
             <div className="mt-6 grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-stone-400 mb-2">Level</label>
+                <label className="block text-[10px] font-semibold uppercase tracking-wider text-stone-400 mb-2">Level</label>
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value as Level)}
-                  className="w-full border border-black rounded-memphis bg-white px-3 py-2.5 text-xs font-semibold text-stone-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -169,11 +181,11 @@ export default function AIPath() {
                 </select>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-stone-400 mb-2">Depth</label>
+                <label className="block text-[10px] font-semibold uppercase tracking-wider text-stone-400 mb-2">Depth</label>
                 <select
                   value={depth}
                   onChange={(e) => setDepth(e.target.value as Depth)}
-                  className="w-full border border-black rounded-memphis bg-white px-3 py-2.5 text-xs font-semibold text-stone-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
                 >
                   {DEPTH_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -181,11 +193,11 @@ export default function AIPath() {
                 </select>
               </div>
               <div>
-                <label className="block text-[10px] font-black uppercase tracking-wider text-stone-400 mb-2">Format</label>
+                <label className="block text-[10px] font-semibold uppercase tracking-wider text-stone-400 mb-2">Format</label>
                 <select
                   value={contentType}
                   onChange={(e) => setContentType(e.target.value as ContentType)}
-                  className="w-full border border-black rounded-memphis bg-white px-3 py-2.5 text-xs font-semibold text-stone-700 outline-none focus:border-purple-500 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
                 >
                   {CONTENT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -202,7 +214,7 @@ export default function AIPath() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || !query.trim()}
-                className="bg-purple-500 text-white px-6 py-3 text-sm font-black uppercase tracking-wider hover:bg-purple-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-black shadow-memphis rounded-memphis flex items-center gap-2"
+                className="bg-amber-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-amber-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? (
                   "Generating..."
@@ -216,35 +228,30 @@ export default function AIPath() {
             </div>
 
             {error && (
-              <p className="mt-4 text-sm text-red-500 font-semibold">{error}</p>
+              <p className="mt-4 text-sm text-red-500 font-medium">{error}</p>
             )}
           </section>
 
           {/* Sidebar */}
-          <aside className="lg:col-span-2 space-y-5">
+          <aside className="space-y-6">
             {/* How it works */}
-            <section className="bg-white border-2 border-black rounded-memphis shadow-memphis p-6">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+            <section className="bg-white rounded-lg shadow-sm p-6">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                 How it works
               </p>
               <div className="mt-4 space-y-4">
                 {steps.map((step, idx) => {
                   const Icon = step.icon;
-                  const colors = ["#7c3aed", "#2563eb", "#16a34a"];
-                  const color = colors[idx % colors.length];
                   return (
-                    <div key={step.title} className="flex gap-4">
-                      <div
-                        className="w-10 h-10 shrink-0 flex items-center justify-center border border-black rounded-memphis"
-                        style={{ backgroundColor: color + "20" }}
-                      >
-                        <Icon className="w-5 h-5" style={{ color }} />
+                    <div key={step.title} className="flex gap-3">
+                      <div className="w-8 h-8 shrink-0 flex items-center justify-center bg-stone-100 rounded-lg">
+                        <Icon className="w-4 h-4 text-stone-600" />
                       </div>
                       <div>
-                        <h3 className="text-sm font-black text-stone-900">
+                        <h3 className="text-sm font-semibold text-stone-900">
                           {step.title}
                         </h3>
-                        <p className="mt-1 text-xs leading-relaxed text-stone-500">
+                        <p className="mt-0.5 text-xs leading-relaxed text-stone-500">
                           {step.text}
                         </p>
                       </div>
@@ -256,19 +263,19 @@ export default function AIPath() {
 
             {/* Last result */}
             {lastResult && (
-              <section className="bg-white border-2 border-black rounded-memphis shadow-memphis p-6">
+              <section className="bg-white rounded-lg shadow-sm p-6">
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-stone-400">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                       Latest
                     </p>
-                    <h3 className="mt-1 text-base font-black tracking-tight text-stone-900 line-clamp-1">
+                    <h3 className="mt-1 text-sm font-semibold text-stone-900 line-clamp-1">
                       {lastResult.data.title || "Latest AI Path"}
                     </h3>
                   </div>
                   <Link
                     to="/ai-path-detail"
-                    className="text-xs font-black uppercase tracking-wider text-purple-500 hover:text-purple-600"
+                    className="text-xs font-medium text-amber-600 hover:text-amber-700"
                   >
                     Open →
                   </Link>
@@ -276,52 +283,76 @@ export default function AIPath() {
                 <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-stone-500">
                   {lastResult.data.summary}
                 </p>
-                <div className="mt-4 flex items-center gap-4 text-xs font-semibold text-stone-400">
+                <div className="mt-4 flex items-center gap-4 text-xs text-stone-400">
                   <span>{lastResult.data.nodes?.length || 0} stages</span>
-                  {lastResult.warnings?.length > 0 && (
-                    <span>{lastResult.warnings.length} warnings</span>
-                  )}
                 </div>
               </section>
             )}
           </aside>
         </div>
 
-        {/* Learning path preview placeholder */}
-        <section className="mt-10">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-1 h-6 bg-purple-500 rounded-full" />
-            <h2 className="text-lg font-black text-stone-900 uppercase tracking-wider">
+        {/* Learning path preview */}
+        <section className="mt-12">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-1 h-5 bg-amber-500 rounded-full" />
+            <h2 className="text-sm font-semibold text-stone-900 uppercase tracking-wider">
               Generated Path Preview
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="bg-white border-2 border-black rounded-memphis shadow-memphis p-5 hover:shadow-memphis-lg hover:-translate-x-1 hover:-translate-y-1 transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-2 mb-3">
-                  <div
-                    className="w-8 h-8 rounded-memphis flex items-center justify-center text-white text-xs font-black border border-black"
-                    style={{ backgroundColor: ["#7c3aed", "#2563eb", "#16a34a"][i - 1] }}
-                  >
-                    {i}
+          {previewNodes.length ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {previewNodes.map((node, idx) => (
+                <Link
+                  key={`${idx}-${node.title}`}
+                  to="/ai-path-detail"
+                  className="bg-white rounded-lg shadow-sm p-5 hover:shadow-md transition-all"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xs font-semibold">
+                      {idx + 1}
+                    </div>
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">
+                      Stage {idx + 1}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-wider text-stone-400">
-                    Stage {i}
-                  </span>
+                  <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-stone-900">
+                    {node.title}
+                  </h3>
+                  <p className="mt-2 line-clamp-3 text-xs leading-5 text-stone-500">
+                    {stageDescription(node)}
+                  </p>
+                  <div className="mt-4 flex items-center gap-3 text-[10px] font-medium uppercase tracking-wider text-stone-400">
+                    <span>{node.sub_nodes?.length || 0} topics</span>
+                    <span>{nodeResourceCount(node)} resources</span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-lg shadow-sm p-5"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 text-xs font-semibold">
+                      {i}
+                    </div>
+                    <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">
+                      Stage {i}
+                    </span>
+                  </div>
+                  <div className="h-4 bg-stone-100 rounded mb-2 w-3/4" />
+                  <div className="h-3 bg-stone-50 rounded mb-4 w-full" />
+                  <div className="flex items-center gap-2">
+                    <div className="h-3 bg-stone-50 rounded w-16" />
+                  </div>
                 </div>
-                <div className="h-4 bg-stone-100 rounded-memphis mb-2 w-3/4" />
-                <div className="h-3 bg-stone-50 rounded-memphis mb-4 w-full" />
-                <div className="flex items-center gap-2">
-                  <div className="h-6 w-6 bg-stone-100 rounded-memphis" />
-                  <div className="h-3 bg-stone-50 rounded-memphis w-20" />
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>

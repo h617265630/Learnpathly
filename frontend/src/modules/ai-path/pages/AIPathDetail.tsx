@@ -27,7 +27,7 @@ function collectNodeResources(node: AiPathNode): AiPathResourceLink[] {
     const url = String(item?.url || "").trim();
     if (!url || seen.has(url)) continue;
     seen.add(url);
-    links.push({ url });
+    links.push({ ...item, url });
   }
   return links;
 }
@@ -40,7 +40,7 @@ function collectAllNodeResources(node: AiPathNode): AiPathResourceLink[] {
     const url = String(item?.url || "").trim();
     if (!url || seen.has(url)) continue;
     seen.add(url);
-    links.push({ url });
+    links.push({ ...item, url });
   }
 
   for (const subNode of node.sub_nodes || []) {
@@ -48,7 +48,7 @@ function collectAllNodeResources(node: AiPathNode): AiPathResourceLink[] {
       const url = String(item?.url || "").trim();
       if (!url || seen.has(url)) continue;
       seen.add(url);
-      links.push({ url });
+      links.push({ ...item, url });
     }
   }
 
@@ -84,6 +84,14 @@ function resourceTitle(url: string) {
   }
 }
 
+function resourceDisplayTitle(resource: AiPathResourceLink) {
+  return resource.title || resourceTitle(resource.url);
+}
+
+function resourceDisplaySummary(resource: AiPathResourceLink) {
+  return resource.description || resource.summary || resource.url;
+}
+
 function resourceTypeLabel(url: string) {
   const lower = url.toLowerCase();
   if (
@@ -102,7 +110,9 @@ function resourceTypeLabel(url: string) {
   return "article";
 }
 
-function resourceThumbnail(url: string) {
+function resourceThumbnail(resource: AiPathResourceLink) {
+  if (resource.image) return resource.image;
+  const url = resource.url;
   const host = resourceHost(url);
   return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(
     host
@@ -423,7 +433,7 @@ export default function AIPathDetail() {
                                                     className="h-10 w-10 shrink-0 rounded-none bg-stone-100 bg-cover bg-center"
                                                     style={{
                                                       backgroundImage: `url(${resourceThumbnail(
-                                                        resource.url
+                                                        resource
                                                       )})`,
                                                     }}
                                                   />
@@ -447,8 +457,8 @@ export default function AIPathDetail() {
                                                       )}
                                                     </div>
                                                     <div className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-stone-800 group-hover:text-amber-600">
-                                                      {resourceTitle(
-                                                        resource.url
+                                                      {resourceDisplayTitle(
+                                                        resource
                                                       )}
                                                     </div>
                                                   </div>
@@ -484,7 +494,7 @@ export default function AIPathDetail() {
                                     className="relative h-40 bg-stone-100 bg-cover bg-center"
                                     style={{
                                       backgroundImage: `url(${resourceThumbnail(
-                                        resource.url
+                                        resource
                                       )})`,
                                     }}
                                   />
@@ -501,10 +511,10 @@ export default function AIPathDetail() {
                                       {resourceHost(resource.url)}
                                     </div>
                                     <h4 className="mt-2 line-clamp-2 text-sm font-semibold leading-snug text-stone-800 group-hover:text-amber-600">
-                                      {resourceTitle(resource.url)}
+                                      {resourceDisplayTitle(resource)}
                                     </h4>
                                     <p className="mt-2 line-clamp-2 text-xs leading-5 text-stone-400">
-                                      {resource.url}
+                                      {resourceDisplaySummary(resource)}
                                     </p>
                                   </div>
                                 </a>

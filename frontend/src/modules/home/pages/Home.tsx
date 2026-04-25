@@ -51,8 +51,8 @@ export default function Home() {
       try {
         const db = await listPublicLearningPaths();
         const mapped = (db || []).map(mapDbToPool);
-        setFeaturedPaths(mapped.slice(0, 3));
-        setPoolPaths(mapped.slice(3, 11));
+        setFeaturedPaths(mapped.slice(0, 4));
+        setPoolPaths(mapped.slice(4, 12));
       } catch {
         setFeaturedPaths([]);
         setPoolPaths([]);
@@ -153,11 +153,11 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="flex gap-4 overflow-x-auto pb-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {loading ? (
-              [...Array(3)].map((_, i) => (
-                <div key={i} className="shrink-0 w-64">
-                  <div className="h-40 bg-stone-100 mb-4" />
+              [...Array(4)].map((_, i) => (
+                <div key={i}>
+                  <div className="aspect-video bg-stone-100 rounded-lg mb-3" />
                   <div className="h-4 w-20 bg-stone-200 mb-2" />
                   <div className="h-6 w-full bg-stone-200 mb-2" />
                   <div className="h-4 w-32 bg-stone-200" />
@@ -168,7 +168,7 @@ export default function Home() {
                 <PopularPathCard key={path.id} path={path} index={idx} />
               ))
             ) : (
-              <div className="shrink-0 py-20 text-center">
+              <div className="col-span-4 py-20 text-center">
                 <p className="text-sm font-medium uppercase tracking-wider text-stone-400">
                   No paths yet.
                 </p>
@@ -373,10 +373,10 @@ export default function Home() {
           </div>
 
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
                 <div key={i}>
-                  <div className="aspect-4/3 bg-stone-100 rounded-lg mb-4" />
+                  <div className="aspect-video bg-stone-100 rounded-lg mb-3" />
                   <div className="h-4 w-20 bg-stone-200 mb-2" />
                   <div className="h-5 w-full bg-stone-200 mb-2" />
                   <div className="h-3 w-24 bg-stone-200" />
@@ -384,7 +384,7 @@ export default function Home() {
               ))}
             </div>
           ) : poolPaths.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {poolPaths.map((path, idx) => (
                 <PathCard key={path.id} path={path} index={idx} />
               ))}

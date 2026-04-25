@@ -2,12 +2,23 @@ import request from "./request";
 
 export interface AiPathResourceLink {
   url: string;
+  title?: string;
+  description?: string;
+  summary?: string;
+  key_points?: string[];
+  difficulty?: string;
+  resource_type?: string;
+  learning_stage?: string;
+  estimated_minutes?: number;
+  image?: string | null;
 }
 
 export interface AiPathSubNode {
   title: string;
   description: string;
   learning_points?: string[];
+  practical_exercise?: string;
+  search_keywords?: string[];
   resources?: AiPathResourceLink[];
 }
 
@@ -19,6 +30,7 @@ export interface AiPathNode {
   resources?: AiPathResourceLink[];
   sub_nodes?: AiPathSubNode[];
   order?: number;
+  estimated_minutes?: number;
 }
 
 export interface AiPathData {
@@ -43,7 +55,7 @@ export interface AiPathPreferences {
 
 export function generateAiPath(query: string, preferences?: AiPathPreferences) {
   return request.post<AiPathGenerateResponse, AiPathGenerateResponse>(
-    "/ai-path/generate",
+    "/ai-path/generate-outline",
     { query, ...preferences },
     {
       timeout: 120000,

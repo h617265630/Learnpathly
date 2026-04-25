@@ -201,24 +201,9 @@ async def generate_outline(
             total_duration_hours=float(parsed.get("total_duration_hours", 0)),
             sections=sections,
         )
-    except Exception:
-        # Fallback: simple single-section outline
-        return LearningOutline(
-            topic=topic,
-            level=level,
-            overview=f"学习 {topic} 的完整路径",
-            total_duration_hours=len(search_results) * 0.5,
-            sections=[
-                OutlineSection(
-                    title=f"第一章：{topic} 入门",
-                    description=f"学习 {topic} 的基础知识",
-                    learning_goals=[f"理解 {topic} 的基本概念"],
-                    sub_nodes=[],
-                    search_queries=[topic],
-                    order=0,
-                )
-            ],
-        )
+    except Exception as exc:
+        # Fail loudly so frontend shows an actionable error instead of fake instant outline.
+        raise RuntimeError(f"Step1 outline generation failed: {exc}") from exc
 
 
 # ── Main Step 1 orchestrator ─────────────────────────────────────────────────

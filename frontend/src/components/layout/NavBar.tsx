@@ -68,29 +68,27 @@ export function NavBar() {
   };
 
   return (
-    <header className="border-b border-stone-300 sticky top-0 bg-white z-50 shadow-memphis">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-16">
+    <header className="border-b border-stone-100 sticky top-0 bg-white z-50">
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex items-center justify-between h-14">
 
           {/* Logo */}
-          <Link to="/home" className="flex items-center gap-3">
-            <img src="/favicon.png" alt="LearnPathly" className="h-8 w-8" />
-            <span className="font-serif text-2xl font-bold tracking-tight">
-              Learn<span className="text-blue-400">Pathly</span>
+          <Link to="/home" className="flex items-center gap-2">
+            <img src="/favicon.png" alt="LearnPathly" className="h-7 w-7" />
+            <span className="font-serif text-xl font-semibold tracking-tight text-stone-900">
+              Learn<span className="text-amber-500">Pathly</span>
             </span>
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8" aria-label="Main navigation">
-            {MAIN_NAV_LINKS.map((link, idx) => {
-              const colors = ["#7c3aed", "#2563eb", "#16a34a", "#ca8a04", "#ea580c"];
-              const color = colors[idx % colors.length];
+          <nav className="hidden md:flex items-center gap-6" aria-label="Main navigation">
+            {MAIN_NAV_LINKS.map((link) => {
               const active = isActivePath(link.to, pathname);
 
               // Insert AI button before Plan
               if (link.to === "/plan") {
                 return (
-                  <div key="ai-nav-item" className="flex items-center gap-8">
+                  <div key="ai-nav-item" className="flex items-center gap-6">
                     <div
                       className="relative"
                       onMouseEnter={handleAiMouseEnter}
@@ -98,31 +96,23 @@ export function NavBar() {
                     >
                       <button
                         type="button"
-                        className="bg-transparent text-pink-600 px-4 py-2 text-xs font-bold uppercase tracking-wider hover:text-pink-500 transition-colors flex items-center gap-1"
+                        className="text-sm font-medium text-stone-500 hover:text-amber-600 transition-colors flex items-center gap-1"
                       >
                         AI
                         <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${aiMenuOpen ? "rotate-180" : ""}`} />
                       </button>
 
                       {aiMenuOpen && (
-                        <div className="absolute left-0 top-full mt-2 w-48 bg-white border-2 border-black shadow-memphis py-1 z-50">
-                          {AI_DROPDOWN_LINKS.map((link, idx) => {
-                            const colors = ["#7c3aed", "#2563eb"];
-                            const color = colors[idx % colors.length];
-                            return (
-                              <Link
-                                key={link.to}
-                                to={link.to}
-                                className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors font-medium"
-                              >
-                                <span
-                                  className="w-2 h-2 rounded-full"
-                                  style={{ backgroundColor: color }}
-                                />
-                                {link.label}
-                              </Link>
-                            );
-                          })}
+                        <div className="absolute left-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg py-1 z-50">
+                          {AI_DROPDOWN_LINKS.map((link) => (
+                            <Link
+                              key={link.to}
+                              to={link.to}
+                              className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
                         </div>
                       )}
                     </div>
@@ -130,10 +120,7 @@ export function NavBar() {
                     <Link
                       key={link.to}
                       to={link.to}
-                      className="text-sm font-bold uppercase tracking-wider px-3 py-1 transition-all hover:scale-105"
-                      style={{
-                        color: active ? color : "#78716c",
-                      }}
+                      className={`text-sm font-medium transition-colors ${active ? "text-amber-600" : "text-stone-500 hover:text-stone-700"}`}
                     >
                       {link.label}
                     </Link>
@@ -145,10 +132,7 @@ export function NavBar() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="text-sm font-bold uppercase tracking-wider px-3 py-1 transition-all hover:scale-105"
-                  style={{
-                    color: active ? color : "#78716c",
-                  }}
+                  className={`text-sm font-medium transition-colors ${active ? "text-amber-600" : "text-stone-500 hover:text-stone-700"}`}
                 >
                   {link.label}
                 </Link>
@@ -168,42 +152,34 @@ export function NavBar() {
                 >
                   <button
                     type="button"
-                    className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-stone-700 hover:text-purple-500 transition-colors"
+                    className="flex items-center gap-2 text-sm font-medium text-stone-600 hover:text-stone-900 transition-colors"
                   >
                     {user?.avatar_url ? (
                       <img
                         src={user.avatar_url}
                         alt={user.username}
-                        className="w-7 h-7 rounded-full object-cover"
+                        className="w-6 h-6 rounded-full object-cover"
                       />
                     ) : (
-                      <div className="w-7 h-7 rounded-full bg-purple-500 text-white flex items-center justify-center text-xs font-black">
+                      <div className="w-6 h-6 rounded-full bg-stone-200 text-stone-600 flex items-center justify-center text-xs font-medium">
                         {user?.username?.[0]?.toUpperCase() || "U"}
                       </div>
                     )}
-                    <span>{user?.username || "Account"}</span>
+                    <span className="hidden sm:inline">{user?.username || "Account"}</span>
                     <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${userMenuOpen ? "rotate-180" : ""}`} />
                   </button>
 
                   {userMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-48 bg-white border-2 border-black shadow-memphis py-1 z-50">
-                      {USER_DROPDOWN_LINKS.map((link, idx) => {
-                        const colors = ["#7c3aed", "#2563eb", "#16a34a", "#ca8a04"];
-                        const color = colors[idx % colors.length];
-                        return (
-                          <Link
-                            key={link.to}
-                            to={link.to}
-                            className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors font-medium"
-                          >
-                            <span
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: color }}
-                            />
-                            {link.label}
-                          </Link>
-                        );
-                      })}
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg py-1 z-50">
+                      {USER_DROPDOWN_LINKS.map((link) => (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
                       <hr className="my-1 border-stone-100" />
                       <button
                         type="button"
@@ -211,9 +187,8 @@ export function NavBar() {
                           logout();
                           setUserMenuOpen(false);
                         }}
-                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors font-medium"
+                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
                       >
-                        <span className="w-2 h-2 rounded-full bg-red-500" />
                         Logout
                       </button>
                     </div>
@@ -227,31 +202,23 @@ export function NavBar() {
                 >
                   <button
                     type="button"
-                    className="bg-blue-500 text-white px-4 py-2 text-xs font-black uppercase tracking-wider hover:bg-blue-600 transition-colors shadow-memphis flex items-center gap-1"
+                    className="bg-amber-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-1"
                   >
                     Create
                     <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${createMenuOpen ? "rotate-180" : ""}`} />
                   </button>
 
                   {createMenuOpen && (
-                    <div className="absolute right-0 top-full mt-2 w-44 bg-white border-2 border-black shadow-memphis py-1 z-50">
-                      {CREATE_DROPDOWN_LINKS.map((link, idx) => {
-                        const colors = ["#7c3aed", "#2563eb"];
-                        const color = colors[idx % colors.length];
-                        return (
-                          <Link
-                            key={link.to}
-                            to={link.to}
-                            className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors font-medium"
-                          >
-                            <span
-                              className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: color }}
-                            />
-                            {link.label}
-                          </Link>
-                        );
-                      })}
+                    <div className="absolute right-0 top-full mt-2 w-44 bg-white border border-stone-200 rounded-lg shadow-lg py-1 z-50">
+                      {CREATE_DROPDOWN_LINKS.map((link) => (
+                        <Link
+                          key={link.to}
+                          to={link.to}
+                          className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -260,13 +227,13 @@ export function NavBar() {
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-bold uppercase tracking-wider text-stone-600 hover:text-purple-500 transition-colors px-3 py-1"
+                  className="text-sm font-medium text-stone-500 hover:text-stone-700 transition-colors"
                 >
                   Log In
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-blue-500 text-white px-5 py-2.5 text-xs font-black uppercase tracking-wider hover:bg-blue-400 transition-colors duration-200 border-2 border-black shadow-memphis"
+                  className="bg-amber-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors"
                 >
                   Get Started
                 </Link>

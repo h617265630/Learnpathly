@@ -1,0 +1,157 @@
+{
+  "topic": "java全栈",
+  "timestamp": "20260425_155738",
+  "outline": {
+    "topic": "java全栈",
+    "level": "intermediate",
+    "overview": "学习 java全栈 的完整路径",
+    "total_duration_hours": 0.0,
+    "sections": [
+      {
+        "title": "第一章：java全栈 入门",
+        "description": "学习 java全栈 的基础知识",
+        "learning_goals": [
+          "理解 java全栈 的基本概念"
+        ],
+        "sub_nodes": [],
+        "search_queries": [
+          "java全栈"
+        ],
+        "suggested_resources": [],
+        "resources": [],
+        "estimated_minutes": 60,
+        "order": 0
+      }
+    ]
+  },
+  "expanded_outline": {
+    "topic": "java全栈",
+    "level": "intermediate",
+    "overview": "学习 java全栈 的完整路径",
+    "total_duration_hours": 0.0,
+    "sections": [
+      {
+        "title": "第一章：java全栈 入门",
+        "description": "学习 java全栈 的基础知识",
+        "learning_goals": [
+          "理解 java全栈 的基本概念"
+        ],
+        "sub_nodes": [
+          {
+            "title": "理解 java全栈 的基本概念",
+            "description": "学习并掌握 理解 java全栈 的基本概念",
+            "key_points": [
+              "理解 java全栈 的基本概念"
+            ],
+            "practical_exercise": "完成相关练习",
+            "search_keywords": [
+              "理解 java全栈 的基本概念",
+              "java全栈"
+            ],
+            "detailed_content": "",
+            "code_examples": [],
+            "related_resources": []
+          }
+        ],
+        "search_queries": [
+          "java全栈"
+        ],
+        "suggested_resources": [],
+        "resources": [],
+        "estimated_minutes": 60,
+        "order": 0
+      }
+    ]
+  },
+  "sections": [
+    {
+      "title": "第一章：java全栈 入门",
+      "description": "学习 java全栈 的基础知识",
+      "learning_goals": [
+        "理解 java全栈 的基本概念"
+      ],
+      "sub_nodes": [
+        {
+          "title": "理解 java全栈 的基本概念",
+          "description": "学习并掌握 理解 java全栈 的基本概念",
+          "key_points": [
+            "理解 java全栈 的基本概念"
+          ],
+          "practical_exercise": "完成相关练习",
+          "search_keywords": [
+            "理解 java全栈 的基本概念",
+            "java全栈"
+          ],
+          "detailed_content": "",
+          "code_examples": [],
+          "related_resources": []
+        }
+      ],
+      "search_queries": [
+        "java全栈"
+      ],
+      "suggested_resources": [],
+      "resources": [],
+      "estimated_minutes": 60,
+      "order": 0
+    }
+  ],
+  "final_summary": "# java全栈 学习路径总结\n\n恭喜你完成了 java全栈 的学习！请继续探索和实践。",
+  "github_projects": [
+    {
+      "name": "vercel/next.js",
+      "url": "https://github.com/vercel/next.js",
+      "description": "The React Framework for Web.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/vercel/next.js"
+    },
+    {
+      "name": "facebook/react",
+      "url": "https://github.com/facebook/react",
+      "description": "A declarative, efficient JavaScript library for building UIs.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/facebook/react"
+    },
+    {
+      "name": "microsoft/typescript",
+      "url": "https://github.com/microsoft/typescript",
+      "description": "TypeScript is a superset of JavaScript that compiles to clean JS.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/microsoft/typescript"
+    },
+    {
+      "name": "tailwindlabs/tailwindcss",
+      "url": "https://github.com/tailwindlabs/tailwindcss",
+      "description": "A utility-first CSS framework for rapid UI development.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/tailwindlabs/tailwindcss"
+    },
+    {
+      "name": "vitejs/vite",
+      "url": "https://github.com/vitejs/vite",
+      "description": "Next generation frontend tooling — lightning fast HMR.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/vitejs/vite"
+    },
+    {
+      "name": "shadcn-ui/ui",
+      "url": "https://github.com/shadcn-ui/ui",
+      "description": "Beautifully designed components built with Radix UI and Tailwind CSS.",
+      "stars": 0,
+      "stars_display": "",
+      "language": "",
+      "thumbnail": "https://opengraph.githubassets.com/1/shadcn-ui/ui"
+    }
+  ],
+  "exclude_urls": []
+}

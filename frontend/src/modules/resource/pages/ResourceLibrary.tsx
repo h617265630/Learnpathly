@@ -360,7 +360,7 @@ export default function ResourceLibrary() {
             </div>
 
             {/* Editorial grid: alternating hero and standard cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
               {filteredResources.map((resource, idx) => {
                 const isHero = idx % 7 === 0 && idx > 0;
                 const saving = !!addingToMy[resource.id];

@@ -30,7 +30,7 @@ function saveRecentSearches(topics: string[]) {
   } catch {}
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────
 
 function resourceHost(url: string) {
   try {
@@ -75,7 +75,7 @@ function aiItemToUiResource(item: AiResourceItem, _idx: number): UiResource {
   };
 }
 
-// ── Presets ────────────────────────────────────────────────────────────────
+// ── Presets ────────────────────────────────────────────────────────
 
 const presets = [
   "React hooks best practices",
@@ -86,7 +86,7 @@ const presets = [
   "claude code",
 ];
 
-// ── Component ─────────────────────────────────────────────────────────────
+// ── Component ─────────────────────────────────────────────────────
 
 export default function AIRsource() {
   const [query, setQuery] = useState("");
@@ -261,41 +261,41 @@ export default function AIRsource() {
 
   return (
     <div className="min-h-screen bg-stone-50">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 md:py-10">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <span className="h-px w-8 bg-amber-500" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                  AI Guided
-                </span>
-              </div>
-              <h1 className="text-3xl font-black leading-[0.92] tracking-tight text-stone-900 md:text-5xl">
-                AI Resource
-                <br />
-                <span className="text-amber-500">Search.</span>
-              </h1>
-            </div>
-            <p className="hidden max-w-sm text-sm leading-relaxed text-stone-500 md:block">
-              Enter any learning topic and AI will search the web for the most
-              relevant tutorials, articles, videos and docs — summarised and
-              ready to explore.
+      {/* Header */}
+      <header className="bg-white border-b border-stone-100">
+        <div className="mx-auto max-w-5xl px-6 py-12">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500 mb-4 block">
+              AI Guided
+            </span>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+              AI Resource Search
+            </h1>
+            <p className="mt-4 text-base text-stone-500 leading-relaxed">
+              Enter any learning topic and AI will search the web for the most relevant tutorials, articles, videos and docs — summarised and ready to explore.
             </p>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 py-8">
+      <main className="mx-auto max-w-5xl px-6 py-10">
         {/* Search input */}
-        <section className="mb-8 rounded-md border border-stone-200 bg-white p-6 shadow-sm md:p-8">
-          <div className="mb-4">
-            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-              Search
-            </p>
-            <h2 className="mt-2 text-xl font-black tracking-tight text-stone-900">
-              What do you want to learn about?
-            </h2>
+        <section className="bg-white rounded-lg shadow-sm p-8">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
+                Search
+              </p>
+              <h2 className="mt-1 text-lg font-semibold text-stone-900">
+                What do you want to learn about?
+              </h2>
+            </div>
+            <Link
+              to="/ai-path"
+              className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+            >
+              Or generate a full path →
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">
@@ -305,13 +305,13 @@ export default function AIRsource() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="e.g. Kubernetes, React performance, SQL optimization"
-              className="flex-1 rounded-sm border border-stone-200 bg-stone-50 px-5 py-3 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-4 focus:ring-amber-50"
+              className="flex-1 border border-stone-200 rounded-lg bg-stone-50 px-5 py-3 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50"
             />
             <Button
               type="button"
               onClick={handleSearch}
               disabled={loading || !query.trim()}
-              className="rounded-sm bg-amber-500 px-6 py-3 text-sm font-bold text-white hover:bg-amber-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="bg-amber-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
               {loading ? "Searching..." : "Search"}
             </Button>
@@ -324,35 +324,35 @@ export default function AIRsource() {
                 key={p}
                 type="button"
                 onClick={() => setQuery(p)}
-                className="rounded-sm border border-stone-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-stone-500 transition-colors hover:border-amber-200 hover:text-amber-700"
+                className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-300 hover:text-amber-600"
               >
                 {p}
               </button>
             ))}
           </div>
 
-          {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+          {error && <p className="mt-4 text-sm text-red-500 font-medium">{error}</p>}
         </section>
 
         {/* Results */}
         {searched && (
-          <section>
+          <section className="mt-8">
             {/* Result header */}
-            <div className="mb-5 flex items-center justify-between gap-4 flex-wrap">
+            <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                   {isCachedResult ? "Cached" : "Results"}
                 </p>
-                <h3 className="mt-1 text-lg font-black tracking-tight text-stone-900">
+                <h3 className="mt-1 text-base font-semibold text-stone-900">
                   {topic}
-                  <span className="ml-2 text-sm font-medium text-stone-400">
+                  <span className="ml-2 text-sm font-normal text-stone-400">
                     — {totalResults} resources found
                   </span>
                 </h3>
               </div>
               <div className="flex items-center gap-3">
                 {isCachedResult && (
-                  <span className="flex items-center gap-1 rounded-full bg-stone-100 px-3 py-1 text-[10px] font-semibold text-stone-500">
+                  <span className="flex items-center gap-1 rounded-full bg-stone-100 px-3 py-1 text-[10px] font-medium text-stone-500">
                     from cache
                   </span>
                 )}
@@ -361,34 +361,28 @@ export default function AIRsource() {
                     type="button"
                     onClick={handleShuffle}
                     disabled={loading}
-                    className="flex items-center gap-2 rounded-full border border-amber-300 bg-gradient-to-r from-amber-50 to-orange-50 px-4 py-2 text-xs font-bold text-amber-700 shadow-sm transition-all duration-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex items-center gap-2 border border-stone-200 bg-white px-4 py-2 text-xs font-semibold text-stone-600 rounded-lg transition-all hover:border-stone-300 active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>
                     </svg>
                     Shuffle
                   </button>
                 )}
-                <Link
-                  to="/ai-path"
-                  className="text-xs font-semibold uppercase tracking-wider text-stone-400 transition-colors hover:text-amber-500"
-                >
-                  Or generate a full path →
-                </Link>
               </div>
             </div>
 
             {/* GitHub Results — top section */}
             {githubResults.length > 0 && (
-              <div className="mb-6">
-                <div className="mb-3 flex items-center gap-2">
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <div className="mb-8">
+                <div className="mb-4 flex items-center gap-2">
+                  <svg className="h-4 w-4 text-stone-400" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
                   </svg>
-                  <h4 className="text-sm font-bold text-stone-900">GitHub Repositories</h4>
+                  <h4 className="text-sm font-semibold text-stone-900">GitHub Repositories</h4>
                   <span className="text-xs text-stone-400">{githubResults.length} results</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                   {githubResults.map((item, idx) => {
                     const ui = aiItemToUiResource(item, idx);
                     return (
@@ -408,22 +402,22 @@ export default function AIRsource() {
 
             {/* Divider */}
             {githubResults.length > 0 && webResults.length > 0 && (
-              <div className="my-6 flex items-center gap-4">
-                <div className="h-px flex-1 bg-stone-200" />
-                <span className="text-xs font-semibold text-stone-400 uppercase tracking-widest">
+              <div className="my-8 flex items-center gap-4">
+                <div className="h-px flex-1 bg-stone-100" />
+                <span className="text-xs font-medium text-stone-400 uppercase tracking-wider">
                   Web Resources
                 </span>
-                <div className="h-px flex-1 bg-stone-200" />
+                <div className="h-px flex-1 bg-stone-100" />
               </div>
             )}
 
             {/* Web Results — bottom section */}
             {webResults.length > 0 && (
               <div>
-                <div className="mb-3 flex items-center gap-2">
+                <div className="mb-4 flex items-center gap-2">
                   <span className="text-xs text-stone-400">{webResults.length} results</span>
                 </div>
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
                   {webResults.map((item, idx) => {
                     const ui = aiItemToUiResource(item, idx);
                     return (
@@ -442,7 +436,7 @@ export default function AIRsource() {
             )}
 
             {totalResults === 0 && !loading && (
-              <div className="rounded-md border border-dashed border-stone-300 bg-white px-6 py-16 text-center">
+              <div className="rounded-lg border border-stone-200 bg-white px-6 py-16 text-center">
                 <p className="text-stone-500">No resources found. Try a different topic.</p>
               </div>
             )}
@@ -453,13 +447,13 @@ export default function AIRsource() {
         {!searched && (
           <>
             {recentSearches.length > 0 && (
-              <section className="mb-8">
+              <section className="mt-8">
                 <div className="mb-4 flex items-center justify-between">
                   <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                       Recent
                     </p>
-                    <h3 className="mt-1 text-lg font-black tracking-tight text-stone-900">
+                    <h3 className="mt-1 text-base font-semibold text-stone-900">
                       Recent Searches
                     </h3>
                   </div>
@@ -468,7 +462,7 @@ export default function AIRsource() {
                   {recentSearches.map((t) => (
                     <div
                       key={t}
-                      className="group flex items-center gap-1 rounded-full border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600 hover:border-amber-300 hover:text-amber-600 transition-colors cursor-pointer"
+                      className="group flex items-center gap-1 rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600 hover:border-amber-300 hover:text-amber-600 transition-colors cursor-pointer"
                       role="button"
                       onClick={() => void handleLoadCached(t)}
                       title="Load from cache"
@@ -498,7 +492,7 @@ export default function AIRsource() {
               </section>
             )}
 
-            <section className="rounded-md border border-dashed border-stone-300 bg-white px-6 py-16 text-center">
+            <section className="mt-8 rounded-lg border border-stone-200 bg-white px-6 py-16 text-center">
               <p className="text-stone-500">
                 {recentSearches.length > 0
                   ? "Click a recent search to load cached results, or enter a new topic above."

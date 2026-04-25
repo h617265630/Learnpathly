@@ -323,27 +323,17 @@ export default function Plan() {
   return (
     <div className="min-h-screen bg-stone-50">
       {/* ── Masthead ───────────────────────────────────────────────────── */}
-      <header className="border-b-2 border-stone-900 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-          <div className="flex items-end justify-between gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="h-px w-8 bg-blue-500" />
-                <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                  Pricing
-                </span>
-              </div>
-              <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-[0.9]">
-                Simple plans,
-                <br />
-                <span className="text-blue-500">serious learning.</span>
-              </h1>
-            </div>
-            <div className="hidden md:flex flex-col items-end gap-1">
-              <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">
-                Free · Basic · Pro
-              </span>
-            </div>
+      <header className="bg-white border-b border-stone-100">
+        <div className="max-w-5xl mx-auto px-6 py-12">
+          <div className="max-w-2xl">
+            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-amber-500 mb-4 block">
+              Pricing
+            </span>
+            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+              Simple plans,
+              <br />
+              <span className="text-amber-500">serious learning.</span>
+            </h1>
           </div>
         </div>
       </header>

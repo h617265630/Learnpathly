@@ -187,7 +187,6 @@ export default function LearningPool() {
   const [allPaths, setAllPaths] = useState<PoolPath[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [activeCategory, setActiveCategory] = useState("");
   const [activeType, setActiveType] = useState("all");
 
   useEffect(() => {
@@ -209,11 +208,6 @@ export default function LearningPool() {
   useEffect(() => {
     setSearchInput(searchQuery);
   }, [searchQuery]);
-
-  const categories = useMemo(() => {
-    const cats = new Set(allPaths.map((p) => p.category));
-    return Array.from(cats).sort();
-  }, [allPaths]);
 
   const typeTabs = useMemo(
     () => [
@@ -249,10 +243,6 @@ export default function LearningPool() {
       result = result.filter((p) => p.typeLabel.toLowerCase() === activeType);
     }
 
-    if (activeCategory) {
-      result = result.filter((p) => p.category === activeCategory);
-    }
-
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
       result = result.filter(
@@ -264,7 +254,7 @@ export default function LearningPool() {
     }
 
     return result;
-  }, [allPaths, activeCategory, activeType, searchQuery]);
+  }, [allPaths, activeType, searchQuery]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -317,37 +307,6 @@ export default function LearningPool() {
               </>
             </Button>
           </div>
-        </div>
-      </section>
-
-      {/* Category pills */}
-      <section className="mb-10">
-        <div className="flex items-center gap-2 flex-wrap">
-          <button
-            type="button"
-            onClick={() => setActiveCategory("")}
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-150 ${
-              activeCategory === ""
-                ? "bg-stone-900 text-white border-stone-900"
-                : "border-stone-200 text-stone-500 bg-white hover:border-stone-300 hover:text-stone-700"
-            }`}
-          >
-            All
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setActiveCategory(cat)}
-              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-all duration-150 ${
-                activeCategory === cat
-                  ? "bg-stone-900 text-white border-stone-900"
-                  : "border-stone-200 text-stone-500 bg-white hover:border-stone-300 hover:text-stone-700"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
         </div>
       </section>
 

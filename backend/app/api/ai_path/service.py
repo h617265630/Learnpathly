@@ -47,6 +47,81 @@ def _sanitize(prefs: dict[str, Any] | None) -> dict[str, str]:
     }
 
 
+def _dump_model(value: Any) -> Any:
+    """Convert Pydantic models nested in pipeline output into plain dicts."""
+    if hasattr(value, "model_dump"):
+        return value.model_dump()
+    if isinstance(value, dict):
+        return {k: _dump_model(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_dump_model(item) for item in value]
+    return value
+
+
+def _normalise_resource(resource: Any) -> dict[str, Any]:
+    data = _dump_model(resource)
+    if not isinstance(data, dict):
+        return {}
+
+    url = str(data.get("url") or "").strip()
+    if not url:
+        return {}
+
+    return {
+        "url": url,
+        "title": data.get("title") or url,
+        "description": data.get("description") or data.get("summary") or "",
+        "summary": data.get("summary") or data.get("description") or "",
+        "key_points": data.get("key_points") or [],
+        "difficulty": data.get("difficulty") or "",
+        "resource_type": data.get("resource_type") or "",
+        "learning_stage": data.get("learning_stage") or "",
+        "estimated_minutes": data.get("estimated_minutes") or 0,
+        "image": data.get("image"),
+    }
+
+
+def _normalise_sub_node(sub_node: Any) -> dict[str, Any]:
+    data = _dump_model(sub_node)
+    if not isinstance(data, dict):
+        return {}
+
+    return {
+        "title": data.get("title") or "",
+        "description": data.get("description") or "",
+        "learning_points": data.get("learning_points") or data.get("key_points") or [],
+        "practical_exercise": data.get("practical_exercise") or "",
+        "search_keywords": data.get("search_keywords") or [],
+        "resources": [
+            item
+            for item in (_normalise_resource(res) for res in data.get("resources", []))
+            if item
+        ],
+    }
+
+
+def _normalise_section(section: Any, fallback_order: int) -> dict[str, Any]:
+    data = _dump_model(section)
+    if not isinstance(data, dict):
+        data = {}
+
+    return {
+        "title": data.get("title") or f"Stage {fallback_order + 1}",
+        "description": data.get("description") or "",
+        "learning_points": data.get("learning_goals") or data.get("learning_points") or [],
+        "resources": [
+            item
+            for item in (_normalise_resource(res) for res in data.get("resources", []))
+            if item
+        ],
+        "sub_nodes": [
+            item
+            for item in (_normalise_sub_node(sub) for sub in data.get("sub_nodes", []))
+            if item.get("title") or item.get("description")
+        ],
+        "order": data.get("order", fallback_order),
+        "estimated_minutes": data.get("estimated_minutes") or 0,
+    }
 
 
 async def generate_ai_path_outline(
@@ -78,37 +153,17 @@ async def generate_ai_path_outline(
 
     # Extract outline (already contains sub_nodes)
     outline = step1_result.get("outline")
-    if hasattr(outline, "model_dump"):
-        outline_data = outline.model_dump()
-    elif isinstance(outline, dict):
-        outline_data = outline
-    else:
+    outline_data = _dump_model(outline)
+    if not isinstance(outline_data, dict):
         outline_data = {}
 
     warnings.append(f"Generated {len(outline_data.get('sections', []))} sections with sub_nodes")
 
     # Build nodes directly from outline (no Step 2 needed)
-    nodes = []
-    for sec in outline_data.get("sections", []):
-        # Build sub_nodes from section's sub_nodes field
-        sub_nodes = []
-        for sub in sec.get("sub_nodes", []):
-            if isinstance(sub, dict):
-                sub_nodes.append({
-                    "title": sub.get("title", ""),
-                    "description": sub.get("description", ""),
-                    "learning_points": sub.get("key_points", []),
-                    "resources": [],
-                })
-
-        nodes.append({
-            "title": sec.get("title", ""),
-            "description": sec.get("description", ""),
-            "learning_points": sec.get("learning_goals", []),
-            "resources": [],
-            "sub_nodes": sub_nodes,
-            "order": sec.get("order", len(nodes)),
-        })
+    nodes = [
+        _normalise_section(sec, idx)
+        for idx, sec in enumerate(outline_data.get("sections", []))
+    ]
 
     # Build overview text
     overview = outline_data.get("overview", "") or f"关于「{query}」的完整学习路径，包含 {len(nodes)} 个章节"
@@ -132,7 +187,7 @@ async def generate_ai_path_outline(
     try:
         import json as _json
         from datetime import datetime as _dt
-        _result_dir = _AI_PATH_ROOT / "ai_path" / "result"
+        _result_dir = Path(__file__).resolve().parents[3] / "ai_path" / "result"
         _result_dir.mkdir(parents=True, exist_ok=True)
         _timestamp = _dt.now().strftime("%Y%m%d_%H%M%S")
         _filename = f"ai_path_outline_{_timestamp}.json"
@@ -174,54 +229,21 @@ async def generate_ai_path_pipeline(
         resource_count=_DEFAULT_RESOURCE_COUNT,
     )
 
-    # Extract data
-    outline = workflow_result.get("outline")
-    if hasattr(outline, "model_dump"):
-        outline_data = outline.model_dump()
-    else:
-        outline_data = outline or {}
+    outline_data = _dump_model(
+        workflow_result.get("expanded_outline") or workflow_result.get("outline")
+    )
+    if not isinstance(outline_data, dict):
+        outline_data = {}
 
-    sections_with_resources = workflow_result.get("sections_with_resources", [])
+    sections_with_resources = workflow_result.get("sections_with_resources") or []
     if not isinstance(sections_with_resources, list):
         sections_with_resources = []
 
-    # Build nodes from sections with resources
-    nodes = []
-    for sec in outline_data.get("sections", []):
-        section_title = sec.get("title", "")
-
-        # Find matching section with resources
-        matched_resources = []
-        for swr in sections_with_resources:
-            swr_title = swr.title if hasattr(swr, "title") else swr.get("title", "")
-            if swr_title == section_title:
-                for res in swr.resources if hasattr(swr, "resources") else swr.get("resources", []):
-                    if isinstance(res, dict):
-                        matched_resources.append({
-                            "url": res.get("url", ""),
-                            "title": res.get("title", ""),
-                            "description": res.get("summary", ""),
-                        })
-                break
-
-        # Build sub_nodes from learning_goals
-        sub_nodes = []
-        for idx, goal in enumerate(sec.get("learning_goals", [])):
-            sub_nodes.append({
-                "title": goal,
-                "description": f"Goal {idx + 1} of section '{section_title}'",
-                "learning_points": [goal],
-                "resources": [],
-            })
-
-        nodes.append({
-            "title": section_title,
-            "description": sec.get("description", ""),
-            "learning_points": sec.get("learning_goals", []),
-            "resources": matched_resources,
-            "sub_nodes": sub_nodes,
-            "order": sec.get("order", len(nodes) + 1),
-        })
+    source_sections = sections_with_resources or outline_data.get("sections", [])
+    nodes = [
+        _normalise_section(section, idx)
+        for idx, section in enumerate(source_sections)
+    ]
 
     # Enrich node explanations
     _enrich_nodes_explanations(nodes, query)
