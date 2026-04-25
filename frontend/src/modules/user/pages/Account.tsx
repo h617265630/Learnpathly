@@ -41,7 +41,7 @@ export default function Account() {
       <div className="mb-8 pb-6 border-b border-stone-200">
         <div className="flex items-end justify-between">
           <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-500 mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-500 mb-2">
               Account
             </p>
             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-stone-900 font-serif leading-tight">
@@ -63,7 +63,7 @@ export default function Account() {
           {/* User profile card */}
           <div className="mb-5 p-5 bg-stone-900 rounded-none">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-11 h-11 shrink-0 overflow-hidden rounded-none border-2 border-amber-500/30">
+              <div className="w-11 h-11 shrink-0 overflow-hidden rounded-none border-2 border-sky-500/30">
                 {avatarSrc ? (
                   <img
                     src={avatarSrc}
@@ -72,7 +72,7 @@ export default function Account() {
                     className="h-full w-full rounded-none object-cover"
                   />
                 ) : (
-                  <div className="h-full w-full flex items-center justify-center bg-amber-500 text-white text-sm font-bold">
+                  <div className="h-full w-full flex items-center justify-center bg-sky-500 text-white text-sm font-bold">
                     {getInitials(displayName)}
                   </div>
                 )}
@@ -84,7 +84,7 @@ export default function Account() {
                 <p className="text-[10px] text-stone-400 truncate">{email}</p>
               </div>
             </div>
-            <div className="w-8 h-px bg-amber-500/40 mb-4" />
+            <div className="w-8 h-px bg-sky-500/40 mb-4" />
             <nav className="space-y-0.5">
               {navItems.map((item) => {
                 const active = isActive(item.to, location.pathname);
@@ -94,7 +94,7 @@ export default function Account() {
                     to={item.to}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-sm text-xs font-semibold transition-all duration-150 group ${
                       active
-                        ? "bg-amber-500 text-stone-900"
+                        ? "bg-sky-500 text-stone-900"
                         : "text-stone-400 hover:text-stone-200 hover:bg-white/5"
                     }`}
                   >
@@ -132,7 +132,7 @@ export default function Account() {
           {/* Back link */}
           <Link
             to="/home"
-            className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-amber-500 transition-colors px-1"
+            className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-sky-500 transition-colors px-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -92,7 +92,7 @@ function getCardWeightClass(weight?: string): string {
   const basicMap: Record<string, string> = {
     default: "border border-stone-200 bg-stone-50",
     iron: "border border-slate-300 bg-slate-50",
-    bronze: "border-2 border-amber-400 bg-amber-50",
+    bronze: "border-2 border-sky-400 bg-sky-50",
     silver:
       "border-2 border-zinc-300 bg-gradient-to-br from-zinc-50 to-zinc-100",
     gold: "tier-gold",

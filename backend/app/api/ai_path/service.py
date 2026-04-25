@@ -183,21 +183,6 @@ async def generate_ai_path_outline(
         },
     }
 
-    # ── Save result to ai_path/result/ ─────────────────────────────────────────
-    try:
-        import json as _json
-        from datetime import datetime as _dt
-        _result_dir = Path(__file__).resolve().parents[3] / "ai_path" / "result"
-        _result_dir.mkdir(parents=True, exist_ok=True)
-        _timestamp = _dt.now().strftime("%Y%m%d_%H%M%S")
-        _filename = f"ai_path_outline_{_timestamp}.json"
-        _save_path = _result_dir / _filename
-        with open(_save_path, "w", encoding="utf-8") as _f:
-            _json.dump(data, _f, ensure_ascii=False, indent=2)
-        warnings.append(f"Result saved to {_filename}")
-    except Exception:
-        pass  # Non-blocking, don't fail the request
-
     return data, warnings
 
 

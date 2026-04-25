@@ -193,10 +193,10 @@ export default function Login() {
         </div>
 
         {/* Accent bar */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500" />
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-sky-500" />
 
         <div className="relative z-10">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-500 mb-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-500 mb-6">
             Learnpathly
           </p>
           <h1 className="text-5xl xl:text-6xl font-black text-white leading-[0.9] tracking-tight font-serif">
@@ -212,7 +212,7 @@ export default function Login() {
 
         <div className="relative z-10 space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-px bg-amber-500" />
+            <div className="w-8 h-px bg-sky-500" />
             <p className="text-[11px] uppercase tracking-[0.2em] text-stone-500">
               Personal learning platform
             </p>
@@ -228,7 +228,7 @@ export default function Login() {
       <div className="flex-1 flex flex-col justify-center px-8 py-12 lg:px-16 xl:px-24 bg-stone-50/50">
         {/* Mobile logo */}
         <div className="lg:hidden mb-10">
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-amber-600 mb-2">
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-sky-600 mb-2">
             Learnpathly
           </p>
           <h1 className="text-3xl font-black text-stone-900 tracking-tight font-serif">
@@ -239,7 +239,7 @@ export default function Login() {
         <div className="w-full max-w-sm mx-auto lg:mx-0">
           {/* Form masthead */}
           <div className="mb-8">
-            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-amber-500 mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-sky-500 mb-2">
               Account
             </p>
             <h2 className="text-2xl font-black text-stone-900 font-serif tracking-tight leading-tight">
@@ -278,7 +278,7 @@ export default function Login() {
                     aria-describedby={
                       errors.email ? "login-email-error" : undefined
                     }
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-stone-200 text-stone-900 text-sm placeholder:text-stone-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-stone-200 text-stone-900 text-sm placeholder:text-stone-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -318,7 +318,7 @@ export default function Login() {
                     aria-describedby={
                       errors.password ? "login-password-error" : undefined
                     }
-                    className="w-full pl-10 pr-12 py-3 bg-white border border-stone-200 text-stone-900 text-sm placeholder:text-stone-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-100 transition-all"
+                    className="w-full pl-10 pr-12 py-3 bg-white border border-stone-200 text-stone-900 text-sm placeholder:text-stone-400 outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 transition-all"
                     placeholder="••••••••"
                   />
                   <button
@@ -355,13 +355,13 @@ export default function Login() {
                   type="checkbox"
                   checked={remember}
                   onChange={(e) => setRemember(e.target.checked)}
-                  className="w-3.5 h-3.5 border-stone-300 rounded text-amber-500 focus:ring-amber-200"
+                  className="w-3.5 h-3.5 border-stone-300 rounded text-sky-500 focus:ring-amber-200"
                 />
                 <span className="text-xs text-stone-400">Remember me</span>
               </label>
               <a
                 href="#"
-                className="text-xs text-stone-400 hover:text-amber-600 transition-colors"
+                className="text-xs text-stone-400 hover:text-sky-600 transition-colors"
               >
                 Forgot password?
               </a>
@@ -407,7 +407,7 @@ export default function Login() {
             Don't have an account?
             <Link
               to="/register"
-              className="text-amber-600 hover:text-amber-700 font-semibold transition-colors"
+              className="text-sky-600 hover:text-sky-700 font-semibold transition-colors"
             >
               {" "}
               Create one →

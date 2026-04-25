@@ -167,7 +167,7 @@ export default function AboutResources() {
               </div>
 
               {/* Document */}
-              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-amber-600 transition-colors">
+              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-sky-600 transition-colors">
                 <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center">
                   <span className="text-[10px] font-bold text-stone-400">
                     3

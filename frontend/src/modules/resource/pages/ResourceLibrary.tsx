@@ -249,7 +249,7 @@ export default function ResourceLibrary() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search resources, topics..."
                 aria-label="Search resources"
-                className="h-11 sm:h-11 w-full rounded-none border border-stone-200 bg-white pl-9 sm:pl-10 pr-3 sm:pr-4 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-colors"
+                className="h-11 sm:h-11 w-full rounded-none border border-stone-200 bg-white pl-9 sm:pl-10 pr-3 sm:pr-4 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-100 transition-colors"
               />
             </div>
 
@@ -260,7 +260,7 @@ export default function ResourceLibrary() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="appearance-none h-11 rounded-none border border-stone-200 bg-white pl-3 sm:pl-4 pr-8 sm:pr-10 text-sm text-stone-700 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-colors cursor-pointer w-full"
+                  className="appearance-none h-11 rounded-none border border-stone-200 bg-white pl-3 sm:pl-4 pr-8 sm:pr-10 text-sm text-stone-700 outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-100 transition-colors cursor-pointer w-full"
                 >
                   {categoryOptions.map((cat) => (
                     <option key={cat} value={cat}>
@@ -325,7 +325,7 @@ export default function ResourceLibrary() {
         {loading && (
           <div className="py-20 text-center">
             <div className="inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></div>
+              <div className="h-2 w-2 rounded-full bg-sky-500 animate-pulse"></div>
               <span className="text-sm text-stone-400">Loading resources…</span>
             </div>
           </div>

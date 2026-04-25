@@ -93,7 +93,10 @@ export default function AIPath() {
       });
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
       setLastResult(result);
-      navigate("/ai-path-detail");
+      const projectId = result.project_id;
+      navigate(
+        projectId ? `/ai-path-detail?project_id=${projectId}` : "/ai-path-detail"
+      );
     } catch (e: unknown) {
       const err = e as { response?: { data?: { detail?: string } }; message?: string };
       setError(String(err.response?.data?.detail || err.message || "AI Path generation failed"));
@@ -110,7 +113,7 @@ export default function AIPath() {
       <header className="bg-white border-b border-stone-100">
         <div className="mx-auto max-w-5xl px-6 py-12">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500 mb-4 block">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-500 mb-4 block">
               AI Guided
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
@@ -138,7 +141,7 @@ export default function AIPath() {
               </div>
               <Link
                 to="/ai-path-detail"
-                className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+                className="text-xs font-medium text-sky-600 hover:text-sky-700 transition-colors"
               >
                 View recent →
               </Link>
@@ -150,7 +153,7 @@ export default function AIPath() {
               rows={6}
               maxLength={2000}
               placeholder="Example: I want to learn React full-stack development systematically, launch a production-ready project in 3 months..."
-              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50 transition-all"
+              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50 transition-all"
             />
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -159,7 +162,7 @@ export default function AIPath() {
                   key={preset}
                   type="button"
                   onClick={() => setQuery(preset)}
-                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-300 hover:text-amber-600"
+                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-sky-300 hover:text-sky-600"
                 >
                   {preset.length > 35 ? preset.slice(0, 35) + "..." : preset}
                 </button>
@@ -173,7 +176,7 @@ export default function AIPath() {
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value as Level)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -185,7 +188,7 @@ export default function AIPath() {
                 <select
                   value={depth}
                   onChange={(e) => setDepth(e.target.value as Depth)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {DEPTH_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -197,7 +200,7 @@ export default function AIPath() {
                 <select
                   value={contentType}
                   onChange={(e) => setContentType(e.target.value as ContentType)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {CONTENT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -214,7 +217,7 @@ export default function AIPath() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || !query.trim()}
-                className="bg-amber-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-amber-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="bg-sky-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sky-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? (
                   "Generating..."
@@ -240,7 +243,7 @@ export default function AIPath() {
                 How it works
               </p>
               <div className="mt-4 space-y-4">
-                {steps.map((step, idx) => {
+                {steps.map((step) => {
                   const Icon = step.icon;
                   return (
                     <div key={step.title} className="flex gap-3">
@@ -275,7 +278,7 @@ export default function AIPath() {
                   </div>
                   <Link
                     to="/ai-path-detail"
-                    className="text-xs font-medium text-amber-600 hover:text-amber-700"
+                    className="text-xs font-medium text-sky-600 hover:text-sky-700"
                   >
                     Open →
                   </Link>
@@ -294,7 +297,7 @@ export default function AIPath() {
         {/* Learning path preview */}
         <section className="mt-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-5 bg-amber-500 rounded-full" />
+            <div className="w-1 h-5 bg-sky-500 rounded-full" />
             <h2 className="text-sm font-semibold text-stone-900 uppercase tracking-wider">
               Generated Path Preview
             </h2>
@@ -309,7 +312,7 @@ export default function AIPath() {
                   className="bg-white rounded-lg shadow-sm p-5 hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xs font-semibold">
+                    <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 text-xs font-semibold">
                       {idx + 1}
                     </div>
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">

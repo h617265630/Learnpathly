@@ -326,13 +326,13 @@ export default function Plan() {
       <header className="bg-white border-b border-stone-100">
         <div className="max-w-5xl mx-auto px-6 py-12">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-amber-500 mb-4 block">
+            <span className="text-[10px] font-semibold tracking-[0.2em] uppercase text-sky-500 mb-4 block">
               Pricing
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
               Simple plans,
               <br />
-              <span className="text-amber-500">serious learning.</span>
+              <span className="text-sky-500">serious learning.</span>
             </h1>
           </div>
         </div>
@@ -368,7 +368,7 @@ export default function Plan() {
                   -17%
                 </span>
               ) : (
-                <span className="text-[10px] font-semibold text-amber-600">-17%</span>
+                <span className="text-[10px] font-semibold text-sky-600">-17%</span>
               )}
             </button>
           </div>

@@ -15,6 +15,11 @@ from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 
 from .service import generate_ai_path_pipeline, generate_ai_path_outline, generate_section_tutorial, search_resources_pipeline
+from app.models.ai_path_project import AiPathProject
+from app.models.ai_path_section import AiPathSection
+from app.models.ai_path_subnode import AiPathSubNode
+from app.models.ai_path_subnode_detail_cache import AiPathSubNodeDetailCache
+import hashlib
 
 
 router = APIRouter(prefix="/ai-path", tags=["ai-path"])
@@ -31,6 +36,7 @@ class AiPathGenerateRequest(BaseModel):
 
 
 class AiPathGenerateResponse(BaseModel):
+    project_id: int | None = None
     data: dict
     warnings: list[str] = Field(default_factory=list)
 
@@ -78,7 +84,10 @@ async def generate_ai_path(payload: AiPathGenerateRequest):
 
 
 @router.post("/generate-outline", response_model=AiPathGenerateResponse)
-async def generate_ai_path_outline_endpoint(payload: AiPathGenerateRequest):
+async def generate_ai_path_outline_endpoint(
+    payload: AiPathGenerateRequest,
+    db=Depends(get_db_dep),
+):
     """
     Generate only the learning path outline (search → summarise only, skip organize/report).
     Much faster. Returns stages grouped by learning_stage with resources.
@@ -99,7 +108,71 @@ async def generate_ai_path_outline_endpoint(payload: AiPathGenerateRequest):
             if v is not None
         }
         data, warnings = await generate_ai_path_outline(query, prefs)
-        return AiPathGenerateResponse(data=data, warnings=warnings)
+
+        # Persist outline + subnodes for admin/batch generation workflows.
+        project_id: int | None = None
+        try:
+            project = AiPathProject(
+                user_id=None,
+                topic=query,
+                level=prefs.get("level") or "intermediate",
+                learning_depth=prefs.get("learning_depth") or "standard",
+                content_type=prefs.get("content_type") or "mixed",
+                practical_ratio=prefs.get("practical_ratio") or "balanced",
+                resource_count="standard",
+                status="outline_generated",
+                outline_overview=(data.get("summary") or ""),
+                total_duration_hours=(data.get("_raw") or {}).get("total_duration_hours"),
+                raw_outline_json=(data.get("_raw") or {}),
+                raw_result_json=data,
+            )
+            db.add(project)
+            db.flush()  # allocate project.id
+
+            nodes = data.get("nodes") or []
+            if isinstance(nodes, list):
+                for sec_idx, node in enumerate(nodes):
+                    if not isinstance(node, dict):
+                        continue
+                    section = AiPathSection(
+                        project_id=project.id,
+                        order_index=int(node.get("order", sec_idx) or sec_idx),
+                        title=str(node.get("title") or f"Stage {sec_idx + 1}"),
+                        description=str(node.get("description") or ""),
+                        learning_goals=node.get("learning_points") or [],
+                        search_queries=node.get("search_queries") or [],
+                        estimated_minutes=node.get("estimated_minutes") or None,
+                    )
+                    db.add(section)
+                    db.flush()
+
+                    sub_nodes = node.get("sub_nodes") or []
+                    if isinstance(sub_nodes, list):
+                        for sub_idx, sub in enumerate(sub_nodes):
+                            if not isinstance(sub, dict):
+                                continue
+                            subnode = AiPathSubNode(
+                                section_id=section.id,
+                                order_index=sub_idx,
+                                title=str(sub.get("title") or f"SubNode {sub_idx + 1}"),
+                                description=str(sub.get("description") or ""),
+                                key_points=sub.get("learning_points") or [],
+                                practical_exercise=str(sub.get("practical_exercise") or ""),
+                                search_keywords=sub.get("search_keywords") or [],
+                            )
+                            db.add(subnode)
+
+            db.commit()
+            project_id = project.id
+            warnings.append(f"Saved outline to DB (ai_path_projects.id={project.id})")
+        except Exception as exc:
+            try:
+                db.rollback()
+            except Exception:
+                pass
+            warnings.append(f"DB save skipped: {exc}")
+
+        return AiPathGenerateResponse(project_id=project_id, data=data, warnings=warnings)
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:
@@ -133,8 +206,28 @@ class SubNodeDetailResponse(BaseModel):
 @router.post("/subnode-detail", response_model=SubNodeDetailResponse)
 async def generate_subnode_detail_endpoint(
     payload: SubNodeDetailRequest,
+    db=Depends(get_db_dep),
 ):
     """Generate detailed content for a sub-node (Step 2.5). Called on-demand when user clicks a sub-node."""
+    # DB cache first (replaces disk cache for server-side persistence)
+    key_str = f"{payload.topic}|{payload.section_title}|{payload.subnode_title}|{payload.detail_level}"
+    cache_key = hashlib.md5(key_str.encode()).hexdigest()
+
+    cached = (
+        db.query(AiPathSubNodeDetailCache)
+        .filter(AiPathSubNodeDetailCache.cache_key == cache_key)
+        .first()
+    )
+    if cached and cached.detailed_content:
+        return SubNodeDetailResponse(
+            title=payload.subnode_title,
+            description=payload.subnode_description,
+            key_points=payload.subnode_key_points,
+            detailed_content=cached.detailed_content,
+            code_examples=cached.code_examples or [],
+        )
+
+    # Generate via LLM (Step 2.5)
     try:
         from ai_path.pipeline.step2_5_subnode_detail import run_step2_5
 
@@ -149,18 +242,122 @@ async def generate_subnode_detail_endpoint(
             level=payload.level,
             detail_level=payload.detail_level,
         )
-
-        return SubNodeDetailResponse(
-            title=result.title,
-            description=result.description,
-            key_points=result.key_points,
-            detailed_content=result.detailed_content,
-            code_examples=result.code_examples,
-        )
     except Exception as exc:
         raise HTTPException(
             status_code=500, detail=f"Sub-node detail generation failed: {exc}"
         ) from exc
+
+    # Save to DB cache (best-effort)
+    try:
+        record = AiPathSubNodeDetailCache(
+            cache_key=cache_key,
+            topic=payload.topic,
+            section_title=payload.section_title,
+            subnode_title=payload.subnode_title,
+            detail_level=payload.detail_level,
+            detailed_content=result.detailed_content,
+            code_examples=result.code_examples,
+            raw_json={
+                "title": result.title,
+                "description": result.description,
+                "key_points": result.key_points,
+                "detailed_content": result.detailed_content,
+                "code_examples": result.code_examples,
+            },
+        )
+        db.add(record)
+        db.commit()
+    except Exception:
+        try:
+            db.rollback()
+        except Exception:
+            pass
+
+    return SubNodeDetailResponse(
+        title=result.title,
+        description=result.description,
+        key_points=result.key_points,
+        detailed_content=result.detailed_content,
+        code_examples=result.code_examples,
+    )
+
+
+# ── DB-backed Outline Fetching ────────────────────────────────────────────────
+
+def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
+    sections = list(project.sections or [])
+    sections.sort(key=lambda s: (s.order_index or 0, s.id or 0))
+
+    nodes: list[dict] = []
+    for sec in sections:
+        subnodes = list(sec.subnodes or [])
+        subnodes.sort(key=lambda s: (s.order_index or 0, s.id or 0))
+
+        nodes.append(
+            {
+                "title": sec.title,
+                "description": sec.description or "",
+                "learning_points": sec.learning_goals or [],
+                "resources": [],
+                "sub_nodes": [
+                    {
+                        "title": sn.title,
+                        "description": sn.description or "",
+                        "learning_points": sn.key_points or [],
+                        "practical_exercise": sn.practical_exercise or "",
+                        "search_keywords": sn.search_keywords or [],
+                        "resources": [],
+                    }
+                    for sn in subnodes
+                ],
+                "order": sec.order_index or 0,
+                "estimated_minutes": sec.estimated_minutes or 0,
+            }
+        )
+
+    overview = project.outline_overview or ""
+    data = {
+        "title": project.topic,
+        "summary": overview,
+        "description": overview,
+        "recommendations": [
+            f"共 {len(nodes)} 个章节",
+            f"约 {float(project.total_duration_hours or 0):.1f} 小时学习时长",
+        ],
+        "nodes": nodes,
+        "_raw": project.raw_outline_json or {},
+        "_from_db": True,
+    }
+
+    warnings = [f"Loaded from DB (ai_path_projects.id={project.id})"]
+    return AiPathGenerateResponse(project_id=project.id, data=data, warnings=warnings)
+
+
+@router.get("/projects/latest", response_model=AiPathGenerateResponse)
+async def get_latest_ai_path_project(db=Depends(get_db_dep)):
+    project = (
+        db.query(AiPathProject)
+        .order_by(AiPathProject.created_at.desc())
+        .first()
+    )
+    if not project:
+        raise HTTPException(status_code=404, detail="No ai_path projects found")
+    # Ensure relationships are loaded
+    _ = project.sections
+    for sec in project.sections or []:
+        _ = sec.subnodes
+    return _project_to_response(project)
+
+
+@router.get("/projects/{project_id}", response_model=AiPathGenerateResponse)
+async def get_ai_path_project(project_id: int, db=Depends(get_db_dep)):
+    project = db.query(AiPathProject).filter(AiPathProject.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    _ = project.sections
+    for sec in project.sections or []:
+        _ = sec.subnodes
+    return _project_to_response(project)
 
 
 @router.post("/section-tutorial", response_model=SectionTutorialResponse)

@@ -11,7 +11,7 @@ import {
 import { getResourceDetail, type DbResource } from "@/services/resource";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { MyPathCard, type PoolPath } from "@/components/MyPathCard";
+import { PathCard, type PoolPath } from "@/components/PathCard";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -297,7 +297,7 @@ export default function MyLearningPath() {
               <h1 className="text-3xl md:text-4xl font-black tracking-tight text-stone-900 leading-[0.92]">
                 My
                 <br />
-                <span className="text-amber-500">Paths.</span>
+                <span className="text-sky-500">Paths.</span>
               </h1>
             </div>
             <div className="hidden md:flex flex-col items-end gap-1">
@@ -313,7 +313,7 @@ export default function MyLearningPath() {
                 </span>
               )}
               {createdPaths.length > 0 && (
-                <span className="text-xs text-amber-600">
+                <span className="text-xs text-sky-600">
                   {createdPaths.length} published
                 </span>
               )}
@@ -333,7 +333,7 @@ export default function MyLearningPath() {
           <div className="mt-6 flex items-center justify-end gap-6">
             <Link
               to="/createpath"
-              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-8 px-5 text-xs rounded-md font-semibold bg-amber-500 text-white hover:bg-amber-600"
+              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-8 px-5 text-xs rounded-md font-semibold bg-sky-500 text-white hover:bg-sky-600"
             >
               + New path
             </Link>
@@ -346,7 +346,7 @@ export default function MyLearningPath() {
         {loading && (
           <div className="py-20 text-center">
             <div className="inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+              <div className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
               <span className="text-sm text-stone-400">
                 Loading your paths…
               </span>
@@ -379,7 +379,7 @@ export default function MyLearningPath() {
             </p>
             <Link
               to="/createpath"
-              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-9 px-5 text-sm rounded-md font-semibold bg-amber-500 text-white hover:bg-amber-600"
+              className="inline-flex items-center justify-center gap-2 transition-all duration-150 h-9 px-5 text-sm rounded-md font-semibold bg-sky-500 text-white hover:bg-sky-600"
             >
               Create your first path →
             </Link>
@@ -449,68 +449,48 @@ export default function MyLearningPath() {
 
             {/* Tab content */}
             {activeTab === "drafts" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {draftPaths.map((path, idx) => (
-                  <MyPathCard
+                  <PathCard
                     key={path.id ?? `draft-${idx}`}
                     path={mapToPoolPath(path, idx)}
-                    onClick={() =>
-                      navigate(`/learningpath/${path.id}?from=my-paths`)
-                    }
-                    onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
-                    onDelete={() => openDeleteConfirm(path.id)}
+                    index={idx}
                   />
                 ))}
               </div>
             )}
 
             {activeTab === "created" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {createdPaths.map((path, idx) => (
-                  <MyPathCard
+                  <PathCard
                     key={path.id ?? `created-${idx}`}
                     path={mapToPoolPath(path, idx)}
-                    onClick={() =>
-                      navigate(`/learningpath/${path.id}?from=my-paths`)
-                    }
-                    onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
-                    onDelete={() => openDeleteConfirm(path.id)}
+                    index={idx}
                   />
                 ))}
               </div>
             )}
 
             {activeTab === "forked" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {forkedPaths.map((path, idx) => (
-                  <MyPathCard
+                  <PathCard
                     key={path.id ?? `forked-${idx}`}
                     path={mapToPoolPath(path, idx)}
-                    onClick={() =>
-                      navigate(`/learningpath/${path.id}?from=my-paths`)
-                    }
-                    onEdit={() => navigate(`/learningpath/${path.id}/edit`)}
-                    onDelete={() => openDeleteConfirm(path.id)}
-                    showSource
-                    rightCategory="Forked"
+                    index={idx}
                   />
                 ))}
               </div>
             )}
 
             {activeTab === "saved" && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {savedPaths.map((path, idx) => (
-                  <MyPathCard
+                  <PathCard
                     key={path.id ?? `saved-${idx}`}
                     path={mapToPoolPath(path, idx)}
-                    onClick={() =>
-                      navigate(`/learningpath/${path.id}?from=my-paths`)
-                    }
-                    onEdit={undefined}
-                    onDelete={() => openDeleteConfirm(path.id)}
-                    showSource
-                    rightCategory="Saved"
+                    index={idx}
                   />
                 ))}
               </div>

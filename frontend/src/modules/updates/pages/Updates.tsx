@@ -55,7 +55,7 @@ export default function Updates() {
           <div className="flex items-end justify-between gap-6">
             <div>
               <div className="mb-3 flex items-center gap-2">
-                <span className="h-px w-8 bg-amber-500" />
+                <span className="h-px w-8 bg-sky-500" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
                   Product
                 </span>
@@ -63,7 +63,7 @@ export default function Updates() {
               <h1 className="text-3xl font-black leading-[0.92] tracking-tight text-stone-900 md:text-5xl">
                 Updates
                 <br />
-                <span className="text-amber-500">& Roadmap.</span>
+                <span className="text-sky-500">& Roadmap.</span>
               </h1>
             </div>
           </div>
@@ -133,8 +133,8 @@ export default function Updates() {
           {/* Upcoming Features */}
           <section>
             <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100">
-                <ArrowRight className="h-5 w-5 text-amber-600" />
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-100">
+                <ArrowRight className="h-5 w-5 text-sky-600" />
               </span>
               <div>
                 <h3 className="text-xl font-black tracking-tight text-stone-900">
@@ -153,8 +153,8 @@ export default function Updates() {
                     className="rounded-md border border-stone-200 bg-white p-5 shadow-sm"
                   >
                     <div className="flex gap-3">
-                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-50">
-                        <Icon className="h-4 w-4 text-amber-600" />
+                      <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sky-50">
+                        <Icon className="h-4 w-4 text-sky-600" />
                       </span>
                       <div>
                         <h4 className="mb-1 text-sm font-semibold text-stone-900">
@@ -186,7 +186,7 @@ export default function Updates() {
             <Link to="/ai-path">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-sm bg-amber-500 px-6 py-2.5 text-sm font-bold text-white hover:bg-amber-600 transition-colors"
+                className="inline-flex items-center gap-2 rounded-sm bg-sky-500 px-6 py-2.5 text-sm font-bold text-white hover:bg-sky-600 transition-colors"
               >
                 Try AI Path
                 <ArrowRight className="h-4 w-4" />

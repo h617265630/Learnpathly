@@ -58,7 +58,7 @@ export function PathCard({ path }: PathCardProps) {
         </span>
 
         {/* Title */}
-        <h3 className="text-sm font-semibold leading-snug text-stone-900 line-clamp-2 mb-2 group-hover:text-amber-600 transition-colors">
+        <h3 className="text-sm font-semibold leading-snug text-stone-900 line-clamp-2 mb-2 group-hover:text-sky-600 transition-colors">
           {path.title}
         </h3>
 
