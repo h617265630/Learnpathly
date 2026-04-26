@@ -30,10 +30,15 @@ class AiPathSubNode(Base):
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
     section = relationship("AiPathSection", back_populates="subnodes")
+    details = relationship(
+        "AiPathSubNodeDetail",
+        back_populates="subnode",
+        cascade="all, delete-orphan",
+        order_by="AiPathSubNodeDetail.detail_level",
+    )
 
     __table_args__ = (
         UniqueConstraint("section_id", "order_index", name="uq_ai_path_subnodes_section_order"),
         Index("ix_ai_path_subnodes_section_order", "section_id", "order_index"),
         Index("ix_ai_path_subnodes_title", "title"),
     )
-

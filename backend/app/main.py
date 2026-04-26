@@ -53,6 +53,7 @@ import app.models.webhook_event
 import app.models.ai_path_project
 import app.models.ai_path_section
 import app.models.ai_path_subnode
+import app.models.ai_path_subnode_detail
 import app.models.ai_path_subnode_detail_cache
 
 Base.metadata.create_all(bind=engine)
