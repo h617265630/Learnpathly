@@ -25,6 +25,7 @@ const USER_DROPDOWN_LINKS = [
 const CREATE_DROPDOWN_LINKS = [
   { to: "/createpath", label: "Create Path", icon: Plus },
   { to: "/ai-path", label: "AI Path", icon: Plus },
+  { to: "/my-resources/add", label: "Add Resource", icon: Plus },
 ];
 
 function isActivePath(prefix: string, pathname: string) {
@@ -76,7 +77,7 @@ export function NavBar() {
           <Link to="/home" className="flex items-center gap-2">
             <img src="/favicon.png" alt="LearnPathly" className="h-7 w-7" />
             <span className="font-serif text-xl font-semibold tracking-tight text-stone-900">
-              Learn<span className="text-amber-500">Pathly</span>
+              Learn<span className="text-sky-500">Pathly</span>
             </span>
           </Link>
 
@@ -96,7 +97,7 @@ export function NavBar() {
                     >
                       <button
                         type="button"
-                        className="text-sm font-medium text-stone-500 hover:text-amber-600 transition-colors flex items-center gap-1"
+                        className="text-sm font-medium text-stone-500 hover:text-sky-600 transition-colors flex items-center gap-1"
                       >
                         AI
                         <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${aiMenuOpen ? "rotate-180" : ""}`} />
@@ -120,7 +121,7 @@ export function NavBar() {
                     <Link
                       key={link.to}
                       to={link.to}
-                      className={`text-sm font-medium transition-colors ${active ? "text-amber-600" : "text-stone-500 hover:text-stone-700"}`}
+                      className={`text-sm font-medium transition-colors ${active ? "text-sky-600" : "text-stone-500 hover:text-stone-700"}`}
                     >
                       {link.label}
                     </Link>
@@ -132,7 +133,7 @@ export function NavBar() {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`text-sm font-medium transition-colors ${active ? "text-amber-600" : "text-stone-500 hover:text-stone-700"}`}
+                  className={`text-sm font-medium transition-colors ${active ? "text-sky-600" : "text-stone-500 hover:text-stone-700"}`}
                 >
                   {link.label}
                 </Link>
@@ -202,7 +203,7 @@ export function NavBar() {
                 >
                   <button
                     type="button"
-                    className="bg-amber-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors flex items-center gap-1"
+                    className="bg-sky-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-sky-600 transition-colors flex items-center gap-1"
                   >
                     Create
                     <ChevronDown className={`w-3 h-3 transition-transform duration-150 ${createMenuOpen ? "rotate-180" : ""}`} />
@@ -233,7 +234,7 @@ export function NavBar() {
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-amber-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors"
+                  className="bg-sky-500 text-white px-4 py-2 text-sm font-semibold rounded-lg hover:bg-sky-600 transition-colors"
                 >
                   Get Started
                 </Link>

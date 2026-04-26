@@ -161,6 +161,9 @@ async def generate_outline(
 }}
 
 要求：
+- 必须完整保留用户主题中的学习目标、focus/重点、技术栈、产出目标；不要只围绕第一个工具词或编程语言展开
+- 如果主题包含多个重点（例如 Python、Pandas、visualization、real-world projects），每个重点都应在章节或子节点中明确出现
+- 章节标题应优先体现总目标和阶段能力，而不是只写某个工具名
 - 每个章节必须包含 2-4 个 sub_nodes（子知识点）
 - sub_nodes 要具体、可操作
 - 用中文回答"""

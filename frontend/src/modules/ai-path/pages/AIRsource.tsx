@@ -265,7 +265,7 @@ export default function AIRsource() {
       <header className="bg-white border-b border-stone-100">
         <div className="mx-auto max-w-5xl px-6 py-12">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500 mb-4 block">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-500 mb-4 block">
               AI Guided
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
@@ -292,7 +292,7 @@ export default function AIRsource() {
             </div>
             <Link
               to="/ai-path"
-              className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+              className="text-xs font-medium text-sky-600 hover:text-sky-700 transition-colors"
             >
               Or generate a full path →
             </Link>
@@ -305,13 +305,13 @@ export default function AIRsource() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="e.g. Kubernetes, React performance, SQL optimization"
-              className="flex-1 border border-stone-200 rounded-lg bg-stone-50 px-5 py-3 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50"
+              className="flex-1 border border-stone-200 rounded-lg bg-stone-50 px-5 py-3 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50"
             />
             <Button
               type="button"
               onClick={handleSearch}
               disabled={loading || !query.trim()}
-              className="bg-amber-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-amber-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="bg-sky-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sky-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
               {loading ? "Searching..." : "Search"}
             </Button>
@@ -324,7 +324,7 @@ export default function AIRsource() {
                 key={p}
                 type="button"
                 onClick={() => setQuery(p)}
-                className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-300 hover:text-amber-600"
+                className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-sky-300 hover:text-sky-600"
               >
                 {p}
               </button>
@@ -462,7 +462,7 @@ export default function AIRsource() {
                   {recentSearches.map((t) => (
                     <div
                       key={t}
-                      className="group flex items-center gap-1 rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600 hover:border-amber-300 hover:text-amber-600 transition-colors cursor-pointer"
+                      className="group flex items-center gap-1 rounded-lg border border-stone-200 bg-white px-4 py-2 text-sm text-stone-600 hover:border-sky-300 hover:text-sky-600 transition-colors cursor-pointer"
                       role="button"
                       onClick={() => void handleLoadCached(t)}
                       title="Load from cache"
@@ -485,7 +485,7 @@ export default function AIRsource() {
                 </div>
                 {loadingCached && (
                   <div className="mt-4 flex items-center gap-2 text-sm text-stone-400">
-                    <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                    <div className="h-2 w-2 rounded-full bg-sky-500 animate-pulse" />
                     Loading from cache...
                   </div>
                 )}

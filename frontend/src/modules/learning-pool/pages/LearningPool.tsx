@@ -376,7 +376,7 @@ export default function LearningPool() {
                 onClick={() => setActiveType(tab.key)}
                 className={`px-5 py-2.5 text-xs font-semibold uppercase tracking-wider border-b-2 transition-all duration-150 -mb-px ${
                   activeType === tab.key
-                    ? "border-amber-500 text-amber-600"
+                    ? "border-sky-500 text-sky-600"
                     : "border-transparent text-stone-400 hover:text-stone-600 hover:border-stone-200"
                 }`}
               >

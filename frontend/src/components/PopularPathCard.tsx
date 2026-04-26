@@ -27,7 +27,7 @@ export function PopularPathCard({ path }: PopularPathCardProps) {
       className="group block bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200"
     >
       {/* Thumbnail */}
-      <div className={`relative aspect-video overflow-hidden bg-stone-100 ${isGitHub ? "p-1 bg-white" : ""}`}>
+      <div className={`relative aspect-video overflow-hidden bg-stone-100 ${isGitHub ? "p-2 bg-white" : ""}`}>
         {path.thumbnail ? (
           <img
             src={path.thumbnail}
@@ -58,7 +58,7 @@ export function PopularPathCard({ path }: PopularPathCardProps) {
         </span>
 
         {/* Title */}
-        <h3 className="text-sm font-semibold leading-snug text-stone-900 line-clamp-2 mb-2 group-hover:text-amber-600 transition-colors">
+        <h3 className="text-sm font-semibold leading-snug text-stone-900 line-clamp-2 mb-2 group-hover:text-sky-600 transition-colors">
           {path.title}
         </h3>
 

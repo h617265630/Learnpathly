@@ -9,12 +9,18 @@ _AI_PATH_ROOT = Path(__file__).resolve().parents[4]
 if str(_AI_PATH_ROOT) not in sys.path:
     sys.path.insert(0, str(_AI_PATH_ROOT))
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Response
 from app.core.deps import get_db_dep
 from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
 
 from .service import generate_ai_path_pipeline, generate_ai_path_outline, generate_section_tutorial, search_resources_pipeline
+from app.models.ai_path_project import AiPathProject
+from app.models.ai_path_section import AiPathSection
+from app.models.ai_path_subnode import AiPathSubNode
+from app.models.ai_path_subnode_detail import AiPathSubNodeDetail
+from app.models.ai_path_subnode_detail_cache import AiPathSubNodeDetailCache
+import hashlib
 
 
 router = APIRouter(prefix="/ai-path", tags=["ai-path"])
@@ -31,6 +37,7 @@ class AiPathGenerateRequest(BaseModel):
 
 
 class AiPathGenerateResponse(BaseModel):
+    project_id: int | None = None
     data: dict
     warnings: list[str] = Field(default_factory=list)
 
@@ -48,6 +55,336 @@ class SectionTutorialResponse(BaseModel):
     """Response with generated tutorial content."""
     tutorial: str = Field(..., description="LLM-generated detailed tutorial in markdown")
     key_points: list[str] = Field(default_factory=list, description="Key points extracted from resources")
+
+
+def _build_ai_path_workflow_info() -> dict:
+    return {
+        "name": "ai_path_workflow_info",
+        "version": "2026-04-27",
+        "summary": {
+            "generate_button": "/ai-path 页面点击 Generate 时，会调用 POST /ai-path/generate-outline。",
+            "subnode_click": "/ai-path-detail 页面点击子知识点时，会调用 POST /ai-path/subnode-detail。",
+            "primary_storage": "生成的大纲、sub_nodes 和已生成的 subnode detail 会持久化保存到 PostgreSQL 的 ai_path_* 表。",
+            "frontend_cache": "前端还会把最近一次响应临时保存到 sessionStorage，作为页面 fallback。",
+        },
+        "frontends": {
+            "ai_path_page": {
+                "url": "http://localhost:5175/ai-path",
+                "component": "frontend/src/modules/ai-path/pages/AIPath.tsx",
+                "service_function": "generateAiPath",
+                "service_file": "frontend/src/services/aiPath.ts",
+                "api": {
+                    "method": "POST",
+                    "path": "/ai-path/generate-outline",
+                    "timeout_ms": 120000,
+                },
+                "does": [
+                    "收集表单里的学习目标和偏好配置。",
+                    "调用 POST /ai-path/generate-outline。",
+                    "把 API 响应临时保存到 sessionStorage，key 是 learnsmart_ai_path_result_v1。",
+                    "如果后端返回 project_id，就跳转到 /ai-path-detail?project_id={project_id}。",
+                ],
+                "storage": {
+                    "database": {
+                        "used": True,
+                        "role": "生成后的 outline 和 sub_nodes 的主要持久化存储",
+                        "tables": [
+                            "ai_path_projects",
+                            "ai_path_sections",
+                            "ai_path_subnodes",
+                            "ai_path_subnode_details",
+                        ],
+                    },
+                    "sessionStorage": {
+                        "used": True,
+                        "role": "前端最近一次响应的临时 fallback/cache",
+                        "key": "learnsmart_ai_path_result_v1",
+                    },
+                    "file_cache": {
+                        "used": False,
+                        "role": "generate-outline 返回的大纲不依赖文件缓存",
+                    },
+                },
+                "backend_steps": [
+                    {
+                        "step": "Step 1a",
+                        "name": "生成搜索关键词",
+                        "code": "backend/ai_path/pipeline/step1_outline.py::generate_queries",
+                        "description": "根据 topic、level、content_type、resource_count 生成搜索查询。",
+                    },
+                    {
+                        "step": "Step 1b",
+                        "name": "执行 Web 搜索",
+                        "code": "backend/ai_path/pipeline/step1_outline.py::search_web",
+                        "description": "执行 Web 搜索，并对发现的 URL 去重。",
+                    },
+                    {
+                        "step": "Step 1c",
+                        "name": "生成大纲和 sub_nodes",
+                        "code": "backend/ai_path/pipeline/step1_outline.py::generate_outline",
+                        "description": "调用当前配置的 LLM，一次性生成学习大纲和每个章节下的 sub_nodes。",
+                    },
+                    {
+                        "step": "Persist",
+                        "name": "保存生成项目",
+                        "code": "backend/app/api/ai_path/router.py::generate_ai_path_outline_endpoint",
+                        "description": "把 project、sections、sub_nodes 写入 PostgreSQL，并返回 project_id。",
+                    },
+                ],
+                "output_shape": {
+                    "project_id": "整数或 null",
+                    "data.nodes": "前端展示为学习阶段的章节列表",
+                    "data.nodes[].sub_nodes": "每个章节下的知识点/子节点",
+                    "warnings": "生成和保存过程中的提示信息",
+                },
+            },
+            "ai_path_detail_page": {
+                "url": "http://localhost:5175/ai-path-detail",
+                "component": "frontend/src/modules/ai-path/pages/AIPathDetail.tsx",
+                "load_project_api": {
+                    "by_id": "GET /ai-path/projects/{project_id}",
+                    "latest_fallback": "GET /ai-path/projects/latest",
+                },
+                "subnode_detail_api": {
+                    "method": "POST",
+                    "path": "/ai-path/subnode-detail",
+                    "timeout_ms": 180000,
+                },
+                "does": [
+                    "URL 中存在 project_id 时，从 PostgreSQL 加载对应的大纲。",
+                    "必要时 fallback 到 sessionStorage，或者读取数据库里最新的 project。",
+                    "点击某个子知识点时，只请求这个 subnode 的详细内容。",
+                    "Step 2.5 完成后展示 detailed_content 和 code_examples。",
+                ],
+                "storage": {
+                    "database": {
+                        "used": True,
+                        "role": "从 ai_path_projects、ai_path_sections、ai_path_subnodes 读取 outline/sub_nodes",
+                        "tables": [
+                            "ai_path_projects",
+                            "ai_path_sections",
+                            "ai_path_subnodes",
+                            "ai_path_subnode_details",
+                        ],
+                    },
+                    "sessionStorage": {
+                        "used": True,
+                        "role": "已加载 project 响应的前端 fallback 缓存",
+                        "key": "learnsmart_ai_path_result_v1",
+                    },
+                    "subnode_detail_cache": {
+                        "used": True,
+                        "role": "旧版标题缓存 fallback；主存储已经改为 ai_path_subnode_details",
+                        "table": "ai_path_subnode_detail_cache",
+                        "primary_table": "ai_path_subnode_details",
+                        "cache_key": "md5(topic|section_title|subnode_title|detail_level)",
+                    },
+                    "file_cache": {
+                        "used": True,
+                        "role": "Step 2.5 pipeline 内部的辅助文件缓存",
+                        "path": "backend/ai_path/result/subnode_cache",
+                    },
+                },
+                "backend_steps": [
+                    {
+                        "step": "Load project",
+                        "name": "从数据库读取大纲",
+                        "api": "GET /ai-path/projects/{project_id}",
+                        "description": "返回已保存的 project、sections、sub_nodes，用于页面展示。",
+                    },
+                    {
+                        "step": "Step 2.5a",
+                        "name": "检查 subnode 强关联详情",
+                        "code": "backend/app/api/ai_path/router.py::generate_subnode_detail_endpoint",
+                        "description": "调用 LLM 前，先按 subnode_id + detail_level 检查 ai_path_subnode_details 是否已有结果；旧数据会 fallback 到 ai_path_subnode_detail_cache。",
+                    },
+                    {
+                        "step": "Step 2.5b",
+                        "name": "生成子知识点详情",
+                        "code": "backend/ai_path/pipeline/step2_5_subnode_detail.py::run_step2_5",
+                        "description": "为被点击的 subnode 生成详细 Markdown 讲解和代码示例。",
+                    },
+                    {
+                        "step": "Step 2.5c",
+                        "name": "保存子知识点详情",
+                        "code": "backend/app/api/ai_path/router.py::generate_subnode_detail_endpoint",
+                        "description": "把 generated detailed_content/code_examples 写入 ai_path_subnode_details，并同步写入旧 cache 表兼容老数据。",
+                    },
+                ],
+            },
+            "admin_ai_outline_page": {
+                "url": "http://localhost:5175/admin/ai-outline",
+                "component": "frontend/src/modules/admin/pages/AiOutlineGenerator.tsx",
+                "api": {
+                    "method": "POST",
+                    "path": "/ai-path/generate-outline",
+                    "same_as_frontend_generate": True,
+                },
+                "does": [
+                    "调用和前台 /ai-path 页面相同的 generate-outline API。",
+                    "展示返回的 project_id、sections、sub_nodes，方便管理端检查。",
+                    "目前不会自动为所有 sub_nodes 批量执行 Step 2.5。",
+                ],
+            },
+        },
+        "current_limitations": [
+            "POST /ai-path/generate-outline 只生成 outline + sub_nodes，不会自动为每个 subnode 生成 Step 2.5 详情。",
+            "Step 2.5 目前是懒加载：用户在详情页点击某个子知识点时才会执行。",
+            "生成出来的 AI Path project 目前还没有发布到正式的 learning_paths/path_items 表。",
+        ],
+        "recommended_next_api_if_needed": {
+            "path": "/ai-path/projects/{project_id}/generate-subnode-details",
+            "purpose": "为某个 project 下的所有 sub_nodes 批量执行 Step 2.5，并把详情内容持久化到 ai_path_subnode_details。",
+        },
+    }
+
+
+def _render_ai_path_workflow_markdown(info: dict) -> str:
+    generate = info["frontends"]["ai_path_page"]
+    detail = info["frontends"]["ai_path_detail_page"]
+    admin = info["frontends"]["admin_ai_outline_page"]
+
+    def bullet(items: list[str]) -> str:
+        return "\n".join(f"- {item}" for item in items)
+
+    def backend_steps(steps: list[dict]) -> str:
+        lines: list[str] = []
+        for step in steps:
+            label = step.get("step", "")
+            name = step.get("name", "")
+            api = step.get("api")
+            code = step.get("code")
+            desc = step.get("description", "")
+            lines.append(f"### {label}: {name}")
+            if api:
+                lines.append(f"- API: `{api}`")
+            if code:
+                lines.append(f"- 代码位置: `{code}`")
+            lines.append(f"- 做了什么: {desc}")
+            lines.append("")
+        return "\n".join(lines).strip()
+
+    return f"""# AI Path 工作流说明
+
+版本: `{info["version"]}`
+
+## 总览
+
+- Generate 按钮: {info["summary"]["generate_button"]}
+- 子知识点点击: {info["summary"]["subnode_click"]}
+- 主要存储: {info["summary"]["primary_storage"]}
+- 前端缓存: {info["summary"]["frontend_cache"]}
+
+## `/ai-path` 页面 Generate 按钮
+
+- 页面: `{generate["url"]}`
+- 前端组件: `{generate["component"]}`
+- Service 函数: `{generate["service_function"]}`
+- Service 文件: `{generate["service_file"]}`
+- API: `{generate["api"]["method"]} {generate["api"]["path"]}`
+- 超时时间: `{generate["api"]["timeout_ms"]}ms`
+
+### 做了什么
+
+{bullet(generate["does"])}
+
+### 存储方式
+
+- 数据库: `{generate["storage"]["database"]["used"]}`  
+  作用: {generate["storage"]["database"]["role"]}  
+  表: {", ".join(f"`{table}`" for table in generate["storage"]["database"]["tables"])}
+- sessionStorage: `{generate["storage"]["sessionStorage"]["used"]}`  
+  作用: {generate["storage"]["sessionStorage"]["role"]}  
+  Key: `{generate["storage"]["sessionStorage"]["key"]}`
+- 文件缓存: `{generate["storage"]["file_cache"]["used"]}`  
+  作用: {generate["storage"]["file_cache"]["role"]}
+
+### 后端步骤
+
+{backend_steps(generate["backend_steps"])}
+
+### 返回结构
+
+- `project_id`: {generate["output_shape"]["project_id"]}
+- `data.nodes`: {generate["output_shape"]["data.nodes"]}
+- `data.nodes[].sub_nodes`: {generate["output_shape"]["data.nodes[].sub_nodes"]}
+- `warnings`: {generate["output_shape"]["warnings"]}
+
+## `/ai-path-detail` 页面加载与子知识点点击
+
+- 页面: `{detail["url"]}`
+- 前端组件: `{detail["component"]}`
+- 按 ID 加载: `{detail["load_project_api"]["by_id"]}`
+- 最新 project fallback: `{detail["load_project_api"]["latest_fallback"]}`
+- 子知识点详情 API: `{detail["subnode_detail_api"]["method"]} {detail["subnode_detail_api"]["path"]}`
+- 子知识点详情超时时间: `{detail["subnode_detail_api"]["timeout_ms"]}ms`
+
+### 做了什么
+
+{bullet(detail["does"])}
+
+### 存储方式
+
+- 数据库: `{detail["storage"]["database"]["used"]}`  
+  作用: {detail["storage"]["database"]["role"]}  
+  表: {", ".join(f"`{table}`" for table in detail["storage"]["database"]["tables"])}
+- sessionStorage: `{detail["storage"]["sessionStorage"]["used"]}`  
+  作用: {detail["storage"]["sessionStorage"]["role"]}  
+  Key: `{detail["storage"]["sessionStorage"]["key"]}`
+- 子知识点详情缓存: `{detail["storage"]["subnode_detail_cache"]["used"]}`  
+  作用: {detail["storage"]["subnode_detail_cache"]["role"]}  
+  主表: `{detail["storage"]["subnode_detail_cache"]["primary_table"]}`  
+  旧缓存表: `{detail["storage"]["subnode_detail_cache"]["table"]}`  
+  Cache key: `{detail["storage"]["subnode_detail_cache"]["cache_key"]}`
+- 文件缓存: `{detail["storage"]["file_cache"]["used"]}`  
+  作用: {detail["storage"]["file_cache"]["role"]}  
+  路径: `{detail["storage"]["file_cache"]["path"]}`
+
+### 后端步骤
+
+{backend_steps(detail["backend_steps"])}
+
+## 管理端 AI 大纲生成页面
+
+- 页面: `{admin["url"]}`
+- 前端组件: `{admin["component"]}`
+- API: `{admin["api"]["method"]} {admin["api"]["path"]}`
+- 是否和前台 Generate 使用同一 API: `{admin["api"]["same_as_frontend_generate"]}`
+
+### 做了什么
+
+{bullet(admin["does"])}
+
+## 当前限制
+
+{bullet(info["current_limitations"])}
+
+## 推荐下一步 API
+
+- 路径: `{info["recommended_next_api_if_needed"]["path"]}`
+- 目的: {info["recommended_next_api_if_needed"]["purpose"]}
+"""
+
+
+@router.get("/workflow-info")
+async def get_ai_path_workflow_info():
+    """
+    Explain the current ai-path frontend/API workflow as JSON.
+
+    This endpoint is intentionally read-only. It documents what the current
+    frontend buttons call, which steps run, and where data is cached or stored.
+    """
+    return _build_ai_path_workflow_info()
+
+
+@router.get("/workflow-info.md")
+async def get_ai_path_workflow_info_markdown():
+    """Explain the current ai-path frontend/API workflow as Markdown."""
+    info = _build_ai_path_workflow_info()
+    return Response(
+        content=_render_ai_path_workflow_markdown(info),
+        media_type="text/markdown; charset=utf-8",
+    )
 
 
 @router.post("/generate", response_model=AiPathGenerateResponse)
@@ -78,7 +415,10 @@ async def generate_ai_path(payload: AiPathGenerateRequest):
 
 
 @router.post("/generate-outline", response_model=AiPathGenerateResponse)
-async def generate_ai_path_outline_endpoint(payload: AiPathGenerateRequest):
+async def generate_ai_path_outline_endpoint(
+    payload: AiPathGenerateRequest,
+    db=Depends(get_db_dep),
+):
     """
     Generate only the learning path outline (search → summarise only, skip organize/report).
     Much faster. Returns stages grouped by learning_stage with resources.
@@ -99,7 +439,71 @@ async def generate_ai_path_outline_endpoint(payload: AiPathGenerateRequest):
             if v is not None
         }
         data, warnings = await generate_ai_path_outline(query, prefs)
-        return AiPathGenerateResponse(data=data, warnings=warnings)
+
+        # Persist outline + subnodes for admin/batch generation workflows.
+        project_id: int | None = None
+        try:
+            project = AiPathProject(
+                user_id=None,
+                topic=query,
+                level=prefs.get("level") or "intermediate",
+                learning_depth=prefs.get("learning_depth") or "standard",
+                content_type=prefs.get("content_type") or "mixed",
+                practical_ratio=prefs.get("practical_ratio") or "balanced",
+                resource_count="standard",
+                status="outline_generated",
+                outline_overview=(data.get("summary") or ""),
+                total_duration_hours=(data.get("_raw") or {}).get("total_duration_hours"),
+                raw_outline_json=(data.get("_raw") or {}),
+                raw_result_json=data,
+            )
+            db.add(project)
+            db.flush()  # allocate project.id
+
+            nodes = data.get("nodes") or []
+            if isinstance(nodes, list):
+                for sec_idx, node in enumerate(nodes):
+                    if not isinstance(node, dict):
+                        continue
+                    section = AiPathSection(
+                        project_id=project.id,
+                        order_index=int(node.get("order", sec_idx) or sec_idx),
+                        title=str(node.get("title") or f"Stage {sec_idx + 1}"),
+                        description=str(node.get("description") or ""),
+                        learning_goals=node.get("learning_points") or [],
+                        search_queries=node.get("search_queries") or [],
+                        estimated_minutes=node.get("estimated_minutes") or None,
+                    )
+                    db.add(section)
+                    db.flush()
+
+                    sub_nodes = node.get("sub_nodes") or []
+                    if isinstance(sub_nodes, list):
+                        for sub_idx, sub in enumerate(sub_nodes):
+                            if not isinstance(sub, dict):
+                                continue
+                            subnode = AiPathSubNode(
+                                section_id=section.id,
+                                order_index=sub_idx,
+                                title=str(sub.get("title") or f"SubNode {sub_idx + 1}"),
+                                description=str(sub.get("description") or ""),
+                                key_points=sub.get("learning_points") or [],
+                                practical_exercise=str(sub.get("practical_exercise") or ""),
+                                search_keywords=sub.get("search_keywords") or [],
+                            )
+                            db.add(subnode)
+
+            db.commit()
+            project_id = project.id
+            warnings.append(f"Saved outline to DB (ai_path_projects.id={project.id})")
+        except Exception as exc:
+            try:
+                db.rollback()
+            except Exception:
+                pass
+            warnings.append(f"DB save skipped: {exc}")
+
+        return AiPathGenerateResponse(project_id=project_id, data=data, warnings=warnings)
     except RuntimeError as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
     except Exception as exc:
@@ -112,6 +516,7 @@ async def generate_ai_path_outline_endpoint(payload: AiPathGenerateRequest):
 
 class SubNodeDetailRequest(BaseModel):
     """Request to generate detailed content for a sub-node."""
+    subnode_id: int | None = Field(default=None, description="Persisted ai_path_subnodes.id")
     topic: str = Field(..., min_length=1, description="Main learning topic")
     section_title: str = Field(..., description="Parent section title")
     subnode_title: str = Field(..., description="Sub-node title")
@@ -123,6 +528,8 @@ class SubNodeDetailRequest(BaseModel):
 
 class SubNodeDetailResponse(BaseModel):
     """Response with detailed sub-node content."""
+    detail_id: int | None = None
+    subnode_id: int | None = None
     title: str
     description: str
     key_points: list[str]
@@ -130,11 +537,120 @@ class SubNodeDetailResponse(BaseModel):
     code_examples: list[str] = Field(default_factory=list)
 
 
+def _upsert_subnode_detail(
+    db,
+    *,
+    subnode_id: int,
+    detail_level: str,
+    detailed_content: str,
+    code_examples: list[str],
+    raw_json: dict,
+) -> AiPathSubNodeDetail:
+    detail = (
+        db.query(AiPathSubNodeDetail)
+        .filter(
+            AiPathSubNodeDetail.subnode_id == subnode_id,
+            AiPathSubNodeDetail.detail_level == detail_level,
+        )
+        .first()
+    )
+    if detail:
+        detail.detailed_content = detailed_content
+        detail.code_examples = code_examples
+        detail.raw_json = raw_json
+    else:
+        detail = AiPathSubNodeDetail(
+            subnode_id=subnode_id,
+            detail_level=detail_level,
+            detailed_content=detailed_content,
+            code_examples=code_examples,
+            raw_json=raw_json,
+        )
+        db.add(detail)
+
+    db.commit()
+    db.refresh(detail)
+    return detail
+
+
+def _subnode_detail_response_from_record(
+    detail: AiPathSubNodeDetail,
+    payload: SubNodeDetailRequest,
+) -> SubNodeDetailResponse:
+    raw = detail.raw_json or {}
+    return SubNodeDetailResponse(
+        detail_id=detail.id,
+        subnode_id=detail.subnode_id,
+        title=raw.get("title") or payload.subnode_title,
+        description=raw.get("description") or payload.subnode_description,
+        key_points=raw.get("key_points") or payload.subnode_key_points,
+        detailed_content=detail.detailed_content or "",
+        code_examples=detail.code_examples or [],
+    )
+
+
 @router.post("/subnode-detail", response_model=SubNodeDetailResponse)
 async def generate_subnode_detail_endpoint(
     payload: SubNodeDetailRequest,
+    db=Depends(get_db_dep),
 ):
     """Generate detailed content for a sub-node (Step 2.5). Called on-demand when user clicks a sub-node."""
+    subnode: AiPathSubNode | None = None
+    if payload.subnode_id:
+        subnode = db.query(AiPathSubNode).filter(AiPathSubNode.id == payload.subnode_id).first()
+        if not subnode:
+            raise HTTPException(status_code=404, detail="Sub-node not found")
+
+        linked_detail = (
+            db.query(AiPathSubNodeDetail)
+            .filter(
+                AiPathSubNodeDetail.subnode_id == payload.subnode_id,
+                AiPathSubNodeDetail.detail_level == payload.detail_level,
+            )
+            .first()
+        )
+        if linked_detail and linked_detail.detailed_content:
+            return _subnode_detail_response_from_record(linked_detail, payload)
+
+    # Legacy title-based cache fallback for old clients/data.
+    key_str = f"{payload.topic}|{payload.section_title}|{payload.subnode_title}|{payload.detail_level}"
+    cache_key = hashlib.md5(key_str.encode()).hexdigest()
+
+    cached = (
+        db.query(AiPathSubNodeDetailCache)
+        .filter(AiPathSubNodeDetailCache.cache_key == cache_key)
+        .first()
+    )
+    if cached and cached.detailed_content:
+        linked_detail_id: int | None = None
+        if payload.subnode_id:
+            try:
+                linked_detail = _upsert_subnode_detail(
+                    db,
+                    subnode_id=payload.subnode_id,
+                    detail_level=payload.detail_level,
+                    detailed_content=cached.detailed_content,
+                    code_examples=cached.code_examples or [],
+                    raw_json=cached.raw_json or {},
+                )
+                linked_detail_id = linked_detail.id
+            except Exception:
+                try:
+                    db.rollback()
+                except Exception:
+                    pass
+
+        return SubNodeDetailResponse(
+            detail_id=linked_detail_id,
+            subnode_id=payload.subnode_id,
+            title=payload.subnode_title,
+            description=payload.subnode_description,
+            key_points=payload.subnode_key_points,
+            detailed_content=cached.detailed_content,
+            code_examples=cached.code_examples or [],
+        )
+
+    # Generate via LLM (Step 2.5)
     try:
         from ai_path.pipeline.step2_5_subnode_detail import run_step2_5
 
@@ -149,18 +665,160 @@ async def generate_subnode_detail_endpoint(
             level=payload.level,
             detail_level=payload.detail_level,
         )
-
-        return SubNodeDetailResponse(
-            title=result.title,
-            description=result.description,
-            key_points=result.key_points,
-            detailed_content=result.detailed_content,
-            code_examples=result.code_examples,
-        )
     except Exception as exc:
         raise HTTPException(
             status_code=500, detail=f"Sub-node detail generation failed: {exc}"
         ) from exc
+
+    linked_detail_id: int | None = None
+
+    # Save strong subnode_id-linked detail first.
+    if payload.subnode_id:
+        try:
+            linked_detail = _upsert_subnode_detail(
+                db,
+                subnode_id=payload.subnode_id,
+                detail_level=payload.detail_level,
+                detailed_content=result.detailed_content,
+                code_examples=result.code_examples,
+                raw_json={
+                    "title": result.title,
+                    "description": result.description,
+                    "key_points": result.key_points,
+                    "detailed_content": result.detailed_content,
+                    "code_examples": result.code_examples,
+                },
+            )
+            linked_detail_id = linked_detail.id
+        except Exception:
+            try:
+                db.rollback()
+            except Exception:
+                pass
+
+    # Save legacy title-key cache too, so older clients still benefit.
+    try:
+        record = AiPathSubNodeDetailCache(
+            cache_key=cache_key,
+            topic=payload.topic,
+            section_title=payload.section_title,
+            subnode_title=payload.subnode_title,
+            detail_level=payload.detail_level,
+            detailed_content=result.detailed_content,
+            code_examples=result.code_examples,
+            raw_json={
+                "title": result.title,
+                "description": result.description,
+                "key_points": result.key_points,
+                "detailed_content": result.detailed_content,
+                "code_examples": result.code_examples,
+            },
+        )
+        db.add(record)
+        db.commit()
+    except Exception:
+        try:
+            db.rollback()
+        except Exception:
+            pass
+
+    return SubNodeDetailResponse(
+        detail_id=linked_detail_id,
+        subnode_id=payload.subnode_id,
+        title=result.title,
+        description=result.description,
+        key_points=result.key_points,
+        detailed_content=result.detailed_content,
+        code_examples=result.code_examples,
+    )
+
+
+# ── DB-backed Outline Fetching ────────────────────────────────────────────────
+
+def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
+    sections = list(project.sections or [])
+    sections.sort(key=lambda section: (section.order_index or 0, section.id or 0))
+
+    nodes: list[dict] = []
+    for section in sections:
+        subnodes = list(section.subnodes or [])
+        subnodes.sort(key=lambda subnode: (subnode.order_index or 0, subnode.id or 0))
+        nodes.append({
+            "id": section.id,
+            "project_id": project.id,
+            "title": section.title,
+            "description": section.description or "",
+            "learning_points": section.learning_goals or [],
+            "resources": [],
+            "sub_nodes": [
+                {
+                    "id": subnode.id,
+                    "section_id": subnode.section_id,
+                    "title": subnode.title,
+                    "description": subnode.description or "",
+                    "learning_points": subnode.key_points or [],
+                    "practical_exercise": subnode.practical_exercise or "",
+                    "search_keywords": subnode.search_keywords or [],
+                    "details": [
+                        {
+                            "id": detail.id,
+                            "subnode_id": detail.subnode_id,
+                            "detail_level": detail.detail_level,
+                            "detailed_content": detail.detailed_content or "",
+                            "code_examples": detail.code_examples or [],
+                            "raw_json": detail.raw_json or {},
+                        }
+                        for detail in sorted(
+                            list(subnode.details or []),
+                            key=lambda item: (item.detail_level or "", item.id or 0),
+                        )
+                    ],
+                    "resources": [],
+                }
+                for subnode in subnodes
+            ],
+            "order": section.order_index or 0,
+            "estimated_minutes": section.estimated_minutes or 0,
+        })
+
+    overview = project.outline_overview or ""
+    data = {
+        "title": project.topic,
+        "summary": overview,
+        "description": overview,
+        "recommendations": [
+            f"共 {len(nodes)} 个章节",
+            f"约 {float(project.total_duration_hours or 0):.1f} 小时学习时长",
+        ],
+        "nodes": nodes,
+        "_raw": project.raw_outline_json or {},
+        "_from_db": True,
+    }
+    return AiPathGenerateResponse(
+        project_id=project.id,
+        data=data,
+        warnings=[f"Loaded from DB (ai_path_projects.id={project.id})"],
+    )
+
+
+@router.get("/projects/latest", response_model=AiPathGenerateResponse)
+async def get_latest_ai_path_project(db=Depends(get_db_dep)):
+    project = (
+        db.query(AiPathProject)
+        .order_by(AiPathProject.created_at.desc(), AiPathProject.id.desc())
+        .first()
+    )
+    if not project:
+        raise HTTPException(status_code=404, detail="No ai_path projects found")
+    return _project_to_response(project)
+
+
+@router.get("/projects/{project_id}", response_model=AiPathGenerateResponse)
+async def get_ai_path_project(project_id: int, db=Depends(get_db_dep)):
+    project = db.query(AiPathProject).filter(AiPathProject.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return _project_to_response(project)
 
 
 @router.post("/section-tutorial", response_model=SectionTutorialResponse)

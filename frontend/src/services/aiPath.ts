@@ -13,16 +13,30 @@ export interface AiPathResourceLink {
   image?: string | null;
 }
 
+export interface AiPathSubNodeDetail {
+  id: number;
+  subnode_id: number;
+  detail_level: string;
+  detailed_content: string;
+  code_examples?: string[];
+  raw_json?: Record<string, unknown>;
+}
+
 export interface AiPathSubNode {
+  id?: number;
+  section_id?: number;
   title: string;
   description: string;
   learning_points?: string[];
   practical_exercise?: string;
   search_keywords?: string[];
+  details?: AiPathSubNodeDetail[];
   resources?: AiPathResourceLink[];
 }
 
 export interface AiPathNode {
+  id?: number;
+  project_id?: number;
   title: string;
   description: string;
   explanation?: string;
@@ -42,6 +56,7 @@ export interface AiPathData {
 }
 
 export interface AiPathGenerateResponse {
+  project_id?: number | null;
   data: AiPathData;
   warnings: string[];
 }
@@ -60,6 +75,18 @@ export function generateAiPath(query: string, preferences?: AiPathPreferences) {
     {
       timeout: 120000,
     }
+  );
+}
+
+export function getAiPathProject(projectId: number) {
+  return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
+    `/ai-path/projects/${projectId}`
+  );
+}
+
+export function getLatestAiPathProject() {
+  return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
+    "/ai-path/projects/latest"
   );
 }
 
@@ -100,5 +127,36 @@ export function searchAiResources(query: string, excludeUrls: string[] = []) {
 export function getCachedResults(topic: string) {
   return request.get<CachedResultsResponse, CachedResultsResponse>(
     `/ai-path/cached-results/${encodeURIComponent(topic)}`
+  );
+}
+
+// ── SubNode Detail (Step 2.5) ──────────────────────────────────────────────────────────
+
+export interface SubNodeDetailRequest {
+  subnode_id?: number;
+  topic: string;
+  section_title: string;
+  subnode_title: string;
+  subnode_description?: string;
+  subnode_key_points?: string[];
+  level?: string;
+  detail_level?: string;
+}
+
+export interface SubNodeDetailResponse {
+  detail_id?: number | null;
+  subnode_id?: number | null;
+  title: string;
+  description: string;
+  key_points: string[];
+  detailed_content: string;
+  code_examples: string[];
+}
+
+export function getSubNodeDetail(payload: SubNodeDetailRequest) {
+  return request.post<SubNodeDetailResponse, SubNodeDetailResponse>(
+    "/ai-path/subnode-detail",
+    payload,
+    { timeout: 180000 }
   );
 }

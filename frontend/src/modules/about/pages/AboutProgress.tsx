@@ -18,7 +18,7 @@ export default function AboutProgress() {
         <div className="relative mx-auto max-w-7xl px-4 py-16 md:py-24">
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-8">
-              <span className="h-px w-12 bg-amber-600"></span>
+              <span className="h-px w-12 bg-sky-600"></span>
               <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-stone-400">
                 About
               </span>
@@ -27,7 +27,7 @@ export default function AboutProgress() {
             <h1 className="text-5xl md:text-7xl font-black tracking-tight text-stone-900 leading-[0.92] mb-8">
               Progress
               <br />
-              <span className="text-amber-600">that</span>
+              <span className="text-sky-600">that</span>
               <br />
               stays.
             </h1>
@@ -47,7 +47,7 @@ export default function AboutProgress() {
           {/* Left: introduction */}
           <div className="col-span-12 md:col-span-5">
             <div className="sticky top-24">
-              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-amber-600 mb-4 block">
+              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-sky-600 mb-4 block">
                 Tracked per step
               </span>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-stone-900 leading-tight mb-6">
@@ -74,7 +74,7 @@ export default function AboutProgress() {
           <div className="col-span-12 md:col-span-7">
             <div className="space-y-8">
               {/* Video tracking */}
-              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-amber-500 transition-colors">
+              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-sky-500 transition-colors">
                 <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -110,7 +110,7 @@ export default function AboutProgress() {
               </div>
 
               {/* Document/Article tracking */}
-              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-amber-500 transition-colors">
+              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-sky-500 transition-colors">
                 <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +147,7 @@ export default function AboutProgress() {
               </div>
 
               {/* Path-level progress */}
-              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-amber-500 transition-colors">
+              <div className="relative border-l-2 border-stone-200 pl-8 group hover:border-l-sky-500 transition-colors">
                 <div className="absolute -left-3 top-0 h-6 w-6 rounded-full bg-stone-50 border border-stone-200 flex items-center justify-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -202,7 +202,7 @@ export default function AboutProgress() {
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-12 md:col-span-6">
             <div className="flex items-start gap-4">
-              <div className="mt-1 h-10 w-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+              <div className="mt-1 h-10 w-10 rounded-full bg-sky-50 flex items-center justify-center shrink-0">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -213,7 +213,7 @@ export default function AboutProgress() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="text-amber-600"
+                  className="text-sky-600"
                 >
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />

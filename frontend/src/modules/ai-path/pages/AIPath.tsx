@@ -5,7 +5,7 @@ import {
   type AiPathGenerateResponse,
   type AiPathNode,
 } from "@/services/aiPath";
-import { ArrowRight, Sparkles, FileText, Eye } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, FileText, Loader2, Sparkles } from "lucide-react";
 
 const STORAGE_KEY = "learnsmart_ai_path_result_v1";
 
@@ -93,7 +93,10 @@ export default function AIPath() {
       });
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result));
       setLastResult(result);
-      navigate("/ai-path-detail");
+      const projectId = result.project_id;
+      navigate(
+        projectId ? `/ai-path-detail?project_id=${projectId}` : "/ai-path-detail"
+      );
     } catch (e: unknown) {
       const err = e as { response?: { data?: { detail?: string } }; message?: string };
       setError(String(err.response?.data?.detail || err.message || "AI Path generation failed"));
@@ -110,7 +113,7 @@ export default function AIPath() {
       <header className="bg-white border-b border-stone-100">
         <div className="mx-auto max-w-5xl px-6 py-12">
           <div className="max-w-2xl">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-500 mb-4 block">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-500 mb-4 block">
               AI Guided
             </span>
             <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
@@ -138,7 +141,7 @@ export default function AIPath() {
               </div>
               <Link
                 to="/ai-path-detail"
-                className="text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+                className="text-xs font-medium text-sky-600 hover:text-sky-700 transition-colors"
               >
                 View recent →
               </Link>
@@ -150,7 +153,7 @@ export default function AIPath() {
               rows={6}
               maxLength={2000}
               placeholder="Example: I want to learn React full-stack development systematically, launch a production-ready project in 3 months..."
-              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50 transition-all"
+              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50 transition-all"
             />
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -159,7 +162,7 @@ export default function AIPath() {
                   key={preset}
                   type="button"
                   onClick={() => setQuery(preset)}
-                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-amber-300 hover:text-amber-600"
+                  className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-sky-300 hover:text-sky-600"
                 >
                   {preset.length > 35 ? preset.slice(0, 35) + "..." : preset}
                 </button>
@@ -173,7 +176,7 @@ export default function AIPath() {
                 <select
                   value={level}
                   onChange={(e) => setLevel(e.target.value as Level)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {LEVEL_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -185,7 +188,7 @@ export default function AIPath() {
                 <select
                   value={depth}
                   onChange={(e) => setDepth(e.target.value as Depth)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {DEPTH_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -197,7 +200,7 @@ export default function AIPath() {
                 <select
                   value={contentType}
                   onChange={(e) => setContentType(e.target.value as ContentType)}
-                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-amber-400 transition-colors cursor-pointer"
+                  className="w-full border border-stone-200 rounded-lg bg-white px-3 py-2.5 text-sm text-stone-700 outline-none focus:border-sky-400 transition-colors cursor-pointer"
                 >
                   {CONTENT_OPTIONS.map((opt) => (
                     <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -214,10 +217,13 @@ export default function AIPath() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading || !query.trim()}
-                className="bg-amber-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-amber-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                className="bg-sky-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sky-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? (
-                  "Generating..."
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
                 ) : (
                   <>
                     Generate
@@ -227,9 +233,44 @@ export default function AIPath() {
               </button>
             </div>
 
-            {error && (
-              <p className="mt-4 text-sm text-red-500 font-medium">{error}</p>
+            {loading && (
+              <div className="mt-5 rounded-md border border-sky-100 bg-sky-50 px-4 py-4">
+                <div className="flex items-start gap-3">
+                  <Loader2 className="mt-0.5 h-5 w-5 shrink-0 animate-spin text-sky-500" />
+                  <div>
+                    <p className="text-sm font-semibold text-sky-900">
+                      正在调用 AI 生成大纲并保存到数据库
+                    </p>
+                    <p className="mt-1 text-xs leading-6 text-sky-700">
+                      会先搜索资料，再生成章节和知识点。通常需要 30-90 秒，完成后会自动跳转到详情页。
+                    </p>
+                  </div>
+                </div>
+              </div>
             )}
+
+            {error && (
+              <div className="mt-5 rounded-md border border-red-100 bg-red-50 px-4 py-4">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+                  <div>
+                    <p className="text-sm font-semibold text-red-900">
+                      生成失败
+                    </p>
+                    <p className="mt-1 text-xs leading-6 text-red-700">{error}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!loading && !error && lastResult?.data?.nodes?.length ? (
+              <div className="mt-5 rounded-md border border-emerald-100 bg-emerald-50 px-4 py-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-emerald-800">
+                  <CheckCircle2 className="h-4 w-4" />
+                  最近一次生成已保存，可继续查看详情。
+                </div>
+              </div>
+            ) : null}
           </section>
 
           {/* Sidebar */}
@@ -240,7 +281,7 @@ export default function AIPath() {
                 How it works
               </p>
               <div className="mt-4 space-y-4">
-                {steps.map((step, idx) => {
+                {steps.map((step) => {
                   const Icon = step.icon;
                   return (
                     <div key={step.title} className="flex gap-3">
@@ -275,7 +316,7 @@ export default function AIPath() {
                   </div>
                   <Link
                     to="/ai-path-detail"
-                    className="text-xs font-medium text-amber-600 hover:text-amber-700"
+                    className="text-xs font-medium text-sky-600 hover:text-sky-700"
                   >
                     Open →
                   </Link>
@@ -294,7 +335,7 @@ export default function AIPath() {
         {/* Learning path preview */}
         <section className="mt-12">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-1 h-5 bg-amber-500 rounded-full" />
+            <div className="w-1 h-5 bg-sky-500 rounded-full" />
             <h2 className="text-sm font-semibold text-stone-900 uppercase tracking-wider">
               Generated Path Preview
             </h2>
@@ -309,7 +350,7 @@ export default function AIPath() {
                   className="bg-white rounded-lg shadow-sm p-5 hover:shadow-md transition-all"
                 >
                   <div className="flex items-center gap-2 mb-3">
-                    <div className="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xs font-semibold">
+                    <div className="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center text-sky-600 text-xs font-semibold">
                       {idx + 1}
                     </div>
                     <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-400">

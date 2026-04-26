@@ -52,7 +52,8 @@ const request: AxiosInstance = axios.create({
     import.meta.env.VITE_API_BASE_URL ||
     (import.meta.env.PROD
       ? "https://api.learnpathly.com"
-      : "http://localhost:8000"),
+      // Use 127.0.0.1 to avoid IPv6 localhost (::1) resolution issues when the backend binds to 127.0.0.1.
+      : "http://127.0.0.1:8000"),
   timeout: 10000,
 });
 

@@ -19,6 +19,9 @@ export function CardHero({
   saving,
   saved,
 }: CardHeroProps) {
+  const imagePaddingClass =
+    resource.platform.trim().toLowerCase() === "github" ? "p-2" : "p-0";
+
   return (
     <article
       className="group border border-stone-300 bg-white hover:border-stone-400 hover:shadow-xl hover:scale-[1.02] transition-all duration-500 overflow-hidden cursor-pointer flex flex-col sm:flex-row"
@@ -26,7 +29,7 @@ export function CardHero({
     >
       {/* Thumbnail */}
       <div
-        className="relative bg-white overflow-hidden shrink-0 w-full sm:w-1/2"
+        className={`relative bg-white overflow-hidden shrink-0 w-full sm:w-1/2 ${imagePaddingClass}`}
         style={{ aspectRatio: "16 / 9" }}
       >
         <img
@@ -62,7 +65,7 @@ export function CardHero({
             {resource.categoryLabel}
           </span>
           <h3
-            className="text-sm sm:text-base md:text-lg font-bold text-stone-900 line-clamp-2 leading-tight group-hover:text-amber-600 transition-colors"
+            className="text-sm sm:text-base md:text-lg font-bold text-stone-900 line-clamp-2 leading-tight group-hover:text-sky-600 transition-colors"
             title={resource.title}
           >
             {resource.title}
@@ -89,7 +92,7 @@ export function CardHero({
             }}
             disabled={saving || saved}
             className={`text-[10px] sm:text-xs font-semibold uppercase tracking-wider transition-colors ${
-              saved ? "text-emerald-500" : "text-amber-600 hover:text-amber-700"
+              saved ? "text-emerald-500" : "text-sky-600 hover:text-sky-700"
             } disabled:opacity-50`}
           >
             {saved ? "Saved" : saving ? "Saving…" : "+ Add"}

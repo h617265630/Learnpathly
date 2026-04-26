@@ -70,7 +70,7 @@ export default function Home() {
         <div className="grid md:grid-cols-2 min-h-[85vh]">
           {/* Left: Content */}
           <div className="flex flex-col justify-center px-6 lg:px-12 py-20 border-r-0 md:border-r border-stone-200">
-            <span className="text-sm font-medium tracking-[0.2em] uppercase mb-6 text-amber-600">
+            <span className="text-sm font-medium tracking-[0.2em] uppercase mb-6 text-sky-600">
               Learning Platform
             </span>
             <h1 className="font-serif text-display lg:text-hero font-bold leading-[0.92] tracking-tight mb-8">
@@ -78,7 +78,7 @@ export default function Home() {
               <br />
               Resources.
               <br />
-              <span className="text-amber-500">Structured.</span>
+              <span className="text-sky-500">Structured.</span>
             </h1>
             <p className="text-base text-stone-600 max-w-md mb-10 leading-relaxed">
               Discover GitHub projects, AI tools, tutorials and articles — organized into learning paths you can follow or generate with AI.
@@ -114,7 +114,7 @@ export default function Home() {
                 <span className="text-sm font-medium tracking-wide uppercase text-stone-400">
                   {featuredPaths[0]?.category || "Machine Learning"}
                 </span>
-                <span className="w-2 h-2 bg-amber-500 rounded-full" />
+                <span className="w-2 h-2 bg-sky-500 rounded-full" />
                 <span className="text-sm font-medium tracking-wide uppercase text-stone-400">
                   {featuredPaths[0]?.items || 12} items
                 </span>
@@ -199,42 +199,42 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-12">
             {/* Step 1 */}
             <div className="text-center">
-              <div className="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
+              <div className="w-14 h-14 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
                 1
               </div>
               <h3 className="font-semibold text-lg text-stone-900 mb-3">Browse Learning Paths</h3>
               <p className="text-sm text-stone-500 leading-relaxed">
                 Explore curated paths created by the community. Filter by technology, difficulty, or topic.
               </p>
-              <Link to="/learningpool" className="inline-block mt-4 text-sm font-medium text-amber-600 hover:text-blue-700 transition-colors">
+              <Link to="/learningpool" className="inline-block mt-4 text-sm font-medium text-sky-600 hover:text-blue-700 transition-colors">
                 Explore paths →
               </Link>
             </div>
 
             {/* Step 2 */}
             <div className="text-center">
-              <div className="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
+              <div className="w-14 h-14 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
                 2
               </div>
               <h3 className="font-semibold text-lg text-stone-900 mb-3">Generate with AI</h3>
               <p className="text-sm text-stone-500 leading-relaxed">
                 Describe what you want to learn. AI generates a personalized path with the best resources.
               </p>
-              <Link to="/ai-path" className="inline-block mt-4 text-sm font-medium text-amber-600 hover:text-blue-700 transition-colors">
+              <Link to="/ai-path" className="inline-block mt-4 text-sm font-medium text-sky-600 hover:text-blue-700 transition-colors">
                 Try AI generator →
               </Link>
             </div>
 
             {/* Step 3 */}
             <div className="text-center">
-              <div className="w-14 h-14 bg-amber-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
+              <div className="w-14 h-14 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold text-2xl mx-auto mb-6">
                 3
               </div>
               <h3 className="font-semibold text-lg text-stone-900 mb-3">Track Your Progress</h3>
               <p className="text-sm text-stone-500 leading-relaxed">
                 Save paths, mark resources as complete, and watch your progress as you build new skills.
               </p>
-              <Link to="/register" className="inline-block mt-4 text-sm font-medium text-amber-600 hover:text-blue-700 transition-colors">
+              <Link to="/register" className="inline-block mt-4 text-sm font-medium text-sky-600 hover:text-blue-700 transition-colors">
                 Create account →
               </Link>
             </div>
@@ -259,8 +259,8 @@ export default function Home() {
               </p>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
-                    <span className="text-amber-400 font-bold text-sm">1</span>
+                  <div className="w-8 h-8 bg-sky-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
+                    <span className="text-sky-400 font-bold text-sm">1</span>
                   </div>
                   <div>
                     <h4 className="font-semibold text-stone-50 mb-1">Describe your goal</h4>
@@ -268,8 +268,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
-                    <span className="text-amber-400 font-bold text-sm">2</span>
+                  <div className="w-8 h-8 bg-sky-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
+                    <span className="text-sky-400 font-bold text-sm">2</span>
                   </div>
                   <div>
                     <h4 className="font-semibold text-stone-50 mb-1">AI generates your path</h4>
@@ -277,8 +277,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-amber-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
-                    <span className="text-amber-400 font-bold text-sm">3</span>
+                  <div className="w-8 h-8 bg-sky-500/20 rounded-full flex items-center justify-center shrink-0 mt-1">
+                    <span className="text-sky-400 font-bold text-sm">3</span>
                   </div>
                   <div>
                     <h4 className="font-semibold text-stone-50 mb-1">Track your progress</h4>
@@ -289,7 +289,7 @@ export default function Home() {
               <div className="mt-8">
                 <Link
                   to="/ai-path"
-                  className="inline-flex items-center gap-2 bg-amber-500 text-stone-900 px-6 py-3 text-sm font-semibold hover:bg-amber-400 transition-colors duration-200"
+                  className="inline-flex items-center gap-2 bg-sky-500 text-stone-900 px-6 py-3 text-sm font-semibold hover:bg-sky-400 transition-colors duration-200"
                 >
                   Try AI Path Generator
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -351,7 +351,7 @@ export default function Home() {
               </div>
               {/* Decorative elements */}
               <div className="absolute -top-4 -right-4 w-24 h-24 border border-stone-700 rounded-lg" />
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-amber-500/10 rounded-lg" />
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-sky-500/10 rounded-lg" />
             </div>
           </div>
         </div>
@@ -419,7 +419,7 @@ export default function Home() {
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/register"
-              className="bg-amber-500 text-stone-900 px-8 py-4 text-base font-semibold hover:bg-amber-400 transition-colors duration-200 rounded-lg"
+              className="bg-sky-500 text-stone-900 px-8 py-4 text-base font-semibold hover:bg-sky-400 transition-colors duration-200 rounded-lg"
             >
               Get Started Free
             </Link>

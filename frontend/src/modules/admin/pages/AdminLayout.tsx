@@ -7,6 +7,7 @@ import {
   FolderOpen,
   BookOpen,
   BarChart3,
+  WandSparkles,
 } from "lucide-react";
 
 const navItems = [
@@ -14,6 +15,7 @@ const navItems = [
   { label: "Users", to: "/admin/users", icon: Users },
   { label: "Resources", to: "/admin/resources", icon: FolderOpen },
   { label: "Learning Paths", to: "/admin/paths", icon: BookOpen },
+  { label: "创建学习大纲+知识点", to: "/admin/ai-outline", icon: WandSparkles },
   { label: "Analytics", to: "/admin/analytics", icon: BarChart3 },
 ];
 

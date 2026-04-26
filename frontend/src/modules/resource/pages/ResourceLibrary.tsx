@@ -130,6 +130,17 @@ export default function ResourceLibrary() {
     });
   }, [uiResources, selectedCategory, activeType, searchQuery]);
 
+  const editorialGroups = useMemo(() => {
+    const groups: Array<{ cards: UiResource[]; hero?: UiResource }> = [];
+    for (let index = 0; index < filteredResources.length; index += 11) {
+      groups.push({
+        cards: filteredResources.slice(index, index + 10),
+        hero: filteredResources[index + 10],
+      });
+    }
+    return groups;
+  }, [filteredResources]);
+
   const activeResource = useMemo(() => {
     if (activeResourceId === null) return null;
     return resources.find((r) => r.id === activeResourceId) || null;
@@ -249,7 +260,7 @@ export default function ResourceLibrary() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search resources, topics..."
                 aria-label="Search resources"
-                className="h-11 sm:h-11 w-full rounded-none border border-stone-200 bg-white pl-9 sm:pl-10 pr-3 sm:pr-4 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-colors"
+                className="h-11 sm:h-11 w-full rounded-none border border-stone-200 bg-white pl-9 sm:pl-10 pr-3 sm:pr-4 text-sm text-stone-900 placeholder:text-stone-400 outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-100 transition-colors"
               />
             </div>
 
@@ -260,7 +271,7 @@ export default function ResourceLibrary() {
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="appearance-none h-11 rounded-none border border-stone-200 bg-white pl-3 sm:pl-4 pr-8 sm:pr-10 text-sm text-stone-700 outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-colors cursor-pointer w-full"
+                  className="appearance-none h-11 rounded-none border border-stone-200 bg-white pl-3 sm:pl-4 pr-8 sm:pr-10 text-sm text-stone-700 outline-none focus:border-sky-400 focus:ring-1 focus:ring-sky-100 transition-colors cursor-pointer w-full"
                 >
                   {categoryOptions.map((cat) => (
                     <option key={cat} value={cat}>
@@ -325,7 +336,7 @@ export default function ResourceLibrary() {
         {loading && (
           <div className="py-20 text-center">
             <div className="inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></div>
+              <div className="h-2 w-2 rounded-full bg-sky-500 animate-pulse"></div>
               <span className="text-sm text-stone-400">Loading resources…</span>
             </div>
           </div>
@@ -359,42 +370,42 @@ export default function ResourceLibrary() {
               </p>
             </div>
 
-            {/* Editorial grid: alternating hero and standard cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-              {filteredResources.map((resource, idx) => {
-                const isHero = idx % 7 === 0 && idx > 0;
-                const saving = !!addingToMy[resource.id];
-                const saved = !!addedToMy[resource.id];
+            {/* Editorial grid: 10 standard cards, then 1 hero card */}
+            <div className="space-y-3">
+              {editorialGroups.map((group, groupIndex) => (
+                <section
+                  key={`resource-group-${groupIndex}`}
+                  className="space-y-3"
+                >
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    {group.cards.map((resource) => {
+                      const saving = !!addingToMy[resource.id];
+                      const saved = !!addedToMy[resource.id];
 
-                if (isHero) {
-                  return (
-                    <div
-                      key={resource.id}
-                      className="col-span-2 sm:col-span-3 md:col-span-3 lg:col-span-4 xl:col-span-5"
-                    >
-                      <CardHero
-                        resource={resource}
-                        onOpen={() => openCard(resource)}
-                        onAdd={() => addToMyResources(resource)}
-                        saving={saving}
-                        saved={saved}
-                      />
-                    </div>
-                  );
-                }
-
-                return (
-                  <div key={resource.id} className="col-span-1">
-                    <ResourceCard
-                      resource={resource}
-                      onOpen={() => openCard(resource)}
-                      onAdd={() => addToMyResources(resource)}
-                      saving={saving}
-                      saved={saved}
-                    />
+                      return (
+                        <ResourceCard
+                          key={resource.id}
+                          resource={resource}
+                          onOpen={() => openCard(resource)}
+                          onAdd={() => addToMyResources(resource)}
+                          saving={saving}
+                          saved={saved}
+                        />
+                      );
+                    })}
                   </div>
-                );
-              })}
+
+                  {group.hero && (
+                    <CardHero
+                      resource={group.hero}
+                      onOpen={() => openCard(group.hero as UiResource)}
+                      onAdd={() => addToMyResources(group.hero as UiResource)}
+                      saving={!!addingToMy[group.hero.id]}
+                      saved={!!addedToMy[group.hero.id]}
+                    />
+                  )}
+                </section>
+              ))}
             </div>
           </div>
         )}

@@ -37,7 +37,7 @@ export default function About() {
           {/* Left: problem statement */}
           <div className="col-span-12 md:col-span-5">
             <div className="sticky top-24">
-              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-amber-600 mb-4 block">
+              <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-sky-600 mb-4 block">
                 The problem
               </span>
               <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-stone-900 leading-tight mb-6">
@@ -136,7 +136,7 @@ export default function About() {
               {/* Progress */}
               <div className="col-span-12 sm:col-span-4 group relative">
                 <div className="relative pt-0">
-                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-full bg-sky-100 text-sky-700">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"
@@ -160,7 +160,7 @@ export default function About() {
                   </p>
                   <Link
                     to="/about/progress"
-                    className="inline-flex items-center gap-1 mt-4 text-[11px] font-bold uppercase tracking-widest text-amber-600 hover:text-amber-700 transition-colors"
+                    className="inline-flex items-center gap-1 mt-4 text-[11px] font-bold uppercase tracking-widest text-sky-600 hover:text-sky-700 transition-colors"
                   >
                     How it works
                     <span aria-hidden>→</span>
