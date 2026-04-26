@@ -62,3 +62,6 @@ build/
 
 # pytest
 .pytest_cache/
+
+# Supabase CLI temp
+supabase/.temp/
