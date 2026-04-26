@@ -27,7 +27,7 @@ export function PopularPathCard({ path }: PopularPathCardProps) {
       className="group block bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200"
     >
       {/* Thumbnail */}
-      <div className={`relative aspect-video overflow-hidden bg-stone-100 ${isGitHub ? "p-1 bg-white" : ""}`}>
+      <div className={`relative aspect-video overflow-hidden bg-stone-100 ${isGitHub ? "p-2 bg-white" : ""}`}>
         {path.thumbnail ? (
           <img
             src={path.thumbnail}

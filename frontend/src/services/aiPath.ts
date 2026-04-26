@@ -13,16 +13,30 @@ export interface AiPathResourceLink {
   image?: string | null;
 }
 
+export interface AiPathSubNodeDetail {
+  id: number;
+  subnode_id: number;
+  detail_level: string;
+  detailed_content: string;
+  code_examples?: string[];
+  raw_json?: Record<string, unknown>;
+}
+
 export interface AiPathSubNode {
+  id?: number;
+  section_id?: number;
   title: string;
   description: string;
   learning_points?: string[];
   practical_exercise?: string;
   search_keywords?: string[];
+  details?: AiPathSubNodeDetail[];
   resources?: AiPathResourceLink[];
 }
 
 export interface AiPathNode {
+  id?: number;
+  project_id?: number;
   title: string;
   description: string;
   explanation?: string;
@@ -119,6 +133,7 @@ export function getCachedResults(topic: string) {
 // ── SubNode Detail (Step 2.5) ──────────────────────────────────────────────────────────
 
 export interface SubNodeDetailRequest {
+  subnode_id?: number;
   topic: string;
   section_title: string;
   subnode_title: string;
@@ -129,6 +144,8 @@ export interface SubNodeDetailRequest {
 }
 
 export interface SubNodeDetailResponse {
+  detail_id?: number | null;
+  subnode_id?: number | null;
   title: string;
   description: string;
   key_points: string[];
@@ -140,6 +157,6 @@ export function getSubNodeDetail(payload: SubNodeDetailRequest) {
   return request.post<SubNodeDetailResponse, SubNodeDetailResponse>(
     "/ai-path/subnode-detail",
     payload,
-    { timeout: 60000 }
+    { timeout: 180000 }
   );
 }

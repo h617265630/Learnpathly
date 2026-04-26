@@ -1,21 +1,21 @@
 import { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
-import { ChevronDown, Loader2 } from "lucide-react";
+import { AlertCircle, ChevronDown, Loader2 } from "lucide-react";
 import type {
   AiPathGenerateResponse,
   AiPathNode,
   AiPathResourceLink,
 } from "@/services/aiPath";
 import {
-  getSubNodeDetail,
   getAiPathProject,
   getLatestAiPathProject,
+  getSubNodeDetail,
   type SubNodeDetailResponse,
 } from "@/services/aiPath";
 
 const STORAGE_KEY = "learnsmart_ai_path_result_v1";
+
 function readResult(): AiPathGenerateResponse | null {
   try {
     const raw = window.sessionStorage.getItem(STORAGE_KEY);
@@ -287,45 +287,49 @@ export default function AIPathDetail() {
   const [expandedSubNodes, setExpandedSubNodes] = useState<Record<string, boolean>>({});
   const [subNodeDetails, setSubNodeDetails] = useState<Record<string, SubNodeDetailResponse>>({});
   const [loadingSubNodes, setLoadingSubNodes] = useState<Record<string, boolean>>({});
-  const [loading, setLoading] = useState(false);
+  const [subNodeErrors, setSubNodeErrors] = useState<Record<string, string>>({});
+  const [loadingProject, setLoadingProject] = useState(false);
   const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
     const projectIdRaw = searchParams.get("project_id");
     const projectId = projectIdRaw ? Number(projectIdRaw) : NaN;
 
-    // Prefer DB-backed load when project_id is present.
     if (projectIdRaw && Number.isFinite(projectId) && projectId > 0) {
-      setLoading(true);
+      setLoadingProject(true);
       setLoadError("");
       getAiPathProject(projectId)
-        .then((res) => {
-          setResult(res);
-          window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(res));
+        .then((response) => {
+          setResult(response);
+          window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(response));
         })
         .catch((e: unknown) => {
           const err = e as { response?: { data?: { detail?: string } }; message?: string };
-          setLoadError(String(err.response?.data?.detail || err.message || "Failed to load project"));
+          setLoadError(String(err.response?.data?.detail || err.message || "Failed to load AI Path"));
           setResult(readResult());
         })
-        .finally(() => setLoading(false));
+        .finally(() => setLoadingProject(false));
       return;
     }
 
-    // If no session cache, try latest from DB as a nice fallback.
     const cached = readResult();
     if (cached) {
       setResult(cached);
       return;
     }
-    setLoading(true);
+
+    setLoadingProject(true);
+    setLoadError("");
     getLatestAiPathProject()
-      .then((res) => {
-        setResult(res);
-        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(res));
+      .then((response) => {
+        setResult(response);
+        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(response));
       })
-      .catch(() => setResult(null))
-      .finally(() => setLoading(false));
+      .catch((e: unknown) => {
+        const err = e as { response?: { data?: { detail?: string } }; message?: string };
+        setLoadError(String(err.response?.data?.detail || err.message || "No saved AI Path found"));
+      })
+      .finally(() => setLoadingProject(false));
   }, [searchParams]);
 
   const toggleSubNode = useCallback(async (
@@ -347,12 +351,34 @@ export default function AIPathDetail() {
       return;
     }
 
+    const savedDetail =
+      subNode.details?.find((item) => item.detail_level === "detailed") ||
+      subNode.details?.[0];
+    if (savedDetail?.detailed_content) {
+      setSubNodeDetails(prev => ({
+        ...prev,
+        [key]: {
+          detail_id: savedDetail.id,
+          subnode_id: savedDetail.subnode_id,
+          title: subNode.title,
+          description: subNode.description || "",
+          key_points: subNode.learning_points || [],
+          detailed_content: savedDetail.detailed_content,
+          code_examples: savedDetail.code_examples || [],
+        },
+      }));
+      setExpandedSubNodes(prev => ({ ...prev, [key]: true }));
+      return;
+    }
+
     // Fetch details
     if (!result) return;
 
     setLoadingSubNodes(prev => ({ ...prev, [key]: true }));
+    setSubNodeErrors(prev => ({ ...prev, [key]: "" }));
     try {
       const detail = await getSubNodeDetail({
+        subnode_id: subNode.id,
         topic: result.data.title,
         section_title: result.data.nodes[nodeIdx].title,
         subnode_title: subNode.title,
@@ -363,8 +389,12 @@ export default function AIPathDetail() {
       });
       setSubNodeDetails(prev => ({ ...prev, [key]: detail }));
       setExpandedSubNodes(prev => ({ ...prev, [key]: true }));
-    } catch (error) {
-      console.error("Failed to fetch subnode detail:", error);
+    } catch (error: unknown) {
+      const err = error as { response?: { data?: { detail?: string } }; message?: string };
+      setSubNodeErrors(prev => ({
+        ...prev,
+        [key]: String(err.response?.data?.detail || err.message || "Failed to generate detailed content"),
+      }));
     } finally {
       setLoadingSubNodes(prev => ({ ...prev, [key]: false }));
     }
@@ -408,11 +438,22 @@ export default function AIPathDetail() {
               <h1 className="text-3xl font-black leading-[0.92] tracking-tight text-stone-900 md:text-5xl">
                 {result?.data.title || "AI Path Detail"}
               </h1>
-              {loading && (
-                <p className="mt-4 text-sm text-stone-500">Loading from database...</p>
+              {loadingProject && (
+                <div className="mt-5 inline-flex items-center gap-2 rounded-md border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-medium text-sky-800">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  正在从数据库加载学习路径...
+                </div>
               )}
               {loadError && (
-                <p className="mt-4 text-sm font-medium text-red-600">{loadError}</p>
+                <div className="mt-5 rounded-md border border-red-100 bg-red-50 px-4 py-3">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+                    <div>
+                      <p className="text-sm font-semibold text-red-900">加载失败</p>
+                      <p className="mt-1 text-xs leading-6 text-red-700">{loadError}</p>
+                    </div>
+                  </div>
+                </div>
               )}
               {articleIntro && (
                 <p className="mt-5 max-w-3xl text-sm leading-7 text-stone-600 md:text-base md:leading-8">
@@ -454,7 +495,17 @@ export default function AIPathDetail() {
       </header>
 
       <main className="mx-auto max-w-7xl px-4 py-8 md:py-10">
-        {!result ? (
+        {loadingProject && !result ? (
+          <div className="rounded-md border border-sky-100 bg-white px-6 py-20 text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-sky-500" />
+            <h2 className="mt-5 text-2xl font-black tracking-tight text-stone-900">
+              正在加载 AI Path
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-stone-500">
+              正在从数据库读取章节和知识点。
+            </p>
+          </div>
+        ) : !result ? (
           <div className="rounded-md border border-dashed border-stone-300 bg-white px-6 py-20 text-center">
             <div className="mx-auto max-w-xl">
               <h2 className="text-2xl font-black tracking-tight text-stone-900">
@@ -600,6 +651,7 @@ export default function AIPathDetail() {
                                 const isExpanded = expandedSubNodes[key];
                                 const isLoading = loadingSubNodes[key];
                                 const detail = subNodeDetails[key];
+                                const subNodeError = subNodeErrors[key];
 
                                 return (
                                   <article
@@ -752,8 +804,24 @@ export default function AIPathDetail() {
                                           <span className="text-sm text-stone-600">Generating detailed content for this topic...</span>
                                         </div>
                                         <p className="text-xs text-stone-400 text-center mt-2">
-                                          This may take 30-60 seconds
+                                          This may take 1-3 minutes. Once generated, it will be cached.
                                         </p>
+                                      </div>
+                                    )}
+
+                                    {subNodeError && !isLoading && (
+                                      <div className="border-t border-red-100 bg-red-50 px-5 py-4">
+                                        <div className="flex items-start gap-3">
+                                          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+                                          <div>
+                                            <p className="text-sm font-semibold text-red-900">
+                                              详情生成失败
+                                            </p>
+                                            <p className="mt-1 text-xs leading-6 text-red-700">
+                                              {subNodeError}
+                                            </p>
+                                          </div>
+                                        </div>
                                       </div>
                                     )}
                                   </article>

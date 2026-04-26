@@ -5,7 +5,7 @@ import {
   type AiPathGenerateResponse,
   type AiPathNode,
 } from "@/services/aiPath";
-import { ArrowRight, Sparkles, FileText, Eye } from "lucide-react";
+import { AlertCircle, ArrowRight, CheckCircle2, Eye, FileText, Loader2, Sparkles } from "lucide-react";
 
 const STORAGE_KEY = "learnsmart_ai_path_result_v1";
 
@@ -220,7 +220,10 @@ export default function AIPath() {
                 className="bg-sky-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sky-600 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {loading ? (
-                  "Generating..."
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
                 ) : (
                   <>
                     Generate
@@ -230,9 +233,44 @@ export default function AIPath() {
               </button>
             </div>
 
-            {error && (
-              <p className="mt-4 text-sm text-red-500 font-medium">{error}</p>
+            {loading && (
+              <div className="mt-5 rounded-md border border-sky-100 bg-sky-50 px-4 py-4">
+                <div className="flex items-start gap-3">
+                  <Loader2 className="mt-0.5 h-5 w-5 shrink-0 animate-spin text-sky-500" />
+                  <div>
+                    <p className="text-sm font-semibold text-sky-900">
+                      正在调用 AI 生成大纲并保存到数据库
+                    </p>
+                    <p className="mt-1 text-xs leading-6 text-sky-700">
+                      会先搜索资料，再生成章节和知识点。通常需要 30-90 秒，完成后会自动跳转到详情页。
+                    </p>
+                  </div>
+                </div>
+              </div>
             )}
+
+            {error && (
+              <div className="mt-5 rounded-md border border-red-100 bg-red-50 px-4 py-4">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
+                  <div>
+                    <p className="text-sm font-semibold text-red-900">
+                      生成失败
+                    </p>
+                    <p className="mt-1 text-xs leading-6 text-red-700">{error}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!loading && !error && lastResult?.data?.nodes?.length ? (
+              <div className="mt-5 rounded-md border border-emerald-100 bg-emerald-50 px-4 py-3">
+                <div className="flex items-center gap-2 text-sm font-medium text-emerald-800">
+                  <CheckCircle2 className="h-4 w-4" />
+                  最近一次生成已保存，可继续查看详情。
+                </div>
+              </div>
+            ) : null}
           </section>
 
           {/* Sidebar */}

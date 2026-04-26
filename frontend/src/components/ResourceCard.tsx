@@ -191,8 +191,8 @@ export function ResourceCard({
             </h3>
           </div>
           {/* Summary */}
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 overflow-hidden bg-stone-50">
-            <p className="text-[9px] sm:text-[10px] text-stone-400 line-clamp-2 sm:line-clamp-3">
+          <div className="px-2 sm:px-3 py-1 sm:py-1.5 h-[4.5rem] sm:h-20 overflow-hidden bg-stone-50">
+            <p className="text-[9px] sm:text-[10px] leading-4 text-stone-400 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>
@@ -213,7 +213,7 @@ export function ResourceCard({
   if (resolvedSize === "lg") {
     return (
       <article
-        className={`w-full h-80 ${
+        className={`w-full h-96 ${
           isGradient ? "rounded-lg" : "rounded-md"
         } shadow-sm cursor-pointer transition-all duration-300 hover:scale-105 overflow-hidden ${weightClass} ${
           isGradient ? "p-0.5" : ""
@@ -237,7 +237,7 @@ export function ResourceCard({
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-32 bg-stone-100 overflow-hidden z-10">
+          <div className="relative h-40 bg-stone-100 overflow-hidden z-10">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
@@ -261,8 +261,8 @@ export function ResourceCard({
           </div>
 
           {/* Summary */}
-          <div className="px-4 py-2 flex-1 overflow-hidden bg-stone-50">
-            <p className="text-sm text-stone-500 line-clamp-4">
+          <div className="px-4 py-3 h-[6.5rem] overflow-hidden bg-stone-50">
+            <p className="text-sm leading-5 text-stone-500 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>
@@ -285,7 +285,7 @@ export function ResourceCard({
   return (
     <>
       <article
-        className={`w-full h-72 ${
+        className={`w-full h-80 ${
           isGradient ? "rounded-lg" : "rounded-md"
         } shadow-sm cursor-pointer transition-all duration-300 hover:scale-105 overflow-hidden ${weightClass} ${
           isGradient ? "p-0.5" : ""
@@ -310,7 +310,7 @@ export function ResourceCard({
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-24 bg-stone-100 overflow-hidden z-10">
+          <div className="relative h-32 bg-stone-100 overflow-hidden z-10">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
@@ -334,8 +334,8 @@ export function ResourceCard({
           </div>
 
           {/* Summary */}
-          <div className="px-3 py-1.5 flex-1 overflow-hidden bg-stone-50">
-            <p className="text-xs text-stone-500 line-clamp-5">
+          <div className="px-3 py-2 h-24 overflow-hidden bg-stone-50">
+            <p className="text-xs leading-5 text-stone-500 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>

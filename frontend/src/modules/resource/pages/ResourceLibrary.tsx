@@ -130,6 +130,17 @@ export default function ResourceLibrary() {
     });
   }, [uiResources, selectedCategory, activeType, searchQuery]);
 
+  const editorialGroups = useMemo(() => {
+    const groups: Array<{ cards: UiResource[]; hero?: UiResource }> = [];
+    for (let index = 0; index < filteredResources.length; index += 11) {
+      groups.push({
+        cards: filteredResources.slice(index, index + 10),
+        hero: filteredResources[index + 10],
+      });
+    }
+    return groups;
+  }, [filteredResources]);
+
   const activeResource = useMemo(() => {
     if (activeResourceId === null) return null;
     return resources.find((r) => r.id === activeResourceId) || null;
@@ -359,42 +370,42 @@ export default function ResourceLibrary() {
               </p>
             </div>
 
-            {/* Editorial grid: alternating hero and standard cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-              {filteredResources.map((resource, idx) => {
-                const isHero = idx % 7 === 0 && idx > 0;
-                const saving = !!addingToMy[resource.id];
-                const saved = !!addedToMy[resource.id];
+            {/* Editorial grid: 10 standard cards, then 1 hero card */}
+            <div className="space-y-3">
+              {editorialGroups.map((group, groupIndex) => (
+                <section
+                  key={`resource-group-${groupIndex}`}
+                  className="space-y-3"
+                >
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    {group.cards.map((resource) => {
+                      const saving = !!addingToMy[resource.id];
+                      const saved = !!addedToMy[resource.id];
 
-                if (isHero) {
-                  return (
-                    <div
-                      key={resource.id}
-                      className="col-span-2 sm:col-span-3 md:col-span-3 lg:col-span-4 xl:col-span-5"
-                    >
-                      <CardHero
-                        resource={resource}
-                        onOpen={() => openCard(resource)}
-                        onAdd={() => addToMyResources(resource)}
-                        saving={saving}
-                        saved={saved}
-                      />
-                    </div>
-                  );
-                }
-
-                return (
-                  <div key={resource.id} className="col-span-1">
-                    <ResourceCard
-                      resource={resource}
-                      onOpen={() => openCard(resource)}
-                      onAdd={() => addToMyResources(resource)}
-                      saving={saving}
-                      saved={saved}
-                    />
+                      return (
+                        <ResourceCard
+                          key={resource.id}
+                          resource={resource}
+                          onOpen={() => openCard(resource)}
+                          onAdd={() => addToMyResources(resource)}
+                          saving={saving}
+                          saved={saved}
+                        />
+                      );
+                    })}
                   </div>
-                );
-              })}
+
+                  {group.hero && (
+                    <CardHero
+                      resource={group.hero}
+                      onOpen={() => openCard(group.hero as UiResource)}
+                      onAdd={() => addToMyResources(group.hero as UiResource)}
+                      saving={!!addingToMy[group.hero.id]}
+                      saved={!!addedToMy[group.hero.id]}
+                    />
+                  )}
+                </section>
+              ))}
             </div>
           </div>
         )}

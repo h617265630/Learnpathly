@@ -8,6 +8,7 @@ const AdminDashboard = lazy(() => import("@/modules/admin/pages/Dashboard"));
 const AdminUserManagement = lazy(() => import("@/modules/admin/pages/UserManagement"));
 const AdminResourceManagement = lazy(() => import("@/modules/admin/pages/ResourceManagement"));
 const AdminLearningPathManagement = lazy(() => import("@/modules/admin/pages/LearningPathManagement"));
+const AdminAiOutlineGenerator = lazy(() => import("@/modules/admin/pages/AiOutlineGenerator"));
 const AdminAnalytics = lazy(() => import("@/modules/admin/pages/Analytics"));
 
 export const adminRoutes: RouteObject[] = [
@@ -83,6 +84,21 @@ export const adminRoutes: RouteObject[] = [
               seo={{
                 title: "Path Management - Admin - Learnpathly",
                 description: "Manage learning paths.",
+                noindex: true,
+              }}
+            />
+          </RouteLoader>
+        ),
+      },
+      {
+        path: "ai-outline",
+        element: (
+          <RouteLoader>
+            <AdminAiOutlineGenerator />
+            <DocumentTitle
+              seo={{
+                title: "AI Outline Generator - Admin - Learnpathly",
+                description: "Generate AI learning outlines and knowledge points.",
                 noindex: true,
               }}
             />

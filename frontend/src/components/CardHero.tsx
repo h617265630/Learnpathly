@@ -19,6 +19,9 @@ export function CardHero({
   saving,
   saved,
 }: CardHeroProps) {
+  const imagePaddingClass =
+    resource.platform.trim().toLowerCase() === "github" ? "p-2" : "p-0";
+
   return (
     <article
       className="group border border-stone-300 bg-white hover:border-stone-400 hover:shadow-xl hover:scale-[1.02] transition-all duration-500 overflow-hidden cursor-pointer flex flex-col sm:flex-row"
@@ -26,7 +29,7 @@ export function CardHero({
     >
       {/* Thumbnail */}
       <div
-        className="relative bg-white overflow-hidden shrink-0 w-full sm:w-1/2"
+        className={`relative bg-white overflow-hidden shrink-0 w-full sm:w-1/2 ${imagePaddingClass}`}
         style={{ aspectRatio: "16 / 9" }}
       >
         <img
