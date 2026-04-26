@@ -11,6 +11,8 @@ export type PoolPath = {
   thumbnail: string;
   hotScore?: number;
   forkCount?: number;
+  source?: string;
+  status?: string;
 };
 
 interface PathCardProps {
