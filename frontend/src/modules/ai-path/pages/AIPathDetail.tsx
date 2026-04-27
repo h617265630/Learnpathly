@@ -426,9 +426,9 @@ export default function AIPathDetail() {
   return (
     <div className="min-h-screen bg-stone-50">
       <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8 md:py-12">
+        <div className="w-full px-4 py-8 md:px-8 md:py-12">
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <div className="max-w-4xl">
+            <div className="w-full">
               <div className="mb-4 flex items-center gap-2">
                 <span className="h-px w-8 bg-sky-500" />
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
@@ -456,7 +456,7 @@ export default function AIPathDetail() {
                 </div>
               )}
               {articleIntro && (
-                <p className="mt-5 max-w-3xl text-sm leading-7 text-stone-600 md:text-base md:leading-8">
+                <p className="mt-5 text-sm leading-7 text-stone-600 md:text-base md:leading-8">
                   {articleIntro}
                 </p>
               )}
@@ -494,7 +494,7 @@ export default function AIPathDetail() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-4 py-8 md:py-10">
+      <main className="w-full px-4 py-8 md:px-8 md:py-10">
         {loadingProject && !result ? (
           <div className="rounded-md border border-sky-100 bg-white px-6 py-20 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-sky-500" />
@@ -546,8 +546,8 @@ export default function AIPathDetail() {
               </section>
             ) : null}
 
-            <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
-              <article className="lg:col-span-8 space-y-8">
+            <div className="grid grid-cols-1 gap-8 lg:grid-cols-1 lg:items-start">
+              <article className="lg:col-span-12 space-y-8">
                 <section className="rounded-md border border-stone-200 bg-white px-6 py-6 shadow-sm md:px-8 md:py-8">
                   <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
                     How to use this guide
@@ -571,7 +571,7 @@ export default function AIPathDetail() {
                   >
                     <div className="border-b border-stone-100 bg-stone-50 px-6 py-5 md:px-8 md:py-6">
                       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                        <div className="max-w-3xl">
+                        <div className="w-full">
                           <div className="flex items-center gap-3">
                             <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-sky-100 px-3 text-xs font-black text-sky-700">
                               {idx + 1}
@@ -882,100 +882,30 @@ export default function AIPathDetail() {
                   </section>
                 ))}
 
-                {result.data.recommendations?.length ? (
-                  <section className="rounded-md border border-stone-200 bg-white px-6 py-6 shadow-sm md:px-8 md:py-8">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                      Final recommendations
-                    </p>
-                    <div className="mt-4 space-y-3">
-                      {result.data.recommendations.map(
-                        (item: string, idx: number) => (
-                          <div
-                            key={`${item}-${idx}`}
-                            className="flex gap-3 rounded-md bg-stone-50 px-4 py-4 text-sm leading-7 text-stone-700"
-                          >
-                            <span className="mt-2 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500" />
-                            <span>{item}</span>
-                          </div>
-                        )
-                      )}
-                    </div>
-                  </section>
-                ) : null}
-              </article>
-
-              <aside className="lg:col-span-4 lg:sticky lg:top-24 space-y-5">
-                <section className="rounded-md border border-stone-200 bg-white p-5 shadow-sm">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                    At a glance
-                  </p>
-                  <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1">
-                    <div className="rounded-md bg-stone-50 px-4 py-4">
-                      <div className="text-2xl font-black tracking-tight text-stone-900">
-                        {result.data.nodes.length}
-                      </div>
-                      <div className="mt-1 text-xs text-stone-500">stages</div>
-                    </div>
-                    <div className="rounded-md bg-stone-50 px-4 py-4">
-                      <div className="text-2xl font-black tracking-tight text-stone-900">
-                        {totalSubNodes}
-                      </div>
-                      <div className="mt-1 text-xs text-stone-500">
-                        sub topics
-                      </div>
-                    </div>
-                    <div className="rounded-md bg-stone-50 px-4 py-4">
-                      <div className="text-2xl font-black tracking-tight text-stone-900">
-                        {totalResources}
-                      </div>
-                      <div className="mt-1 text-xs text-stone-500">
-                        resources
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                <section className="rounded-md border border-stone-200 bg-white p-5 shadow-sm">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                    Outline
-                  </p>
-                  <nav className="mt-4 space-y-2">
-                    {result.data.nodes.map((node, idx) => (
-                      <a
-                        key={`${idx}-${node.title}-outline`}
-                        href={`#${stageAnchor(node, idx)}`}
-                        className="block rounded-md border border-stone-100 bg-stone-50 px-4 py-3 transition-colors hover:border-stone-200 hover:bg-white"
-                      >
-                        <div className="text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                          Stage {idx + 1}
-                        </div>
-                        <div className="mt-1 text-sm font-semibold leading-6 text-stone-800">
-                          {node.title}
-                        </div>
-                      </a>
-                    ))}
-                  </nav>
-                </section>
-
-                <section className="rounded-md border border-stone-200 bg-white p-5 shadow-sm">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
-                    Reading strategy
-                  </p>
-                  <div className="mt-4 space-y-3 text-sm leading-7 text-stone-600">
-                    <p>
-                      先通读每个阶段的 overview，再决定你要不要深入到 sub
-                      topics。
-                    </p>
-                    <p>如果时间有限，优先完成每个阶段 tutorial 中的前 3 步。</p>
-                    <p>
-                      资源是嵌入式补充，不需要一次全部看完，建议按阶段穿插阅读。
-                    </p>
-                  </div>
-                </section>
-              </aside>
-            </div>
-          </>
-        )}
+	                {result.data.recommendations?.length ? (
+	                  <section className="rounded-md border border-stone-200 bg-white px-6 py-6 shadow-sm md:px-8 md:py-8">
+	                    <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
+	                      Final recommendations
+	                    </p>
+	                    <div className="mt-4 space-y-3">
+	                      {result.data.recommendations.map(
+	                        (item: string, idx: number) => (
+	                          <div
+	                            key={`${item}-${idx}`}
+	                            className="flex gap-3 rounded-md bg-stone-50 px-4 py-4 text-sm leading-7 text-stone-700"
+	                          >
+	                            <span className="mt-2 inline-flex h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500" />
+	                            <span>{item}</span>
+	                          </div>
+	                        )
+	                      )}
+	                    </div>
+	                  </section>
+	                ) : null}
+	              </article>
+	            </div>
+	          </>
+	        )}
       </main>
     </div>
   );

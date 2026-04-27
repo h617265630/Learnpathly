@@ -4,8 +4,10 @@ import {
   listPublicLearningPaths,
   type PublicLearningPath,
 } from "@/services/learningPath";
+import { listAiPathProjects } from "@/services/aiPath";
 import { PathCard, type PoolPath } from "@/components/PathCard";
 import { PopularPathCard } from "@/components/PopularPathCard";
+import { LearnPathCard, type LearnPathProject } from "@/components/LearnPathCard";
 
 function mapDbToPool(p: PublicLearningPath): PoolPath {
   const lpType = String(p.type || "").trim().toLowerCase();
@@ -45,6 +47,9 @@ export default function Home() {
   const [poolPaths, setPoolPaths] = useState<PoolPath[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [aiProjects, setAiProjects] = useState<LearnPathProject[]>([]);
+  const [loadingAiProjects, setLoadingAiProjects] = useState(false);
+
   useEffect(() => {
     async function fetchPaths() {
       setLoading(true);
@@ -61,6 +66,22 @@ export default function Home() {
       }
     }
     void fetchPaths();
+  }, []);
+
+  useEffect(() => {
+    setLoadingAiProjects(true);
+    listAiPathProjects(8, 0)
+      .then((res) => {
+        const next = (res || []).map((p) => ({
+          id: Number((p as any).id),
+          topic: String((p as any).topic || "").trim(),
+          outline_overview: String((p as any).outline_overview || "").trim(),
+          created_at: (p as any).created_at,
+        }));
+        setAiProjects(next.filter((p) => Number.isFinite(p.id) && p.id > 0 && p.topic));
+      })
+      .catch(() => setAiProjects([]))
+      .finally(() => setLoadingAiProjects(false));
   }, []);
 
   return (
@@ -153,11 +174,11 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {loading ? (
-              [...Array(4)].map((_, i) => (
-                <div key={i}>
-                  <div className="aspect-video bg-stone-100 rounded-lg mb-3" />
+	          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+	            {loading ? (
+	              [...Array(4)].map((_, i) => (
+	                <div key={i}>
+	                  <div className="aspect-video bg-stone-100 rounded-lg mb-3" />
                   <div className="h-4 w-20 bg-stone-200 mb-2" />
                   <div className="h-6 w-full bg-stone-200 mb-2" />
                   <div className="h-4 w-32 bg-stone-200" />
@@ -173,16 +194,51 @@ export default function Home() {
                   No paths yet.
                 </p>
               </div>
-            )}
-          </div>
+	            )}
+	          </div>
 
-          <div className="mt-12 text-center md:hidden">
-            <Link to="/learningpool" className="btn-outline">
-              View all paths
-            </Link>
-          </div>
-        </div>
-      </section>
+	          {(loadingAiProjects || aiProjects.length > 0) && (
+	            <div className="mt-14">
+	              <div className="flex items-end justify-between mb-8">
+	                <div>
+	                  <SectionLabel>AI</SectionLabel>
+	                  <h3 className="font-serif text-2xl lg:text-3xl font-bold tracking-tight text-stone-900">
+	                    AI LearnPaths
+	                  </h3>
+	                </div>
+	                <Link to="/ai-path" className="hidden md:block article-link">
+	                  Generate new
+	                </Link>
+	              </div>
+
+	              {loadingAiProjects ? (
+	                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+	                  {[...Array(8)].map((_, i) => (
+	                    <div key={`ai-home-${i}`}>
+	                      <div className="aspect-video bg-stone-100 rounded-lg mb-3" />
+	                      <div className="h-4 w-28 bg-stone-200 mb-2" />
+	                      <div className="h-6 w-full bg-stone-200 mb-2" />
+	                      <div className="h-4 w-40 bg-stone-200" />
+	                    </div>
+	                  ))}
+	                </div>
+	              ) : (
+	                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+	                  {aiProjects.slice(0, 8).map((p) => (
+	                    <LearnPathCard key={p.id} project={p} />
+	                  ))}
+	                </div>
+	              )}
+	            </div>
+	          )}
+
+	          <div className="mt-12 text-center md:hidden">
+	            <Link to="/learningpool" className="btn-outline">
+	              View all paths
+	            </Link>
+	          </div>
+	        </div>
+	      </section>
 
       {/* ── How to Use ── */}
       <section className="py-20 px-6 lg:px-12 border-b border-stone-200">

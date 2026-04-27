@@ -1,0 +1,837 @@
+{
+  "topic": "Cursor AI 编程工作流",
+  "status": "resumed",
+  "api_base": "http://127.0.0.1:8000",
+  "started_at": "2026-04-27T11:20:51.124096+00:00",
+  "project_id": 30,
+  "outline_response": {
+    "project_id": 30,
+    "data": {
+      "title": "Cursor AI Programming Workflow",
+      "summary": "Master the end-to-end use of Cursor AI to write, debug, refactor, and maintain code efficiently through a structured workflow that blends theory with hands‑on practice.",
+      "description": "Master the end-to-end use of Cursor AI to write, debug, refactor, and maintain code efficiently through a structured workflow that blends theory with hands‑on practice.",
+      "nodes": [
+        {
+          "title": "Foundations of Cursor AI Setup and Interface",
+          "description": "Install Cursor AI, configure the environment, and get familiar with its UI and core interaction paradigms.",
+          "learning_points": [
+            "Set up Cursor AI on Windows, macOS, and Linux",
+            "Navigate the editor UI and manage extensions",
+            "Customize shortcuts and preferences for a personal workflow"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Installing and Configuring Cursor AI",
+              "description": "Step‑by‑step installation, verifying prerequisites, and initial configuration.",
+              "learning_points": [
+                "Download from the official site or package manager",
+                "Enable required language extensions (e.g., Python, Node.js)",
+                "Sync settings across machines with a settings file"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Exploring the Editor UI",
+              "description": "Overview of the main panels, sidebar, AI chat panel, and status bar.",
+              "learning_points": [
+                "Editor area, tabs, and multi‑file handling",
+                "AI sidebar and interaction window",
+                "Status indicators and AI activity logs"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Keyboard Shortcuts and Personalization",
+              "description": "Essential shortcuts and customizing keybindings to speed up daily tasks.",
+              "learning_points": [
+                "Default versus custom keymaps",
+                "Quick command palette and AI prompt shortcuts",
+                "Theme, font size, and UI tweaks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "AI‑Assisted Code Generation and Completion",
+          "description": "Use Cursor AI's completion engine to write boilerplate, generate functions, and iterate on code with AI suggestions.",
+          "learning_points": [
+            "Leverage AI completions for rapid coding",
+            "Craft effective prompts for targeted code generation",
+            "Integrate AI suggestions into existing codebases"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Understanding AI Completions",
+              "description": "How Cursor AI's model predicts code and provides inline suggestions.",
+              "learning_points": [
+                "Streaming completions vs. batch suggestions",
+                "Context window and file‑scope awareness",
+                "Tuning suggestion depth and relevance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Writing and Refining Prompts",
+              "description": "Techniques to formulate prompts that produce high‑quality, context‑aware code.",
+              "learning_points": [
+                "Specifying language, framework, and naming conventions",
+                "Using comments and docstrings as hints for the model",
+                "Iterative prompt refinement based on output quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Merging AI Suggestions with Manual Code",
+              "description": "Strategies to accept, modify, or reject AI code without breaking the project.",
+              "learning_points": [
+                "Selective acceptance and diff review",
+                "Handling partial suggestions and multi‑line edits",
+                "Keeping code style consistent across the team"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "AI‑Enhanced Debugging and Refactoring",
+          "description": "Apply Cursor AI to locate bugs, get explanations, and refactor code safely.",
+          "learning_points": [
+            "Detect and fix bugs using AI chat and suggestions",
+            "Perform AI‑guided refactoring with confidence",
+            "Use AI to generate unit tests and edge‑case coverage"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Interactive Bug Diagnosis",
+              "description": "Leverage AI chat to analyze error messages and stack traces.",
+              "learning_points": [
+                "Pasting error output into AI chat for analysis",
+                "Asking for root‑cause analysis and fix steps",
+                "Following AI‑suggested fixes while monitoring changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "AI‑Driven Refactoring",
+              "description": "Identify code smells and request AI refactoring proposals.",
+              "learning_points": [
+                "Detecting duplicated code, long functions, and poor naming",
+                "Requesting extraction, renaming, or pattern changes",
+                "Previewing refactored code before applying it"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Automated Test Generation",
+              "description": "Use AI to create unit and integration tests for new or modified functions.",
+              "learning_points": [
+                "Generating pytest or JUnit tests from function signatures",
+                "Covering edge cases and exception handling",
+                "Running tests and interpreting results with AI help"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Collaboration, Version Control, and Documentation",
+          "description": "Integrate AI assistance into team workflows, code reviews, and documentation pipelines.",
+          "learning_points": [
+            "Streamline code reviews with AI comments",
+            "Maintain clean commit history with AI‑generated commit messages",
+            "Auto‑generate documentation and inline comments"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "AI‑Assisted Code Reviews",
+              "description": "Use AI to highlight potential issues and suggest improvements in pull requests.",
+              "learning_points": [
+                "Running AI analysis on diffs for security and performance",
+                "Generating review summaries for reviewers",
+                "Addressing AI‑suggested fixes directly in PRs"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "AI‑Generated Commit Messages and Changelogs",
+              "description": "Automatically produce meaningful commit messages based on changes.",
+              "learning_points": [
+                "Configuring git hooks to invoke AI for message generation",
+                "Producing concise, descriptive messages with scope and purpose",
+                "Maintaining a changelog using AI‑generated summaries"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Documentation Generation",
+              "description": "Create and update README, API docs, and inline comments using AI.",
+              "learning_points": [
+                "Generating function‑level docstrings for readability",
+                "Creating usage examples and code snippets",
+                "Updating documentation after refactoring changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Advanced Workflows and End‑to‑End Project Integration",
+          "description": "Master advanced Cursor AI features, custom prompts, and build a full‑stack project using the AI workflow.",
+          "learning_points": [
+            "Customize AI persona and prompts for domain‑specific tasks",
+            "Automate repetitive tasks with scripts powered by AI",
+            "Deliver a complete project from design to deployment using Cursor AI"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Custom Prompts and Persona Configuration",
+              "description": "Tailor AI behavior by setting system messages, persona, and context.",
+              "learning_points": [
+                "Defining project‑specific personas (e.g., backend engineer, data analyst)",
+                "Storing reusable prompt templates in a library",
+                "Testing and iterating on prompt performance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Scripting and Automation",
+              "description": "Write scripts that invoke Cursor AI for batch processing, code generation, and testing.",
+              "learning_points": [
+                "Using Cursor AI CLI for bulk code generation",
+                "Creating build pipelines with AI‑generated code",
+                "Scheduling AI tasks with cron jobs or CI triggers"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Full‑Stack Project Walkthrough",
+              "description": "Apply the learned workflow to build a web application end‑to‑end: backend, frontend, CI/CD, and documentation.",
+              "learning_points": [
+                "Planning architecture with AI assistance",
+                "Generating boilerplate, REST APIs, and UI components",
+                "Deploying to a cloud platform and monitoring with AI insights"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 4,
+          "estimated_minutes": 60
+        }
+      ],
+      "recommendations": [
+        "5 chapters",
+        "~ 12.5 hours"
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_input_query": "Cursor AI 编程工作流"
+    },
+    "warnings": [
+      "Generated 5 sections with sub_nodes",
+      "Saved outline to DB (ai_path_projects.id=30)"
+    ]
+  },
+  "project_before_details": {
+    "project_id": 30,
+    "data": {
+      "title": "Cursor AI Programming Workflow",
+      "summary": "Master the end-to-end use of Cursor AI to write, debug, refactor, and maintain code efficiently through a structured workflow that blends theory with hands‑on practice.",
+      "description": "Master the end-to-end use of Cursor AI to write, debug, refactor, and maintain code efficiently through a structured workflow that blends theory with hands‑on practice.",
+      "recommendations": [
+        "5 chapters",
+        "~ 12.5 hours"
+      ],
+      "nodes": [
+        {
+          "id": 120,
+          "project_id": 30,
+          "title": "Foundations of Cursor AI Setup and Interface",
+          "description": "Install Cursor AI, configure the environment, and get familiar with its UI and core interaction paradigms.",
+          "learning_points": [
+            "Set up Cursor AI on Windows, macOS, and Linux",
+            "Navigate the editor UI and manage extensions",
+            "Customize shortcuts and preferences for a personal workflow"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 432,
+              "section_id": 120,
+              "title": "Installing and Configuring Cursor AI",
+              "description": "Step‑by‑step installation, verifying prerequisites, and initial configuration.",
+              "learning_points": [
+                "Download from the official site or package manager",
+                "Enable required language extensions (e.g., Python, Node.js)",
+                "Sync settings across machines with a settings file"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [
+                {
+                  "id": 182,
+                  "subnode_id": 432,
+                  "detail_level": "detailed",
+                  "detailed_content": "# Installing and Configuring Cursor AI\\n\\n## Why This Matters\\n\\nInstalling \"Cursor AI\" correctly is the foundation for a smooth, AI‑augmented development experience. If the IDE is not set up, extensions are missing, or environment variables are mis‑pointed, the AI suggestions will be slow, incorrect, or unavailable. Proper configuration also ensures that your personal settings travel with you across workstations, so you don’t waste time re‑customizing the editor after a fresh install.\\n\\n## Core Mechanics\\n\\n\"Cursor AI\" is built on top of a VS‑Code‑compatible shell, but it adds a local AI inference engine and a set of language‑aware extensions. When you install Cursor, you get:\\n\\n- The **IDE core** that manages windows, tabs, and the UI.\\n- **Language extensions** that hook into the AI engine to provide context‑aware completions.\\n- A **settings layer** (`settings.json`) that can be shared via a plain text file.\\n- An optional **sync mechanism** that exports/imports the entire configuration tree.\\n\\nWhen you enable a language extension (e.g., Python, Node.js), the extension registers a language server that the AI engine queries for symbol information, type hints, and error context. The AI engine runs locally, using a small model that is loaded on startup, so you never need an internet connection for core suggestions.\\n\\n## Step‑by‑Step Installation\\n\\n### 1. Verify Prerequisites\\n\\nBefore you download anything, make sure your system meets the following baseline requirements:\\n\\n- **Operating System**: Windows 10 + (x64), macOS 11 + (Intel or Apple Silicon), or a recent Linux distribution (Ubuntu 20.04‑, Debian 11‑).\\n- **Disk Space**: At least 1 GB free for the IDE and additional language packs.\\n- **Memory**: 8 GB RAM recommended; 4 GB is the minimum.\\n- **Runtime Versions** (if you plan to use the AI for those ecosystems):\\n  - Python 3.8 + (run `python3 --version` to check).\\n  - Node.js 14 + (run `node --version` to check).\\n- **Internet**: Required only for downloading the installer and optional extension updates.\\n\\nYou can quickly check the above with a tiny bash script:\\n\\nbash\\n#!/usr/bin/env bash\\n# check‑prereqs.sh – verifies the basic requirements\\nset -e\\n\\n# Python ≥3.8\\necho \\\"Checking Python version...\\\"\\nPYVER=$(python3 --version 2>&1 | awk '{print $2}')\\nPYMAJ=$(echo $PYVER | cut -d. -f1)\\nPYMIN=$(echo $PYVER | cut -d. -f2)\\nif (( PYMAJ < 3 )) || (( PYMAJ == 3 && PYMIN < 8 )); then\\n  echo \\\"Error: Python 3.8+ required. Found $PYVER\\\"\\n  exit 1\\nfi\\n\\n# Node ≥14\\necho \\\"Checking Node.js version...\\\"\\nNODEVER=$(node --version 2>&1 | sed 's/v//')\\nNODEMAJ=$(echo $NODEVER | cut -d. -f1)\\nif (( NODEMAJ < 14 )); then\\n  echo \\\"Error: Node.js 14+ required. Found $NODEVER\\\"\\n  exit 1\\nfi\\n\\n# Disk space (at least 500 MB free on the root partition)\\nFREEMB=$(df -BM / | tail -1 | awk '{print $4}' | sed 's/M//')\\nif (( FREEMB < 500 )); then\\n  echo \\\"Error: At least 500 MB free disk space required.\\\"\\n  exit 1\\nfi\\necho \\\"All prerequisites satisfied.\\\"\\n\\n\\n### 2. Download the Installer\\n\\nChoose the method that fits your workflow:\\n\\n- **Official website**: Visit https://cursor.sh and click **Download**. Pick the installer for your OS (`.exe` for Windows, `.dmg` for macOS, `.AppImage`/`.deb` for Linux).\\n- **Package managers**:\\n  - **Linux (apt)**: `sudo apt install ./cursor-<version>.deb` (or add the repository as shown in the code examples).\\n  - **macOS (Homebrew)**: `brew install --cask cursor`.\\n  - **Windows (winget)**: `winget install Cursor.Cursor`.\\n  - **Windows (Scoop)**: `scoop bucket add extras && scoop install cursor`.\\n\\n### 3. Run the Installer\\n\\n- **Windows**: Double‑click the `.exe` and follow the wizard. If you need a custom directory, change the **Destination Folder** and ensure the path does **not** contain spaces (or quote it properly).\\n- **macOS**: Drag the **Cursor.app** into **Applications**. On first launch, macOS may ask you to confirm opening an app downloaded from the internet.\\n- **Linux**: For `.deb` files, run `sudo dpkg -i cursor-<version>.deb`. For `AppImage`, make it executable (`chmod +x Cursor.AppImage`) and run it.\\n\\nDuring installation, you can opt‑in to **Add Cursor to PATH** (recommended for command‑line usage). Verify the installation by running `cursor --version` in a terminal.\\n\\n### 4. Initial Configuration\\n\\nOnce the IDE starts, follow these steps to bring it into a usable state:\\n\\n1. **Sign‑in (optional but recommended)**: Click the user icon in the bottom‑left corner. Signing in enables cloud settings sync and unlocks premium AI features.\\n2. **Select a theme**: Press `Ctrl+K Ctrl+T` (or `Cmd+K Cmd+T` on macOS) and pick a color scheme.\\n3. **Open the Extensions view**: `Ctrl+Shift+X` / `Cmd+Shift+X`. Search for the language extensions you need:\\n   - **Python** (`ms-python.python`) – enables AI‑aware linting, debugging, and completions.\\n   - **Node.js / JavaScript** (`dbaeumer.vscode-eslint`) – provides ESLint integration.\\n   - **Any additional ecosystem** you plan to work with (e.g., `rust-lang.rust-analyzer` for Rust).\\n4. **Set default interpreter**: For Python, open a `.py` file, then run **Python: Select Interpreter** (`Ctrl+Shift+P` → `Python: Select Interpreter`) and point it to a Python 3.8+ executable.\\n5. **Tweak UI preferences**: Use **File → Preferences → Settings** (`Ctrl+,` / `Cmd+,`) to adjust font size, line height, and cursor style.\\n\\n## Syncing Settings Across Machines\\n\\nCursor stores all user‑specific preferences in a JSON file named `settings.json`. The file lives in the user data directory:\\n\\n- **Windows**: `%APPDATA%\\\\Cursor\\\\User\\\\settings.json`\\n- **macOS**: `~/Library/Application Support/Cursor/User/settings.json`\\n- **Linux**: `~/.config/Cursor/User/settings.json`\\n\\nTo keep multiple machines in sync, you can export the file and commit it to a dotfiles repository or copy it manually:\\n\\nbash\\n# Export settings on machine A\\ncursor --export-settings ~/.cursor/settings.json\\n\\n# Import settings on machine B\\ncursor --import-settings ~/.cursor/settings.json\\n\\n\\nIf you prefer a visual approach, use the **Settings Sync** extension (ID: `eanmoffat.settings-sync`) which supports GitHub Gist storage.\\n\\n## Common Pitfalls\\n\\n- **Skipping language extensions**: The AI engine can still run, but it will lack language‑specific context, leading to generic or irrelevant suggestions.\\n- **Using mismatched interpreter paths**: If `pythonPath` points to an older Python version, the extension will load stale libraries.\\n- **Installing the 32‑bit binary on a 64‑bit OS**: Results in crashes when loading native modules.\\n- **Neglecting to enable background extension execution**: Some AI features (e.g., on‑the‑fly type checking) require the extension host to run in the background.\\n- **Overwriting `settings.json` unintentionally**: When merging configurations, always keep a backup.\\n\\n## Best Practices\\n\\n- **Use version managers for runtimes** (`pyenv`, `nvm`, `rustup`) so Cursor can switch interpreters per project without manual path tweaking.\\n- **Pin language extension versions**: In the Extensions view, right‑click an extension and choose **Install Specific Version** to avoid unexpected updates.\\n- **Keep the IDE updated**: Run `cursor --upgrade` or use your OS package manager to pull the latest release, which often includes performance improvements for the AI engine.\\n- **Commit a minimal `settings.json` to version control**: Include only the settings you truly need (theme, font size, essential extensions) and let machine‑specific paths be overridden locally.\\n- **Test a fresh install in a VM** before rolling out to a team; this surfaces hidden dependencies on system libraries.\\n- **Enable “Telemetry” only if you are comfortable**: Cursor collects anonymized usage data by default; you can turn it off in **Settings → Privacy**.\n\n## Code Examples\n\n### Example 1\n\n```python\n#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor\n```\n\n### Example 2\n\n```python\n:: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements\n```\n\n### Example 3\n\n```python\n#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json\n```\n\n\n\n## Common Mistakes\n\n- Skipping the installation of required language extensions, which leaves AI suggestions generic.\n- Pointing the interpreter path to an incompatible or outdated runtime.\n- Downloading the 32‑bit installer on a 64‑bit OS, causing native module failures.\n- Failing to enable background extension execution, so real‑time AI checks never run.\n- Manually merging `settings.json` without a backup, resulting in loss of preferences.\n\n\n## Best Practices\n\n- Use version managers for runtimes (e.g., `pyenv`, `nvm`, `rustup`) to keep language interpreters aligned with project requirements.\n- Pin language extension versions to avoid unexpected updates that can break AI integration.\n- Keep Cursor AI up‑to‑date; new releases often improve inference latency.\n- Commit a minimal `settings.json` to version control, including only essential preferences.\n- Test a fresh installation in an isolated VM before rolling out to a team.\n- Review telemetry settings and disable data collection if privacy is a concern.\n",
+                  "code_examples": [
+                    "#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor",
+                    ":: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements",
+                    "#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json"
+                  ],
+                  "raw_json": {
+                    "title": "Installing and Configuring Cursor AI",
+                    "description": "Step‑by‑step installation, verifying prerequisites, and initial configuration.",
+                    "key_points": [
+                      "Download from the official site or package manager",
+                      "Enable required language extensions (e.g., Python, Node.js)",
+                      "Sync settings across machines with a settings file"
+                    ],
+                    "detailed_content": "# Installing and Configuring Cursor AI\\n\\n## Why This Matters\\n\\nInstalling \"Cursor AI\" correctly is the foundation for a smooth, AI‑augmented development experience. If the IDE is not set up, extensions are missing, or environment variables are mis‑pointed, the AI suggestions will be slow, incorrect, or unavailable. Proper configuration also ensures that your personal settings travel with you across workstations, so you don’t waste time re‑customizing the editor after a fresh install.\\n\\n## Core Mechanics\\n\\n\"Cursor AI\" is built on top of a VS‑Code‑compatible shell, but it adds a local AI inference engine and a set of language‑aware extensions. When you install Cursor, you get:\\n\\n- The **IDE core** that manages windows, tabs, and the UI.\\n- **Language extensions** that hook into the AI engine to provide context‑aware completions.\\n- A **settings layer** (`settings.json`) that can be shared via a plain text file.\\n- An optional **sync mechanism** that exports/imports the entire configuration tree.\\n\\nWhen you enable a language extension (e.g., Python, Node.js), the extension registers a language server that the AI engine queries for symbol information, type hints, and error context. The AI engine runs locally, using a small model that is loaded on startup, so you never need an internet connection for core suggestions.\\n\\n## Step‑by‑Step Installation\\n\\n### 1. Verify Prerequisites\\n\\nBefore you download anything, make sure your system meets the following baseline requirements:\\n\\n- **Operating System**: Windows 10 + (x64), macOS 11 + (Intel or Apple Silicon), or a recent Linux distribution (Ubuntu 20.04‑, Debian 11‑).\\n- **Disk Space**: At least 1 GB free for the IDE and additional language packs.\\n- **Memory**: 8 GB RAM recommended; 4 GB is the minimum.\\n- **Runtime Versions** (if you plan to use the AI for those ecosystems):\\n  - Python 3.8 + (run `python3 --version` to check).\\n  - Node.js 14 + (run `node --version` to check).\\n- **Internet**: Required only for downloading the installer and optional extension updates.\\n\\nYou can quickly check the above with a tiny bash script:\\n\\nbash\\n#!/usr/bin/env bash\\n# check‑prereqs.sh – verifies the basic requirements\\nset -e\\n\\n# Python ≥3.8\\necho \\\"Checking Python version...\\\"\\nPYVER=$(python3 --version 2>&1 | awk '{print $2}')\\nPYMAJ=$(echo $PYVER | cut -d. -f1)\\nPYMIN=$(echo $PYVER | cut -d. -f2)\\nif (( PYMAJ < 3 )) || (( PYMAJ == 3 && PYMIN < 8 )); then\\n  echo \\\"Error: Python 3.8+ required. Found $PYVER\\\"\\n  exit 1\\nfi\\n\\n# Node ≥14\\necho \\\"Checking Node.js version...\\\"\\nNODEVER=$(node --version 2>&1 | sed 's/v//')\\nNODEMAJ=$(echo $NODEVER | cut -d. -f1)\\nif (( NODEMAJ < 14 )); then\\n  echo \\\"Error: Node.js 14+ required. Found $NODEVER\\\"\\n  exit 1\\nfi\\n\\n# Disk space (at least 500 MB free on the root partition)\\nFREEMB=$(df -BM / | tail -1 | awk '{print $4}' | sed 's/M//')\\nif (( FREEMB < 500 )); then\\n  echo \\\"Error: At least 500 MB free disk space required.\\\"\\n  exit 1\\nfi\\necho \\\"All prerequisites satisfied.\\\"\\n\\n\\n### 2. Download the Installer\\n\\nChoose the method that fits your workflow:\\n\\n- **Official website**: Visit https://cursor.sh and click **Download**. Pick the installer for your OS (`.exe` for Windows, `.dmg` for macOS, `.AppImage`/`.deb` for Linux).\\n- **Package managers**:\\n  - **Linux (apt)**: `sudo apt install ./cursor-<version>.deb` (or add the repository as shown in the code examples).\\n  - **macOS (Homebrew)**: `brew install --cask cursor`.\\n  - **Windows (winget)**: `winget install Cursor.Cursor`.\\n  - **Windows (Scoop)**: `scoop bucket add extras && scoop install cursor`.\\n\\n### 3. Run the Installer\\n\\n- **Windows**: Double‑click the `.exe` and follow the wizard. If you need a custom directory, change the **Destination Folder** and ensure the path does **not** contain spaces (or quote it properly).\\n- **macOS**: Drag the **Cursor.app** into **Applications**. On first launch, macOS may ask you to confirm opening an app downloaded from the internet.\\n- **Linux**: For `.deb` files, run `sudo dpkg -i cursor-<version>.deb`. For `AppImage`, make it executable (`chmod +x Cursor.AppImage`) and run it.\\n\\nDuring installation, you can opt‑in to **Add Cursor to PATH** (recommended for command‑line usage). Verify the installation by running `cursor --version` in a terminal.\\n\\n### 4. Initial Configuration\\n\\nOnce the IDE starts, follow these steps to bring it into a usable state:\\n\\n1. **Sign‑in (optional but recommended)**: Click the user icon in the bottom‑left corner. Signing in enables cloud settings sync and unlocks premium AI features.\\n2. **Select a theme**: Press `Ctrl+K Ctrl+T` (or `Cmd+K Cmd+T` on macOS) and pick a color scheme.\\n3. **Open the Extensions view**: `Ctrl+Shift+X` / `Cmd+Shift+X`. Search for the language extensions you need:\\n   - **Python** (`ms-python.python`) – enables AI‑aware linting, debugging, and completions.\\n   - **Node.js / JavaScript** (`dbaeumer.vscode-eslint`) – provides ESLint integration.\\n   - **Any additional ecosystem** you plan to work with (e.g., `rust-lang.rust-analyzer` for Rust).\\n4. **Set default interpreter**: For Python, open a `.py` file, then run **Python: Select Interpreter** (`Ctrl+Shift+P` → `Python: Select Interpreter`) and point it to a Python 3.8+ executable.\\n5. **Tweak UI preferences**: Use **File → Preferences → Settings** (`Ctrl+,` / `Cmd+,`) to adjust font size, line height, and cursor style.\\n\\n## Syncing Settings Across Machines\\n\\nCursor stores all user‑specific preferences in a JSON file named `settings.json`. The file lives in the user data directory:\\n\\n- **Windows**: `%APPDATA%\\\\Cursor\\\\User\\\\settings.json`\\n- **macOS**: `~/Library/Application Support/Cursor/User/settings.json`\\n- **Linux**: `~/.config/Cursor/User/settings.json`\\n\\nTo keep multiple machines in sync, you can export the file and commit it to a dotfiles repository or copy it manually:\\n\\nbash\\n# Export settings on machine A\\ncursor --export-settings ~/.cursor/settings.json\\n\\n# Import settings on machine B\\ncursor --import-settings ~/.cursor/settings.json\\n\\n\\nIf you prefer a visual approach, use the **Settings Sync** extension (ID: `eanmoffat.settings-sync`) which supports GitHub Gist storage.\\n\\n## Common Pitfalls\\n\\n- **Skipping language extensions**: The AI engine can still run, but it will lack language‑specific context, leading to generic or irrelevant suggestions.\\n- **Using mismatched interpreter paths**: If `pythonPath` points to an older Python version, the extension will load stale libraries.\\n- **Installing the 32‑bit binary on a 64‑bit OS**: Results in crashes when loading native modules.\\n- **Neglecting to enable background extension execution**: Some AI features (e.g., on‑the‑fly type checking) require the extension host to run in the background.\\n- **Overwriting `settings.json` unintentionally**: When merging configurations, always keep a backup.\\n\\n## Best Practices\\n\\n- **Use version managers for runtimes** (`pyenv`, `nvm`, `rustup`) so Cursor can switch interpreters per project without manual path tweaking.\\n- **Pin language extension versions**: In the Extensions view, right‑click an extension and choose **Install Specific Version** to avoid unexpected updates.\\n- **Keep the IDE updated**: Run `cursor --upgrade` or use your OS package manager to pull the latest release, which often includes performance improvements for the AI engine.\\n- **Commit a minimal `settings.json` to version control**: Include only the settings you truly need (theme, font size, essential extensions) and let machine‑specific paths be overridden locally.\\n- **Test a fresh install in a VM** before rolling out to a team; this surfaces hidden dependencies on system libraries.\\n- **Enable “Telemetry” only if you are comfortable**: Cursor collects anonymized usage data by default; you can turn it off in **Settings → Privacy**.\n\n## Code Examples\n\n### Example 1\n\n```python\n#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor\n```\n\n### Example 2\n\n```python\n:: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements\n```\n\n### Example 3\n\n```python\n#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json\n```\n\n\n\n## Common Mistakes\n\n- Skipping the installation of required language extensions, which leaves AI suggestions generic.\n- Pointing the interpreter path to an incompatible or outdated runtime.\n- Downloading the 32‑bit installer on a 64‑bit OS, causing native module failures.\n- Failing to enable background extension execution, so real‑time AI checks never run.\n- Manually merging `settings.json` without a backup, resulting in loss of preferences.\n\n\n## Best Practices\n\n- Use version managers for runtimes (e.g., `pyenv`, `nvm`, `rustup`) to keep language interpreters aligned with project requirements.\n- Pin language extension versions to avoid unexpected updates that can break AI integration.\n- Keep Cursor AI up‑to‑date; new releases often improve inference latency.\n- Commit a minimal `settings.json` to version control, including only essential preferences.\n- Test a fresh installation in an isolated VM before rolling out to a team.\n- Review telemetry settings and disable data collection if privacy is a concern.\n",
+                    "code_examples": [
+                      "#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor",
+                      ":: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements",
+                      "#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json"
+                    ]
+                  }
+                }
+              ],
+              "resources": []
+            },
+            {
+              "id": 433,
+              "section_id": 120,
+              "title": "Exploring the Editor UI",
+              "description": "Overview of the main panels, sidebar, AI chat panel, and status bar.",
+              "learning_points": [
+                "Editor area, tabs, and multi‑file handling",
+                "AI sidebar and interaction window",
+                "Status indicators and AI activity logs"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 434,
+              "section_id": 120,
+              "title": "Keyboard Shortcuts and Personalization",
+              "description": "Essential shortcuts and customizing keybindings to speed up daily tasks.",
+              "learning_points": [
+                "Default versus custom keymaps",
+                "Quick command palette and AI prompt shortcuts",
+                "Theme, font size, and UI tweaks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 121,
+          "project_id": 30,
+          "title": "AI‑Assisted Code Generation and Completion",
+          "description": "Use Cursor AI's completion engine to write boilerplate, generate functions, and iterate on code with AI suggestions.",
+          "learning_points": [
+            "Leverage AI completions for rapid coding",
+            "Craft effective prompts for targeted code generation",
+            "Integrate AI suggestions into existing codebases"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 435,
+              "section_id": 121,
+              "title": "Understanding AI Completions",
+              "description": "How Cursor AI's model predicts code and provides inline suggestions.",
+              "learning_points": [
+                "Streaming completions vs. batch suggestions",
+                "Context window and file‑scope awareness",
+                "Tuning suggestion depth and relevance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 436,
+              "section_id": 121,
+              "title": "Writing and Refining Prompts",
+              "description": "Techniques to formulate prompts that produce high‑quality, context‑aware code.",
+              "learning_points": [
+                "Specifying language, framework, and naming conventions",
+                "Using comments and docstrings as hints for the model",
+                "Iterative prompt refinement based on output quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 437,
+              "section_id": 121,
+              "title": "Merging AI Suggestions with Manual Code",
+              "description": "Strategies to accept, modify, or reject AI code without breaking the project.",
+              "learning_points": [
+                "Selective acceptance and diff review",
+                "Handling partial suggestions and multi‑line edits",
+                "Keeping code style consistent across the team"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 122,
+          "project_id": 30,
+          "title": "AI‑Enhanced Debugging and Refactoring",
+          "description": "Apply Cursor AI to locate bugs, get explanations, and refactor code safely.",
+          "learning_points": [
+            "Detect and fix bugs using AI chat and suggestions",
+            "Perform AI‑guided refactoring with confidence",
+            "Use AI to generate unit tests and edge‑case coverage"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 438,
+              "section_id": 122,
+              "title": "Interactive Bug Diagnosis",
+              "description": "Leverage AI chat to analyze error messages and stack traces.",
+              "learning_points": [
+                "Pasting error output into AI chat for analysis",
+                "Asking for root‑cause analysis and fix steps",
+                "Following AI‑suggested fixes while monitoring changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 439,
+              "section_id": 122,
+              "title": "AI‑Driven Refactoring",
+              "description": "Identify code smells and request AI refactoring proposals.",
+              "learning_points": [
+                "Detecting duplicated code, long functions, and poor naming",
+                "Requesting extraction, renaming, or pattern changes",
+                "Previewing refactored code before applying it"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 440,
+              "section_id": 122,
+              "title": "Automated Test Generation",
+              "description": "Use AI to create unit and integration tests for new or modified functions.",
+              "learning_points": [
+                "Generating pytest or JUnit tests from function signatures",
+                "Covering edge cases and exception handling",
+                "Running tests and interpreting results with AI help"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 123,
+          "project_id": 30,
+          "title": "Collaboration, Version Control, and Documentation",
+          "description": "Integrate AI assistance into team workflows, code reviews, and documentation pipelines.",
+          "learning_points": [
+            "Streamline code reviews with AI comments",
+            "Maintain clean commit history with AI‑generated commit messages",
+            "Auto‑generate documentation and inline comments"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 441,
+              "section_id": 123,
+              "title": "AI‑Assisted Code Reviews",
+              "description": "Use AI to highlight potential issues and suggest improvements in pull requests.",
+              "learning_points": [
+                "Running AI analysis on diffs for security and performance",
+                "Generating review summaries for reviewers",
+                "Addressing AI‑suggested fixes directly in PRs"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 442,
+              "section_id": 123,
+              "title": "AI‑Generated Commit Messages and Changelogs",
+              "description": "Automatically produce meaningful commit messages based on changes.",
+              "learning_points": [
+                "Configuring git hooks to invoke AI for message generation",
+                "Producing concise, descriptive messages with scope and purpose",
+                "Maintaining a changelog using AI‑generated summaries"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 443,
+              "section_id": 123,
+              "title": "Documentation Generation",
+              "description": "Create and update README, API docs, and inline comments using AI.",
+              "learning_points": [
+                "Generating function‑level docstrings for readability",
+                "Creating usage examples and code snippets",
+                "Updating documentation after refactoring changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 124,
+          "project_id": 30,
+          "title": "Advanced Workflows and End‑to‑End Project Integration",
+          "description": "Master advanced Cursor AI features, custom prompts, and build a full‑stack project using the AI workflow.",
+          "learning_points": [
+            "Customize AI persona and prompts for domain‑specific tasks",
+            "Automate repetitive tasks with scripts powered by AI",
+            "Deliver a complete project from design to deployment using Cursor AI"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 444,
+              "section_id": 124,
+              "title": "Custom Prompts and Persona Configuration",
+              "description": "Tailor AI behavior by setting system messages, persona, and context.",
+              "learning_points": [
+                "Defining project‑specific personas (e.g., backend engineer, data analyst)",
+                "Storing reusable prompt templates in a library",
+                "Testing and iterating on prompt performance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 445,
+              "section_id": 124,
+              "title": "Scripting and Automation",
+              "description": "Write scripts that invoke Cursor AI for batch processing, code generation, and testing.",
+              "learning_points": [
+                "Using Cursor AI CLI for bulk code generation",
+                "Creating build pipelines with AI‑generated code",
+                "Scheduling AI tasks with cron jobs or CI triggers"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 446,
+              "section_id": 124,
+              "title": "Full‑Stack Project Walkthrough",
+              "description": "Apply the learned workflow to build a web application end‑to‑end: backend, frontend, CI/CD, and documentation.",
+              "learning_points": [
+                "Planning architecture with AI assistance",
+                "Generating boilerplate, REST APIs, and UI components",
+                "Deploying to a cloud platform and monitoring with AI insights"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 4,
+          "estimated_minutes": 60
+        }
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_from_db": true
+    },
+    "warnings": [
+      "Loaded from DB (ai_path_projects.id=30)"
+    ]
+  },
+  "subnode_details": {
+    "432": {
+      "detail_id": 182,
+      "subnode_id": 432,
+      "title": "Installing and Configuring Cursor AI",
+      "description": "Step‑by‑step installation, verifying prerequisites, and initial configuration.",
+      "key_points": [
+        "Download from the official site or package manager",
+        "Enable required language extensions (e.g., Python, Node.js)",
+        "Sync settings across machines with a settings file"
+      ],
+      "detailed_content": "# Installing and Configuring Cursor AI\\n\\n## Why This Matters\\n\\nInstalling \"Cursor AI\" correctly is the foundation for a smooth, AI‑augmented development experience. If the IDE is not set up, extensions are missing, or environment variables are mis‑pointed, the AI suggestions will be slow, incorrect, or unavailable. Proper configuration also ensures that your personal settings travel with you across workstations, so you don’t waste time re‑customizing the editor after a fresh install.\\n\\n## Core Mechanics\\n\\n\"Cursor AI\" is built on top of a VS‑Code‑compatible shell, but it adds a local AI inference engine and a set of language‑aware extensions. When you install Cursor, you get:\\n\\n- The **IDE core** that manages windows, tabs, and the UI.\\n- **Language extensions** that hook into the AI engine to provide context‑aware completions.\\n- A **settings layer** (`settings.json`) that can be shared via a plain text file.\\n- An optional **sync mechanism** that exports/imports the entire configuration tree.\\n\\nWhen you enable a language extension (e.g., Python, Node.js), the extension registers a language server that the AI engine queries for symbol information, type hints, and error context. The AI engine runs locally, using a small model that is loaded on startup, so you never need an internet connection for core suggestions.\\n\\n## Step‑by‑Step Installation\\n\\n### 1. Verify Prerequisites\\n\\nBefore you download anything, make sure your system meets the following baseline requirements:\\n\\n- **Operating System**: Windows 10 + (x64), macOS 11 + (Intel or Apple Silicon), or a recent Linux distribution (Ubuntu 20.04‑, Debian 11‑).\\n- **Disk Space**: At least 1 GB free for the IDE and additional language packs.\\n- **Memory**: 8 GB RAM recommended; 4 GB is the minimum.\\n- **Runtime Versions** (if you plan to use the AI for those ecosystems):\\n  - Python 3.8 + (run `python3 --version` to check).\\n  - Node.js 14 + (run `node --version` to check).\\n- **Internet**: Required only for downloading the installer and optional extension updates.\\n\\nYou can quickly check the above with a tiny bash script:\\n\\nbash\\n#!/usr/bin/env bash\\n# check‑prereqs.sh – verifies the basic requirements\\nset -e\\n\\n# Python ≥3.8\\necho \\\"Checking Python version...\\\"\\nPYVER=$(python3 --version 2>&1 | awk '{print $2}')\\nPYMAJ=$(echo $PYVER | cut -d. -f1)\\nPYMIN=$(echo $PYVER | cut -d. -f2)\\nif (( PYMAJ < 3 )) || (( PYMAJ == 3 && PYMIN < 8 )); then\\n  echo \\\"Error: Python 3.8+ required. Found $PYVER\\\"\\n  exit 1\\nfi\\n\\n# Node ≥14\\necho \\\"Checking Node.js version...\\\"\\nNODEVER=$(node --version 2>&1 | sed 's/v//')\\nNODEMAJ=$(echo $NODEVER | cut -d. -f1)\\nif (( NODEMAJ < 14 )); then\\n  echo \\\"Error: Node.js 14+ required. Found $NODEVER\\\"\\n  exit 1\\nfi\\n\\n# Disk space (at least 500 MB free on the root partition)\\nFREEMB=$(df -BM / | tail -1 | awk '{print $4}' | sed 's/M//')\\nif (( FREEMB < 500 )); then\\n  echo \\\"Error: At least 500 MB free disk space required.\\\"\\n  exit 1\\nfi\\necho \\\"All prerequisites satisfied.\\\"\\n\\n\\n### 2. Download the Installer\\n\\nChoose the method that fits your workflow:\\n\\n- **Official website**: Visit https://cursor.sh and click **Download**. Pick the installer for your OS (`.exe` for Windows, `.dmg` for macOS, `.AppImage`/`.deb` for Linux).\\n- **Package managers**:\\n  - **Linux (apt)**: `sudo apt install ./cursor-<version>.deb` (or add the repository as shown in the code examples).\\n  - **macOS (Homebrew)**: `brew install --cask cursor`.\\n  - **Windows (winget)**: `winget install Cursor.Cursor`.\\n  - **Windows (Scoop)**: `scoop bucket add extras && scoop install cursor`.\\n\\n### 3. Run the Installer\\n\\n- **Windows**: Double‑click the `.exe` and follow the wizard. If you need a custom directory, change the **Destination Folder** and ensure the path does **not** contain spaces (or quote it properly).\\n- **macOS**: Drag the **Cursor.app** into **Applications**. On first launch, macOS may ask you to confirm opening an app downloaded from the internet.\\n- **Linux**: For `.deb` files, run `sudo dpkg -i cursor-<version>.deb`. For `AppImage`, make it executable (`chmod +x Cursor.AppImage`) and run it.\\n\\nDuring installation, you can opt‑in to **Add Cursor to PATH** (recommended for command‑line usage). Verify the installation by running `cursor --version` in a terminal.\\n\\n### 4. Initial Configuration\\n\\nOnce the IDE starts, follow these steps to bring it into a usable state:\\n\\n1. **Sign‑in (optional but recommended)**: Click the user icon in the bottom‑left corner. Signing in enables cloud settings sync and unlocks premium AI features.\\n2. **Select a theme**: Press `Ctrl+K Ctrl+T` (or `Cmd+K Cmd+T` on macOS) and pick a color scheme.\\n3. **Open the Extensions view**: `Ctrl+Shift+X` / `Cmd+Shift+X`. Search for the language extensions you need:\\n   - **Python** (`ms-python.python`) – enables AI‑aware linting, debugging, and completions.\\n   - **Node.js / JavaScript** (`dbaeumer.vscode-eslint`) – provides ESLint integration.\\n   - **Any additional ecosystem** you plan to work with (e.g., `rust-lang.rust-analyzer` for Rust).\\n4. **Set default interpreter**: For Python, open a `.py` file, then run **Python: Select Interpreter** (`Ctrl+Shift+P` → `Python: Select Interpreter`) and point it to a Python 3.8+ executable.\\n5. **Tweak UI preferences**: Use **File → Preferences → Settings** (`Ctrl+,` / `Cmd+,`) to adjust font size, line height, and cursor style.\\n\\n## Syncing Settings Across Machines\\n\\nCursor stores all user‑specific preferences in a JSON file named `settings.json`. The file lives in the user data directory:\\n\\n- **Windows**: `%APPDATA%\\\\Cursor\\\\User\\\\settings.json`\\n- **macOS**: `~/Library/Application Support/Cursor/User/settings.json`\\n- **Linux**: `~/.config/Cursor/User/settings.json`\\n\\nTo keep multiple machines in sync, you can export the file and commit it to a dotfiles repository or copy it manually:\\n\\nbash\\n# Export settings on machine A\\ncursor --export-settings ~/.cursor/settings.json\\n\\n# Import settings on machine B\\ncursor --import-settings ~/.cursor/settings.json\\n\\n\\nIf you prefer a visual approach, use the **Settings Sync** extension (ID: `eanmoffat.settings-sync`) which supports GitHub Gist storage.\\n\\n## Common Pitfalls\\n\\n- **Skipping language extensions**: The AI engine can still run, but it will lack language‑specific context, leading to generic or irrelevant suggestions.\\n- **Using mismatched interpreter paths**: If `pythonPath` points to an older Python version, the extension will load stale libraries.\\n- **Installing the 32‑bit binary on a 64‑bit OS**: Results in crashes when loading native modules.\\n- **Neglecting to enable background extension execution**: Some AI features (e.g., on‑the‑fly type checking) require the extension host to run in the background.\\n- **Overwriting `settings.json` unintentionally**: When merging configurations, always keep a backup.\\n\\n## Best Practices\\n\\n- **Use version managers for runtimes** (`pyenv`, `nvm`, `rustup`) so Cursor can switch interpreters per project without manual path tweaking.\\n- **Pin language extension versions**: In the Extensions view, right‑click an extension and choose **Install Specific Version** to avoid unexpected updates.\\n- **Keep the IDE updated**: Run `cursor --upgrade` or use your OS package manager to pull the latest release, which often includes performance improvements for the AI engine.\\n- **Commit a minimal `settings.json` to version control**: Include only the settings you truly need (theme, font size, essential extensions) and let machine‑specific paths be overridden locally.\\n- **Test a fresh install in a VM** before rolling out to a team; this surfaces hidden dependencies on system libraries.\\n- **Enable “Telemetry” only if you are comfortable**: Cursor collects anonymized usage data by default; you can turn it off in **Settings → Privacy**.\n\n## Code Examples\n\n### Example 1\n\n```python\n#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor\n```\n\n### Example 2\n\n```python\n:: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements\n```\n\n### Example 3\n\n```python\n#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json\n```\n\n\n\n## Common Mistakes\n\n- Skipping the installation of required language extensions, which leaves AI suggestions generic.\n- Pointing the interpreter path to an incompatible or outdated runtime.\n- Downloading the 32‑bit installer on a 64‑bit OS, causing native module failures.\n- Failing to enable background extension execution, so real‑time AI checks never run.\n- Manually merging `settings.json` without a backup, resulting in loss of preferences.\n\n\n## Best Practices\n\n- Use version managers for runtimes (e.g., `pyenv`, `nvm`, `rustup`) to keep language interpreters aligned with project requirements.\n- Pin language extension versions to avoid unexpected updates that can break AI integration.\n- Keep Cursor AI up‑to‑date; new releases often improve inference latency.\n- Commit a minimal `settings.json` to version control, including only essential preferences.\n- Test a fresh installation in an isolated VM before rolling out to a team.\n- Review telemetry settings and disable data collection if privacy is a concern.\n",
+      "code_examples": [
+        "#!/usr/bin/env bash\n# Install Cursor AI on Debian/Ubuntu via official repository\n# Add the GPG key\ncurl -fsSL https://packages.cursor.ai/gpg | sudo gpg --dearmor -o /usr/share/keyrings/cursor-archive-keyring.gpg\n# Add the repository\necho 'deb [signed-by=/usr/share/keyrings/cursor-archive-keyring.gpg] https://packages.cursor.ai/apt stable main' | sudo tee /etc/apt/sources.list.d/cursor.list\n# Update package list and install\nsudo apt update\nsudo apt install cursor",
+        ":: Install Cursor AI on Windows using winget\nwinget install Cursor.Cursor --accept-package-agreements --accept-source-agreements",
+        "#!/usr/bin/env bash\n# Export Cursor settings to a JSON file\ncursor --export-settings ~/.cursor/settings.json\n# Import settings on another machine\ncursor --import-settings ~/.cursor/settings.json"
+      ]
+    },
+    "433": {
+      "detail_id": 183,
+      "subnode_id": 433,
+      "title": "Exploring the Editor UI",
+      "description": "Overview of the main panels, sidebar, AI chat panel, and status bar.",
+      "key_points": [
+        "Editor area, tabs, and multi‑file handling",
+        "AI sidebar and interaction window",
+        "Status indicators and AI activity logs"
+      ],
+      "detailed_content": "# Exploring the Editor UI in Cursor\n\n## Why the Editor UI Matters\n\nThe Editor UI is the primary workspace where you write, read, and refactor code. It integrates the traditional code editor with AI assistance, making it essential to understand each panel, tab, and status indicator. A solid grasp of the UI enables you to:\n\n- Navigate between files quickly.\n- Leverage AI suggestions without breaking context.\n- Monitor background tasks (linting, git, AI activity) via the status bar.\n- Reduce mouse usage by mastering keyboard shortcuts.\n\n## Core Components\n\n### 1. Editor Area, Tabs, and Multi‑File Handling\n\nThe **Editor Area** occupies the central part of the window. It displays the active file in a syntax‑highlighted view and provides features like IntelliSense, code folding, and inline diagnostics.\n\n- **Tabs**: Each open file appears as a tab at the top of the editor. You can drag, reorder, and close tabs. Split the editor (right‑click a tab > `Split Right`) to view two files side‑by‑side.\n- **Multi‑File Workflow**: Cursor maintains a history of recently opened files. Use `Ctrl+Tab` to cycle forward and `Ctrl+Shift+Tab` to cycle backward. The **breadcrumbs** above the editor show the full path, which helps when working with many files.\n- **Preview Mode**: Opening a file from the Explorer while holding `Ctrl` opens it in preview mode (semi‑transparent tab). Once you edit the file, the tab becomes a normal tab.\n\n### 2. AI Sidebar and Interaction Window\n\nThe **AI Sidebar** (often docked on the right) contains:\n\n- **Chat Panel**: A conversational interface where you can ask the AI about code, request refactorings, or generate boilerplate. The panel maintains conversation history for the current session.\n- **Context Selector**: You can choose which files or functions the AI should consider. Selecting a specific range (`Ctrl+Shift+L` to select line) gives the AI precise context.\n- **Command Palette Integration**: Many AI actions are exposed as commands (`Cursor AI: Ask`, `Cursor AI: Refactor`, etc.). Press `Ctrl+Shift+P` and type `Cursor AI` to explore them.\n\nInteraction window tips:\n\n- Use `@file` or `@function` mentions to direct the AI to specific symbols.\n- Append `?` at the end of a question to ask for clarification.\n- The AI reads the *currently visible* editor content. If you need the AI to consider multiple files, open them in split view or use the context selector.\n\n### 3. Status Indicators and AI Activity Logs\n\nThe **Status Bar** at the bottom of the window provides real‑time feedback:\n\n- **File Info**: Language mode (e.g., Python), line endings (LF/CRLF), encoding (UTF‑8).\n- **Git Branch**: Shows the current branch and whether there are uncommitted changes.\n- **Diagnostics**: Errors, warnings, and lint messages appear as icons (e.g., ✖ for errors). Click an icon to jump to the problem.\n- **AI Activity**: An icon (often a small robot) indicates AI processing. Hovering reveals the current task (e.g., 'Generating code…').\n\nActivity logs are available via `View > Output > Cursor AI` (or `View > Output` then select `Cursor AI` from the dropdown). Logs capture:\n\n- Timestamps of AI requests.\n- Parsed context (which files were sent).\n- Errors (network timeouts, rate limits).\n\nMonitoring logs helps you debug why an AI command may have failed.\n\n## Keyboard Shortcuts for Efficient Navigation\n\n| Action | Shortcut |\n|---|---|\n| Open Command Palette | `Ctrl+Shift+P` |\n| Toggle AI Sidebar | `Ctrl+Shift+A` |\n| New Tab | `Ctrl+N` |\n| Close Tab | `Ctrl+W` |\n| Split Editor | `Ctrl+\\` |\n| Go to File | `Ctrl+P` |\n| Switch Tab | `Ctrl+Tab` / `Ctrl+Shift+Tab` |\n| Save All | `Ctrl+K S` |\n| Run AI Chat (with selection) | `Ctrl+Enter` |\n\n## Typical Workflow Example\n\n1. **Open Project**: Use `Ctrl+P`, type the folder name, press `Enter`. The Explorer populates.\n2. **Open Multiple Files**: `Ctrl+Click` two files in the Explorer to open them side‑by‑side. Each appears as a separate tab.\n3. **Ask AI**: With a function highlighted, press `Ctrl+Shift+A` to open the AI sidebar, then type `Explain this function`. The AI reads the selected code and responds.\n4. **Insert AI Suggestion**: After the AI suggests a refactor, click `Insert` or press `Tab`. Cursor replaces the selection.\n5. **Check Status**: Save (`Ctrl+S`). The status bar updates the git icon to show a dirty state. Run `git status` in the integrated terminal if needed.\n6. **View AI Logs**: If the suggestion fails, open `View > Output > Cursor AI` to inspect the log.\n\n## Tips for a Clean UI\n\n- **Use Tab Groups**: Drag tabs into new groups to keep related files together (e.g., tests alongside source files).\n- **Minimize Unneeded Panels**: Close the AI sidebar when you are not using it to free screen space.\n- **Customize Status Bar**: Right‑click the status bar to hide items you don't need.\n- **Leverage Breadcrumbs**: Click any segment in the breadcrumbs to jump to a parent directory or symbol.\n\n## Summary\n\nUnderstanding the Editor UI—editor area, tabs, AI sidebar, and status bar—gives you a solid foundation for working efficiently in Cursor. Combine this knowledge with keyboard shortcuts and AI interaction patterns to streamline your development workflow.\n\n## Code Examples\n\n### Example 1\n\n```python\n# Example 1: Open a file in Cursor using subprocess\nimport subprocess\nimport sys\n\ndef open_file_in_cursor(file_path):\n    # Ensure 'cursor' command is in your PATH\n    subprocess.run(['cursor', file_path], check=True)\n    print(f'Successfully opened {file_path}')\n\nif __name__ == '__main__':\n    # Replace with a real file path\n    open_file_in_cursor('example.py')\n\n```\n\n### Example 2\n\n```python\n// Example 2: Use VS Code API (Cursor extends VS Code) to ask AI\nconst vscode = require('vscode');\n\nasync function askAI(question) {\n    // Focus the AI sidebar\n    await vscode.commands.executeCommand('cursor-ai.panel.focus');\n    // Send question to AI chat\n    await vscode.commands.executeCommand('cursor-ai.chat.ask', question);\n    vscode.window.showInformationMessage('AI response received. Check AI panel.');\n}\n\naskAI('Explain the open_file_in_cursor function.');\n\n```\n\n### Example 3\n\n```python\n# Example 3: Open multiple files as separate tabs\nimport subprocess\nimport time\n\ndef open_multiple_files(file_list):\n    # Open each file in a new Cursor tab\n    for file_path in file_list:\n        # --new-tab flag tells Cursor to create a new tab\n        subprocess.Popen(['cursor', '--new-tab', file_path])\n        # Brief pause to let Cursor render the tab\n        time.sleep(0.5)\n    print('All files opened in separate tabs.')\n\nif __name__ == '__main__':\n    files = ['src/main.py', 'src/utils.py', 'tests/test_main.py']\n    open_multiple_files(files)\n\n```\n\n\n\n## Common Mistakes\n\n- Assuming AI suggestions are automatically inserted without reviewing them.\n- Leaving unsaved changes before invoking AI, causing the AI to read outdated code.\n- Overlooking the AI activity log, which can reveal why an AI command failed.\n- Closing the AI sidebar inadvertently, losing context for ongoing conversations.\n- Relying solely on the mouse when keyboard shortcuts can speed up workflow.\n\n\n## Best Practices\n\n- Keep the file explorer and AI chat panel side-by-side for quick reference.\n- Use meaningful tab labels and group related files in the same editor group.\n- Check the status bar for current language mode, line endings, and git branch before running code.\n- Enable AI activity logs (via View > Output > Cursor AI) to troubleshoot issues.\n- Save files (Ctrl+S) before invoking AI commands to ensure accurate context.\n- Leverage keyboard shortcuts (Ctrl+Tab, Ctrl+Shift+P) to navigate tabs and commands efficiently.\n",
+      "code_examples": [
+        "# Example 1: Open a file in Cursor using subprocess\nimport subprocess\nimport sys\n\ndef open_file_in_cursor(file_path):\n    # Ensure 'cursor' command is in your PATH\n    subprocess.run(['cursor', file_path], check=True)\n    print(f'Successfully opened {file_path}')\n\nif __name__ == '__main__':\n    # Replace with a real file path\n    open_file_in_cursor('example.py')\n",
+        "// Example 2: Use VS Code API (Cursor extends VS Code) to ask AI\nconst vscode = require('vscode');\n\nasync function askAI(question) {\n    // Focus the AI sidebar\n    await vscode.commands.executeCommand('cursor-ai.panel.focus');\n    // Send question to AI chat\n    await vscode.commands.executeCommand('cursor-ai.chat.ask', question);\n    vscode.window.showInformationMessage('AI response received. Check AI panel.');\n}\n\naskAI('Explain the open_file_in_cursor function.');\n",
+        "# Example 3: Open multiple files as separate tabs\nimport subprocess\nimport time\n\ndef open_multiple_files(file_list):\n    # Open each file in a new Cursor tab\n    for file_path in file_list:\n        # --new-tab flag tells Cursor to create a new tab\n        subprocess.Popen(['cursor', '--new-tab', file_path])\n        # Brief pause to let Cursor render the tab\n        time.sleep(0.5)\n    print('All files opened in separate tabs.')\n\nif __name__ == '__main__':\n    files = ['src/main.py', 'src/utils.py', 'tests/test_main.py']\n    open_multiple_files(files)\n"
+      ]
+    },
+    "434": {
+      "detail_id": 185,
+      "subnode_id": 434,
+      "title": "Keyboard Shortcuts and Personalization",
+      "description": "Essential shortcuts and customizing keybindings to speed up daily tasks.",
+      "key_points": [
+        "Default versus custom keymaps",
+        "Quick command palette and AI prompt shortcuts",
+        "Theme, font size, and UI tweaks"
+      ],
+      "detailed_content": "# Keyboard Shortcuts and Personalization in Cursor AI\n\n## Concept Explanation\n\n### Why Keyboard Shortcuts Matter\n\nIn any integrated development environment (IDE), keyboard shortcuts are the bridge between thought and action. Cursor AI, as an AI-powered code editor, offers a sophisticated set of default shortcuts alongside extensive customization capabilities. Understanding and mastering these shortcuts can dramatically improve your coding efficiency by reducing the time spent navigating menus or performing repetitive tasks.\n\nWhen you spend 8+ hours daily in an editor, even saving 2-3 seconds per action compounds into hours of recovered time over weeks and months. For intermediate users, moving beyond basic copy-paste operations to embrace keyboard-driven workflows represents a significant productivity leap.\n\n### The Philosophy of Customization\n\nCursor AI's approach to keybindings follows the principle that developers have diverse preferences and workflows. While defaults are carefully chosen for common patterns, the system allows complete flexibility. This matters because:\n\n- **Muscle Memory Development**: Repeated shortcut usage creates automatic patterns, eliminating cognitive overhead\n- **Workflow Optimization**: Custom shortcuts can align with your specific coding style and project requirements\n- **Accessibility**: Customization accommodates different physical abilities and ergonomic needs\n\n## Core Mechanics\n\n### Default Versus Custom Keymaps\n\nCursor AI provides two primary keymap configurations:\n\n1. **Default Keymap (Cursor)**: Cursor AI's native shortcuts optimized for AI-assisted workflows\n2. **Vim/Neovim Keymap**: For users preferring modal editing (optional extension)\n\n**Key Default Shortcuts in Cursor AI:**\n\n| Action | Windows/Linux | macOS |\n|--------|---------------|-------|\n| Command Palette | Ctrl+Shift+P | Cmd+Shift+P |\n| Quick AI Prompt | Ctrl+K | Cmd+K |\n| Accept Suggestion | Tab | Tab |\n| Reject Suggestion | Escape | Escape |\n| New Chat | Ctrl+L | Cmd+L |\n| Inline Edit | Ctrl+Shift+I | Cmd+Shift+I |\n| Terminal Toggle | Ctrl+\\` | Cmd+\\` |\n| File Search | Ctrl+P | Cmd+P |\n| Global Search | Ctrl+Shift+F | Cmd+Shift+F |\n| Settings | Ctrl+, | Cmd+, |\n\n### Command Palette Deep Dive\n\nThe Command Palette (Ctrl+Shift+P / Cmd+Shift+P) is the nerve center of Cursor AI. It provides:\n\n- **Fuzzy Search**: Type partial command names for instant filtering\n- **Context-Aware Commands**: Shows relevant options based on current file type and cursor position\n- **Keybinding Display**: Each command shows its associated shortcut when available\n\nTo open the Command Palette effectively:\n- Press the shortcut and start typing immediately\n- Use category prefixes like \">theme\" for theme commands or \">key\" for keybinding settings\n- Press Enter to execute the highlighted command\n\n### AI Prompt Shortcuts\n\nCursor AI introduces specialized shortcuts for AI interactions:\n\n- **Ctrl+K / Cmd+K**: Opens inline AI prompt for the current selection or line\n- **Ctrl+L / Cmd+L**: Opens new chat panel for broader conversations\n- **Ctrl+Shift+R / Cmd+Shift+R**: Refactor selected code with AI assistance\n- **Ctrl+Shift+G / Cmd+Shift+G**: Generate commit message for current changes\n\n### Theme, Font Size, and UI Tweaks\n\n#### Theme Customization\n\nThemes in Cursor AI control:\n- Syntax highlighting colors\n- UI element colors (sidebar, panels, tabs)\n- Status bar and activity bar appearance\n\n**Available Theme Categories:**\n- **Light Themes**: One Light, GitHub Light, Solarized Light\n- **Dark Themes**: One Dark Pro, Dracula, Monokai, GitHub Dark\n- **AI-Specific**: Cursor Dark (optimized for AI code visibility)\n\n#### Font Configuration\n\nKey font settings include:\n- **Editor Font Family**: Monospace fonts like JetBrains Mono, Fira Code, or Cascadia Code\n- **Font Size**: Typically 14-16px for most users\n- **Line Height**: 1.4-1.6 for readability\n- **Font Ligatures**: Code-specific character combinations (=> becomes single glyph)\n\n#### UI Tweaks\n\nCustomizable interface elements:\n- Sidebar visibility and width\n- Panel layouts and positions\n- Tab behavior and grouping\n- Minimap visibility\n- Breadcrumb navigation\n\n## Runnable Code Examples\n\n### Example 1: Custom Keybinding Configuration\n\n\n{\n  \"keybindings\": [\n    {\n      \"key\": \"ctrl+shift+a\",\n      \"command\": \"editor.action.addSelectionToNextFindMatch\",\n      \"when\": \"editorFocus\"\n    },\n    {\n      \"key\": \"ctrl+shift+c\",\n      \"command\": \"cursor-AI.chat.newChat\",\n      \"when\": \"editorFocus\"\n    },\n    {\n      \"key\": \"alt+up\",\n      \"command\": \"editor.action.moveLinesUpAction\",\n      \"when\": \"editorFocus && !editorReadonly\"\n    },\n    {\n      \"key\": \"alt+down\",\n      \"command\": \"editor.action.moveLinesDownAction\",\n      \"when\": \"editorFocus && !editorReadonly\"\n    }\n  ]\n}\n\n\n### Example 2: Theme and Appearance Settings\n\n\n{\n  \"workbench.colorTheme\": \"One Dark Pro\",\n  \"editor.fontSize\": 15,\n  \"editor.lineHeight\": 24,\n  \"editor.fontFamily\": \"JetBrains Mono\",\n  \"editor.fontLigatures\": true,\n  \"editor.cursorStyle\": \"line\",\n  \"editor.cursorWidth\": 2,\n  \"editor.minimap.enabled\": false,\n  \"editor.wordWrap\": \"off\",\n  \"editor.rulers\": [80, 120],\n  \"editor.renderWhitespace\": \"boundary\",\n  \"terminal.integrated.fontSize\": 13,\n  \"terminal.integrated.fontFamily\": \"JetBrains Mono\"\n}\n\n\n### Example 3: AI-Specific Shortcut Configuration\n\njavascript\n// Demonstrating AI prompt shortcut usage patterns\n// These are conceptual examples showing how shortcuts work in practice\n\n// Scenario 1: Inline Code Explanation\n// Position cursor on unfamiliar code, press Ctrl+K (Cmd+K)\n// Type: \"Explain this function\"\n// Cursor AI provides inline explanation\n\n// Scenario 2: Refactoring Workflow\n// Select code block\n// Press Ctrl+Shift+R (Cmd+Shift+R)\n// Type: \"Extract to separate function\"\n// AI refactors and creates new function\n\n// Scenario 3: Multi-file Context\n// Press Ctrl+L (Cmd+L) to open chat\n// Reference multiple files with @filename syntax\n// Ask complex questions spanning project context\n\n// Scenario 4: Quick Documentation\n// Select method or class\n// Press Ctrl+K (Cmd+K)\n// Type: \"Add JSDoc comments\"\n// AI generates documentation inline\n\n\n### Example 4: Workflow Automation with Custom Shortcuts\n\njavascript\n// Custom keyboard shortcut sequences for repetitive tasks\n// These demonstrate how to chain actions efficiently\n\n// Example: Quick Test Generation Workflow\n// 1. Select a function\n// 2. Press Ctrl+Shift+T (custom shortcut)\n// 3. AI generates unit test template\n\n// Example: Quick Documentation Update\n// 1. Press Ctrl+Shift+D (custom shortcut)\n// 2. AI reads function and updates JSDoc\n// 3. Cursor positions at next undocumented function\n\n// Example: Import Management\n// 1. Type new component usage\n// 2. Press Ctrl+Shift+I (custom shortcut)\n// 3. AI suggests and adds necessary imports\n\n\n## Common Pitfalls and Gotchas\n\n### 1. Shortcut Conflicts with System Applications\n\n**Problem**: Custom shortcuts may conflict with OS-level shortcuts or other applications running in the background.\n\n**Solution**: Before setting custom shortcuts, verify they don't conflict with:\n- Window management shortcuts (Mission Control on macOS, virtual desktop switching on Windows)\n- Application-specific shortcuts in other software\n- Accessibility features and screen reader controls\n\n### 2. Forgetting to Save Keybinding Changes\n\n**Problem**: Changes to keybindings sometimes require a restart or manual reload to take effect.\n\n**Solution**: After modifying keybindings:\n- Use \"Reload Window\" command from Command Palette\n- Check that the JSON file is valid (no trailing commas, proper syntax)\n- Verify the \"when\" conditions are correctly specified\n\n### 3. Over-Customizing Without Baseline Knowledge\n\n**Problem**: Creating custom shortcuts for actions you don't frequently use wastes time and clutters your configuration.\n\n**Solution**: \n- Spend 2-3 days using default shortcuts before customizing\n- Track which actions feel slow or awkward\n- Only create custom shortcuts for frequently repeated actions (5+ times daily)\n\n### 4. Ignoring Context Conditions\n\n**Problem**: Custom shortcuts fire in inappropriate contexts (editing when you meant to navigate, etc.).\n\n**Solution**: Always specify appropriate \"when\" conditions:\n- \"editorFocus\" for text editing contexts\n- \"!editorReadonly\" for modification-only shortcuts\n- \"terminalFocus\" for terminal-specific shortcuts\n\n### 5. Font Size Too Small for Extended Sessions\n\n**Problem**: Small font sizes cause eye strain during long coding sessions.\n\n**Solution**: \n- Start at 15-16px and adjust based on monitor distance\n- Enable font ligatures for cleaner code appearance\n- Consider enabling \"Smooth Cursor Animation\" for visual comfort\n\n### 6. Theme Contrast Issues\n\n**Problem**: Some themes have poor contrast for specific syntax elements, making certain code patterns hard to read.\n\n**Solution**:\n- Test themes with your actual project codebase\n- Customize specific syntax colors through token color customization\n- Ensure minimum contrast ratios for accessibility\n\n## Best Practices\n\n### 1. Start with Defaults, Customize Incrementally\n\nBegin your Cursor AI journey using default shortcuts for at least one week. This builds familiarity with available features and reveals which shortcuts feel natural versus awkward. Only customize when you identify specific pain points that persist after building muscle memory.\n\n### 2. Document Your Customizations\n\nMaintain a personal reference document listing your custom shortcuts. Include:\n- The shortcut combination\n- The action it performs\n- The context where it works\n- Why you created it\n\nThis documentation becomes invaluable when setting up new environments or helping colleagues understand your workflow.\n\n### 3. Group Related Shortcuts Logically\n\nOrganize shortcuts by function using modifier key patterns:\n- **Ctrl+Shift**: Major workflow actions (refactor, generate, transform)\n- **Ctrl+Alt**: Navigation and movement\n- **Alt+Shift**: Selection and multi-cursor operations\n\nConsistent grouping makes shortcuts predictable and easier to remember.\n\n### 4. Leverage the Command Palette for Discovery\n\nUse the Command Palette not just for executing commands, but for discovery:\n- Type \"keyboard\" to find all keyboard-related settings\n- Search for action names to discover their default shortcuts\n- Browse category commands to learn available features\n\n### 5. Sync Settings Across Machines\n\nEnable Cursor AI settings sync to maintain consistent:\n- Keybindings\n- Themes and appearance\n- Extensions and configurations\n\nThis ensures your optimized workflow transfers seamlessly between home, office, and travel setups.\n\n### 6. Use Keyboard Shortcut Training\n\nPeriodically review available shortcuts through:\n- Command Palette search for \"Keyboard Shortcuts Reference\"\n- Official Cursor documentation on shortcut cheatsheets\n- Community-created shortcut guides for specific workflows\n\n### 7. Balance Speed with Ergonomics\n\nAvoid creating shortcuts that require uncomfortable hand positions:\n- Prefer home row keys (A, S, D, F, J, K, L) where possible\n- Use Ctrl/ Cmd combinations over Alt for main actions\n- Consider one-handed shortcuts when mouse is in use\n\n### 8. Test AI Shortcuts in Real Projects\n\nAI-specific shortcuts (Ctrl+K, Ctrl+L) behave differently depending on:\n- Current file type and language\n- Selection context\n- Available project context\n\nTest these shortcuts with your actual codebase to understand their behavior and limitations.\n\n### 9. Backup Before Major Changes\n\nBefore making significant keybinding or theme changes:\n- Export current settings to a backup file\n- Use version control for settings files\n- Document the state before changes\n\n### 10. Review and Prune Periodically\n\nEvery few weeks, review your customizations:\n- Identify shortcuts that aren't being used\n- Consolidate duplicate functionality\n- Adjust based on changing workflow needs\n\nA lean configuration is more maintainable than accumulated shortcuts you forgot you created.\n\n## Practical Advice for Intermediate Users\n\nAs an intermediate user, you're positioned to transition from reactive to proactive editor usage. Focus on building shortcut intuition through deliberate practice:\n\n1. **Set a Weekly Learning Goal**: Learn 2-3 new shortcuts per week\n2. **Practice in Low-Pressure Environments**: Try shortcuts in personal projects first\n3. **Use Visual Reminders**: Temporarily add sticky notes for new shortcuts\n4. **Track Time Savings**: Notice when shortcuts save measurable time\n5. **Share Knowledge**: Teaching shortcuts reinforces your own learning\n\nRemember that the goal isn't to memorize every shortcut, but to develop an intuition for when keyboard-driven workflows outperform mouse interactions. As this intuition develops, your coding efficiency will naturally increase without conscious effort.\n\n\n## Code Examples\n\n### Example 1\n\n```python\n// Custom keybindings configuration file (settings.json)\n// Place this in .cursor/settings.json or modify via Settings > Keyboard Shortcuts\n{\n  \"keyboard.shortcuts\": [\n    // AI Commands\n    { \"key\": \"ctrl+k\", \"command\": \"cursor-AI.inline.edit\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+l\", \"command\": \"cursor-AI.chat.newChat\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+shift+r\", \"command\": \"cursor-AI.refactor\", \"when\": \"editorHasSelection\" },\n    \n    // Navigation\n    { \"key\": \"ctrl+pageup\", \"command\": \"workbench.action.previousEditor\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+pagedown\", \"command\": \"workbench.action.nextEditor\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+left\", \"command\": \"workbench.action.navigateBack\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+right\", \"command\": \"workbench.action.navigateForward\", \"when\": \"editorTextFocus\" },\n    \n    // Multi-cursor editing\n    { \"key\": \"ctrl+d\", \"command\": \"editor.action.addSelectionToNextFindMatch\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+shift+l\", \"command\": \"editor.action.selectHighlights\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+click\", \"command\": \"editor.action.insertCursorAtEndOfEachLineSelected\", \"when\": \"editorTextFocus\" },\n    \n    // Line operations\n    { \"key\": \"alt+up\", \"command\": \"editor.action.moveLinesUpAction\", \"when\": \"editorTextFocus && !editorReadonly\" },\n    { \"key\": \"alt+down\", \"command\": \"editor.action.moveLinesDownAction\", \"when\": \"editorTextFocus && !editorReadonly\" },\n    { \"key\": \"ctrl+shift+k\", \"command\": \"editor.action.deleteLines\", \"when\": \"editorTextFocus && !editorReadonly\" }\n  ]\n}\n```\n\n### Example 2\n\n```python\n// Comprehensive appearance and theme settings\n// Customize fonts, colors, and UI elements for optimal coding experience\n{\n  // Color theme configuration\n  \"workbench.colorTheme\": \"One Dark Pro\",\n  \"workbench.iconTheme\": \"material-icon-theme\",\n  \n  // Editor typography\n  \"editor.fontSize\": 15,\n  \"editor.lineHeight\": 26,\n  \"editor.letterSpacing\": 0.5,\n  \"editor.fontFamily\": \"JetBrains Mono, Fira Code, Consolas, monospace\",\n  \"editor.fontLigatures\": \"'calt' on, 'ss01' on, 'ss02' on, 'ss03' on\",\n  \n  // Cursor customization\n  \"editor.cursorStyle\": \"line\",\n  \"editor.cursorWidth\": 3,\n  \"editor.cursorBlinking\": \"smooth\",\n  \"editor.mouseCursorBlinking\": \"smooth\",\n  \n  // Minimap and scrollbars\n  \"editor.minimap.enabled\": true,\n  \"editor.minimap.maxColumn\": 120,\n  \"editor.minimap.showSlider\": \"mouseover\",\n  \"editor.scrollbar.vertical\": \"auto\",\n  \"editor.scrollbar.horizontal\": \"auto\",\n  \"editor.scrollbar.verticalScrollbarSize\": 14,\n  \"editor.scrollbar.horizontalScrollbarSize\": 14,\n  \n  // Whitespace and guides\n  \"editor.renderWhitespace\": \"boundary\",\n  \"editor.guides.bracketPairs\": true,\n  \"editor.guides.indentation\": true,\n  \"editor.rulers\": [80, 100],\n  \n  // Line numbers and folding\n  \"editor.lineNumbers\": \"on\",\n  \"editor.lineNumbersMinChars\": 4,\n  \"editor.folding\": true,\n  \"editor.foldingHighlight\": true,\n  \"editor.showFoldingControls\": \"mouseover\",\n  \n  // Word wrap and formatting\n  \"editor.wordWrap\": \"off\",\n  \"editor.formatOnSave\": true,\n  \"editor.formatOnPaste\": true,\n  \"editor.autoIndent\": \"full\",\n  \"editor.tabSize\": 2,\n  \"editor.insertSpaces\": true,\n  \"editor.detectIndentation\": true,\n  \n  // Terminal appearance\n  \"terminal.integrated.fontSize\": 13,\n  \"terminal.integrated.fontFamily\": \"JetBrains Mono\",\n  \"terminal.integrated.lineHeight\": 1.4,\n  \"terminal.integrated.cursorBlinking\": true,\n  \"terminal.integrated.cursorStyle\": \"line\",\n  \n  // UI layout adjustments\n  \"workbench.sideBar.location\": \"left\",\n  \"workbench.activityBar.visible\": true,\n  \"workbench.statusBar.visible\": true,\n  \"workbench.editor.closeOnFileDelete\": true,\n  \"workbench.editor.enablePreview\": false,\n  \"workbench.editor.highlightModifiedTabs\": true\n}\n```\n\n\n\n## Common Mistakes\n\n- Creating too many custom shortcuts before mastering defaults, leading to confusion about which shortcuts are built-in versus custom\n- Using keybindings that conflict with operating system shortcuts, causing unexpected behavior in Cursor or other applications\n- Not specifying 'when' conditions properly, causing shortcuts to fire in inappropriate contexts like when the terminal is focused\n- Setting font sizes too small (below 13px) for comfortable extended coding sessions, resulting in eye strain and fatigue\n- Choosing themes with poor contrast for specific syntax elements, making certain code patterns difficult to read\n- Forgetting to sync keybinding configurations across multiple workstations, causing inconsistent workflows\n- Overriding default shortcuts without documenting changes, making it difficult to recall original bindings when needed\n- Using inconsistent modifier key patterns (random Ctrl/Cmd/Alt combinations) instead of logical groupings that aid memory\n- Ignoring the Command Palette as a discovery tool, missing out on learning available features and shortcuts\n- Making changes to settings.json without validating JSON syntax, causing silent failures where shortcuts don't register\n\n\n## Best Practices\n\n- Spend 1-2 weeks using default shortcuts before customizing anything, allowing muscle memory to develop naturally\n- Only create custom shortcuts for actions performed 5+ times daily to avoid cluttering your configuration unnecessarily\n- Maintain a personal keyboard shortcut reference document including all customizations, their purposes, and context conditions\n- Organize custom shortcuts logically using consistent modifier patterns (Ctrl+Shift for major actions, Alt for navigation, etc.)\n- Always specify 'when' conditions to prevent shortcuts from firing in inappropriate contexts like read-only files or focused terminals\n- Use the Command Palette's fuzzy search to discover features and their associated shortcuts rather than memorizing lists\n- Enable settings synchronization across devices to maintain consistent keybindings, themes, and UI preferences everywhere\n- Test AI-specific shortcuts (Ctrl+K, Ctrl+L) with your actual project codebase to understand their behavior in real scenarios\n- Balance ergonomic considerations when assigning shortcuts by preferring home row keys and comfortable hand positions\n- Periodically review and prune unused customizations every few weeks to maintain a lean and maintainable configuration\n",
+      "code_examples": [
+        "// Custom keybindings configuration file (settings.json)\n// Place this in .cursor/settings.json or modify via Settings > Keyboard Shortcuts\n{\n  \"keyboard.shortcuts\": [\n    // AI Commands\n    { \"key\": \"ctrl+k\", \"command\": \"cursor-AI.inline.edit\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+l\", \"command\": \"cursor-AI.chat.newChat\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+shift+r\", \"command\": \"cursor-AI.refactor\", \"when\": \"editorHasSelection\" },\n    \n    // Navigation\n    { \"key\": \"ctrl+pageup\", \"command\": \"workbench.action.previousEditor\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+pagedown\", \"command\": \"workbench.action.nextEditor\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+left\", \"command\": \"workbench.action.navigateBack\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+right\", \"command\": \"workbench.action.navigateForward\", \"when\": \"editorTextFocus\" },\n    \n    // Multi-cursor editing\n    { \"key\": \"ctrl+d\", \"command\": \"editor.action.addSelectionToNextFindMatch\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"ctrl+shift+l\", \"command\": \"editor.action.selectHighlights\", \"when\": \"editorTextFocus\" },\n    { \"key\": \"alt+click\", \"command\": \"editor.action.insertCursorAtEndOfEachLineSelected\", \"when\": \"editorTextFocus\" },\n    \n    // Line operations\n    { \"key\": \"alt+up\", \"command\": \"editor.action.moveLinesUpAction\", \"when\": \"editorTextFocus && !editorReadonly\" },\n    { \"key\": \"alt+down\", \"command\": \"editor.action.moveLinesDownAction\", \"when\": \"editorTextFocus && !editorReadonly\" },\n    { \"key\": \"ctrl+shift+k\", \"command\": \"editor.action.deleteLines\", \"when\": \"editorTextFocus && !editorReadonly\" }\n  ]\n}",
+        "// Comprehensive appearance and theme settings\n// Customize fonts, colors, and UI elements for optimal coding experience\n{\n  // Color theme configuration\n  \"workbench.colorTheme\": \"One Dark Pro\",\n  \"workbench.iconTheme\": \"material-icon-theme\",\n  \n  // Editor typography\n  \"editor.fontSize\": 15,\n  \"editor.lineHeight\": 26,\n  \"editor.letterSpacing\": 0.5,\n  \"editor.fontFamily\": \"JetBrains Mono, Fira Code, Consolas, monospace\",\n  \"editor.fontLigatures\": \"'calt' on, 'ss01' on, 'ss02' on, 'ss03' on\",\n  \n  // Cursor customization\n  \"editor.cursorStyle\": \"line\",\n  \"editor.cursorWidth\": 3,\n  \"editor.cursorBlinking\": \"smooth\",\n  \"editor.mouseCursorBlinking\": \"smooth\",\n  \n  // Minimap and scrollbars\n  \"editor.minimap.enabled\": true,\n  \"editor.minimap.maxColumn\": 120,\n  \"editor.minimap.showSlider\": \"mouseover\",\n  \"editor.scrollbar.vertical\": \"auto\",\n  \"editor.scrollbar.horizontal\": \"auto\",\n  \"editor.scrollbar.verticalScrollbarSize\": 14,\n  \"editor.scrollbar.horizontalScrollbarSize\": 14,\n  \n  // Whitespace and guides\n  \"editor.renderWhitespace\": \"boundary\",\n  \"editor.guides.bracketPairs\": true,\n  \"editor.guides.indentation\": true,\n  \"editor.rulers\": [80, 100],\n  \n  // Line numbers and folding\n  \"editor.lineNumbers\": \"on\",\n  \"editor.lineNumbersMinChars\": 4,\n  \"editor.folding\": true,\n  \"editor.foldingHighlight\": true,\n  \"editor.showFoldingControls\": \"mouseover\",\n  \n  // Word wrap and formatting\n  \"editor.wordWrap\": \"off\",\n  \"editor.formatOnSave\": true,\n  \"editor.formatOnPaste\": true,\n  \"editor.autoIndent\": \"full\",\n  \"editor.tabSize\": 2,\n  \"editor.insertSpaces\": true,\n  \"editor.detectIndentation\": true,\n  \n  // Terminal appearance\n  \"terminal.integrated.fontSize\": 13,\n  \"terminal.integrated.fontFamily\": \"JetBrains Mono\",\n  \"terminal.integrated.lineHeight\": 1.4,\n  \"terminal.integrated.cursorBlinking\": true,\n  \"terminal.integrated.cursorStyle\": \"line\",\n  \n  // UI layout adjustments\n  \"workbench.sideBar.location\": \"left\",\n  \"workbench.activityBar.visible\": true,\n  \"workbench.statusBar.visible\": true,\n  \"workbench.editor.closeOnFileDelete\": true,\n  \"workbench.editor.enablePreview\": false,\n  \"workbench.editor.highlightModifiedTabs\": true\n}"
+      ]
+    },
+    "435": {
+      "detail_id": 186,
+      "subnode_id": 435,
+      "title": "Understanding AI Completions",
+      "description": "How Cursor AI's model predicts code and provides inline suggestions.",
+      "key_points": [
+        "Streaming completions vs. batch suggestions",
+        "Context window and file‑scope awareness",
+        "Tuning suggestion depth and relevance"
+      ],
+      "detailed_content": "## Understanding AI Completions in Cursor\n\n### Why It Matters\n\nAI completions represent a fundamental shift in how developers write code. Unlike traditional autocomplete that simply matches keywords, Cursor AI's completions understand context, intent, and code structure. When you understand how these completions work, you can leverage them more effectively, reducing cognitive load and accelerating development velocity. The difference between fighting against the AI and working with it can mean the difference between frustrating, incorrect suggestions and powerful, context-aware code generation.\n\n### Core Mechanics: How Cursor AI Predicts Code\n\n**Streaming Completions vs. Batch Suggestions**\n\nCursor AI employs two distinct completion strategies that serve different purposes:\n\n1. **Streaming Completions**: These appear character-by-character in real-time as you type. The model generates predictions incrementally, showing you the most likely next token immediately. This creates a smooth, responsive experience where suggestions evolve as you continue typing. Streaming is particularly useful for:\n   - Auto-completing function names, variable declarations, and common patterns\n   - Real-time adaptation when you change direction mid-sentence\n   - Minimal disruption to typing flow\n\n2. **Batch Suggestions**: These are pre-computed completions that appear as complete blocks, typically triggered after you pause or explicitly request suggestions. The model has more time to consider the full context and produce more complex, multi-line completions. Batch suggestions excel at:\n   - Generating entire function bodies or class structures\n   - Creating boilerplate code and template implementations\n   - Providing alternative solutions when you dismiss the first suggestion\n\n**Context Window and File-Scope Awareness**\n\nThe AI's understanding comes from its context window—the amount of code it can consider when generating suggestions. Cursor AI analyzes:\n\n- **Recent code**: Your current file, focusing on the lines immediately surrounding your cursor (typically 10-50 lines)\n- **Imports and dependencies**: External modules and libraries your code references\n- **File-level patterns**: The overall structure, naming conventions, and coding style of the current file\n- **Project context**: Related files and recent changes when available\n\nThe context window isn't unlimited. Understanding this helps you structure your code to give the AI better signals. When a file has clear structure, consistent naming, and well-defined sections, the model can infer your intent more accurately. Conversely, messy, inconsistent code confuses the model and leads to generic or irrelevant suggestions.\n\n**Tuning Suggestion Depth and Relevance**\n\nCursor allows you to influence how suggestions are generated through various parameters:\n\n- **Suggestion delay**: Controls how long the AI waits before generating completions\n- **Completions mode**: Switches between faster (less accurate) and slower (more thorough) generation\n- **Tab velocity settings**: Adjusts how quickly suggestions cycle through alternatives\n\nBalancing these settings involves trade-offs. Faster settings improve responsiveness but may sacrifice quality. Slower settings produce better suggestions but introduce latency. Finding your optimal configuration depends on your workflow, the complexity of your code, and whether you're doing rapid prototyping or careful implementation.\n\n### Practical Implications\n\nUnderstanding these mechanics helps you work effectively with the AI:\n\n- **Guide the AI through context**: Write clear, well-organized code that signals your intent\n- **Iterate on suggestions**: Use streaming completions for quick corrections, batch suggestions for structural work\n- **Manage the context window**: Keep relevant code visible and relevant imports at the top of files\n- **Adjust settings based on task**: Use faster settings for exploratory work, slower settings for critical implementations\n\nThe AI isn't magic—it works best when you provide clear signals through well-structured code and understand its limitations regarding context and prediction depth.\n\n## Code Examples\n\n### Example 1\n\n```python\n// Example 1: Understanding Context Window Effects\n// This example demonstrates how file structure affects AI suggestions\n\n// --- Poorly Structured Code (Confuses AI) ---\n\n// File: dataProcessor.js (inconsistent naming, poor structure)\n\nimport fs from 'fs';\n\nfunction processData(x) {\n  // Mixed naming conventions: camelCase, snake_case, abbreviations\n  const raw_data = fs.readFileSync('input.txt');\n  const parsed = JSON.parse(raw_data);\n  // Inconsistent indentation and spacing\n  const result = parsed.map(item => item.val);\n    return result.reduce((a, b) => a + b, 0);\n}\n\nfunction calc(x) {\n  // Function with unclear purpose due to poor context\n  return x * 2.5;\n}\n\n// --- Well-Structured Code (Clear signals for AI) ---\n\n// File: dataProcessor.js\n// Purpose: Processes numerical data from input files and computes aggregates\n\nimport fs from 'fs';\nimport path from 'path';\n\n/**\n * Reads and parses JSON data from the input file.\n * @param {string} filePath - Path to the input file\n * @returns {Array<number>} Parsed numerical values\n */\nfunction readInputData(filePath) {\n  const absolutePath = path.resolve(filePath);\n  const rawContent = fs.readFileSync(absolutePath, 'utf-8');\n  const parsedData = JSON.parse(rawContent);\n  \n  return parsedData.map(item => item.value);\n}\n\n/**\n * Calculates the sum of all values in an array.\n * @param {Array<number>} values - Array of numbers to sum\n * @returns {number} Total sum of all values\n */\nfunction calculateTotal(values) {\n  return values.reduce((accumulator, currentValue) => {\n    return accumulator + currentValue;\n  }, 0);\n}\n\n/**\n * Multiplies a number by the standard multiplier.\n * @param {number} inputValue - The value to multiply\n * @returns {number} The scaled result\n */\nfunction scaleByMultiplier(inputValue) {\n  const standardMultiplier = 2.5;\n  return inputValue * standardMultiplier;\n}\n\n// With well-structured code above, the AI can accurately suggest:\n// - Proper function signatures based on clear JSDoc comments\n// - Consistent naming patterns (camelCase, descriptive names)\n// - Appropriate data transformations matching the established style\n```\n\n### Example 2\n\n```python\n// Example 2: Leveraging Streaming vs Batch Completions\n// This demonstrates when to use each completion type\n\n// --- Scenario: Building a Utility Function ---\n\n// Initial typing triggers streaming completions\n// Type: 'function validateEmail' → AI suggests full signature\nfunction validateEmail(email) {\n  // Streaming: As you type, suggestions appear for common patterns\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  \n  // Continuing with streaming suggestions for validation logic\n  const isValidFormat = emailRegex.test(email);\n  \n  // Trigger batch suggestion for more complex logic\n  // Pause or trigger explicitly to get multi-line suggestions\n  const domain = email.split('@')[1];\n  \n  // Batch suggestion might generate:\n  // const knownDomains = ['gmail.com', 'outlook.com', 'company.org'];\n  // const isKnownDomain = knownDomains.includes(domain);\n  // return isValidFormat && isKnownDomain;\n  \n  return isValidFormat;\n}\n\n// --- Scenario: Creating a Class Structure ---\n\nclass UserService {\n  // Batch suggestion works best for scaffolding entire classes\n  // Type the class declaration and pause to get full structure suggestions\n  \n  constructor(userRepository, emailService) {\n    this.userRepository = userRepository;\n    this.emailService = emailService;\n  }\n  \n  // Batch suggestions can generate all methods together\n  async findUserById(id) {\n    return this.userRepository.findById(id);\n  }\n  \n  async createUser(userData) {\n    const hashedPassword = await this.hashPassword(userData.password);\n    const newUser = {\n      ...userData,\n      password: hashedPassword,\n      createdAt: new Date()\n    };\n    return this.userRepository.create(newUser);\n  }\n  \n  async authenticateUser(email, password) {\n    const user = await this.userRepository.findByEmail(email);\n    if (!user) {\n      throw new Error('User not found');\n    }\n    \n    const isPasswordValid = await this.comparePassword(\n      password,\n      user.password\n    );\n    \n    if (!isPasswordValid) {\n      throw new Error('Invalid credentials');\n    }\n    \n    return this.generateAuthToken(user);\n  }\n  \n  async hashPassword(password) {\n    // Hashing implementation would be suggested based on project patterns\n    const bcrypt = require('bcrypt');\n    return bcrypt.hash(password, 12);\n  }\n  \n  async comparePassword(plainPassword, hashedPassword) {\n    const bcrypt = require('bcrypt');\n    return bcrypt.compare(plainPassword, hashedPassword);\n  }\n  \n  generateAuthToken(user) {\n    const jwt = require('jsonwebtoken');\n    return jwt.sign(\n      { userId: user.id, email: user.email },\n      process.env.JWT_SECRET,\n      { expiresIn: '7d' }\n    );\n  }\n}\n\n// Understanding when to pause for batch vs. letting streaming work\n// improves productivity and reduces context switching\n```\n\n### Example 3\n\n```python\n// Example 3: Working with Context Boundaries\n// Demonstrates how to structure code to maximize AI effectiveness\n\n// File: api/client.js - API client with clear structure\n// The AI can only consider a limited context window, so organization matters\n\nconst API_BASE_URL = 'https://api.example.com';\nconst DEFAULT_TIMEOUT = 5000;\n\nclass ApiClient {\n  constructor(baseUrl = API_BASE_URL, timeout = DEFAULT_TIMEOUT) {\n    this.baseUrl = baseUrl;\n    this.timeout = timeout;\n    this.headers = {\n      'Content-Type': 'application/json'\n    };\n  }\n  \n  setAuthToken(token) {\n    this.headers['Authorization'] = `Bearer ${token}`;\n  }\n  \n  // Method 1: Get endpoint (AI sees this pattern)\n  async get(endpoint, params = {}) {\n    const url = new URL(`${this.baseUrl}${endpoint}`);\n    Object.keys(params).forEach(key => {\n      url.searchParams.append(key, params[key]);\n    });\n    \n    const response = await fetch(url.toString(), {\n      method: 'GET',\n      headers: this.headers\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // Method 2: Post endpoint (AI recognizes the pattern)\n  async post(endpoint, data) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'POST',\n      headers: this.headers,\n      body: JSON.stringify(data)\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // Method 3: Put endpoint (AI can suggest based on similar methods)\n  async put(endpoint, data) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'PUT',\n      headers: this.headers,\n      body: JSON.stringify(data)\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // The AI can suggest the delete method because it sees the pattern\n  // Your next method suggestion will be more accurate due to context\n  \n  async delete(endpoint) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'DELETE',\n      headers: this.headers\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  async handleResponse(response) {\n    if (!response.ok) {\n      const error = new Error(`HTTP ${response.status}`);\n      error.status = response.status;\n      error.response = await response.json().catch(() => null);\n      throw error;\n    }\n    \n    return response.json();\n  }\n}\n\n// The context window captures these method patterns\n// When you start typing 'async patch(', the AI recognizes the pattern\n// and suggests appropriate implementation based on get, post, put, delete\n```\n\n\n\n## Common Mistakes\n\n- Relying solely on the first suggestion without evaluating context or correctness before accepting it\n- Writing messy, inconsistent code and expecting the AI to understand vague intent through unclear context\n- Accepting completions that reference undefined variables or imports not present in the file\n- Ignoring the distinction between streaming (quick corrections) and batch (structural) completions, using them interchangeably\n- Not providing sufficient context by deleting or moving cursor far from relevant code when expecting accurate suggestions\n- Over-relying on AI completions for complex logic that requires careful architectural consideration\n- Assuming the AI understands project-wide patterns when the context window only covers nearby files\n- Accepting suggestions that introduce security vulnerabilities or performance issues without review\n\n\n## Best Practices\n\n- Structure files with clear sections, consistent naming conventions, and descriptive comments to maximize AI context understanding\n- Write import statements at the top and keep type definitions visible so the AI can reference them when suggesting completions\n- Use streaming completions for rapid typing and minor corrections; trigger batch suggestions for scaffolding complex structures\n- Always review AI suggestions before accepting them, especially for code involving security, data manipulation, or business logic\n- When receiving unexpected suggestions, add more context through comments, variable names, or nearby code that signals your intent\n- Keep related code together within the context window—split large functions or classes that the AI needs to understand holistically\n- Iterate on suggestions: if the first completion isn't ideal, wait for alternatives or guide the AI by adjusting your typing direction\n- Adjust completion settings based on task type: faster settings for exploration, slower settings for implementation of critical functionality\n",
+      "code_examples": [
+        "// Example 1: Understanding Context Window Effects\n// This example demonstrates how file structure affects AI suggestions\n\n// --- Poorly Structured Code (Confuses AI) ---\n\n// File: dataProcessor.js (inconsistent naming, poor structure)\n\nimport fs from 'fs';\n\nfunction processData(x) {\n  // Mixed naming conventions: camelCase, snake_case, abbreviations\n  const raw_data = fs.readFileSync('input.txt');\n  const parsed = JSON.parse(raw_data);\n  // Inconsistent indentation and spacing\n  const result = parsed.map(item => item.val);\n    return result.reduce((a, b) => a + b, 0);\n}\n\nfunction calc(x) {\n  // Function with unclear purpose due to poor context\n  return x * 2.5;\n}\n\n// --- Well-Structured Code (Clear signals for AI) ---\n\n// File: dataProcessor.js\n// Purpose: Processes numerical data from input files and computes aggregates\n\nimport fs from 'fs';\nimport path from 'path';\n\n/**\n * Reads and parses JSON data from the input file.\n * @param {string} filePath - Path to the input file\n * @returns {Array<number>} Parsed numerical values\n */\nfunction readInputData(filePath) {\n  const absolutePath = path.resolve(filePath);\n  const rawContent = fs.readFileSync(absolutePath, 'utf-8');\n  const parsedData = JSON.parse(rawContent);\n  \n  return parsedData.map(item => item.value);\n}\n\n/**\n * Calculates the sum of all values in an array.\n * @param {Array<number>} values - Array of numbers to sum\n * @returns {number} Total sum of all values\n */\nfunction calculateTotal(values) {\n  return values.reduce((accumulator, currentValue) => {\n    return accumulator + currentValue;\n  }, 0);\n}\n\n/**\n * Multiplies a number by the standard multiplier.\n * @param {number} inputValue - The value to multiply\n * @returns {number} The scaled result\n */\nfunction scaleByMultiplier(inputValue) {\n  const standardMultiplier = 2.5;\n  return inputValue * standardMultiplier;\n}\n\n// With well-structured code above, the AI can accurately suggest:\n// - Proper function signatures based on clear JSDoc comments\n// - Consistent naming patterns (camelCase, descriptive names)\n// - Appropriate data transformations matching the established style",
+        "// Example 2: Leveraging Streaming vs Batch Completions\n// This demonstrates when to use each completion type\n\n// --- Scenario: Building a Utility Function ---\n\n// Initial typing triggers streaming completions\n// Type: 'function validateEmail' → AI suggests full signature\nfunction validateEmail(email) {\n  // Streaming: As you type, suggestions appear for common patterns\n  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n  \n  // Continuing with streaming suggestions for validation logic\n  const isValidFormat = emailRegex.test(email);\n  \n  // Trigger batch suggestion for more complex logic\n  // Pause or trigger explicitly to get multi-line suggestions\n  const domain = email.split('@')[1];\n  \n  // Batch suggestion might generate:\n  // const knownDomains = ['gmail.com', 'outlook.com', 'company.org'];\n  // const isKnownDomain = knownDomains.includes(domain);\n  // return isValidFormat && isKnownDomain;\n  \n  return isValidFormat;\n}\n\n// --- Scenario: Creating a Class Structure ---\n\nclass UserService {\n  // Batch suggestion works best for scaffolding entire classes\n  // Type the class declaration and pause to get full structure suggestions\n  \n  constructor(userRepository, emailService) {\n    this.userRepository = userRepository;\n    this.emailService = emailService;\n  }\n  \n  // Batch suggestions can generate all methods together\n  async findUserById(id) {\n    return this.userRepository.findById(id);\n  }\n  \n  async createUser(userData) {\n    const hashedPassword = await this.hashPassword(userData.password);\n    const newUser = {\n      ...userData,\n      password: hashedPassword,\n      createdAt: new Date()\n    };\n    return this.userRepository.create(newUser);\n  }\n  \n  async authenticateUser(email, password) {\n    const user = await this.userRepository.findByEmail(email);\n    if (!user) {\n      throw new Error('User not found');\n    }\n    \n    const isPasswordValid = await this.comparePassword(\n      password,\n      user.password\n    );\n    \n    if (!isPasswordValid) {\n      throw new Error('Invalid credentials');\n    }\n    \n    return this.generateAuthToken(user);\n  }\n  \n  async hashPassword(password) {\n    // Hashing implementation would be suggested based on project patterns\n    const bcrypt = require('bcrypt');\n    return bcrypt.hash(password, 12);\n  }\n  \n  async comparePassword(plainPassword, hashedPassword) {\n    const bcrypt = require('bcrypt');\n    return bcrypt.compare(plainPassword, hashedPassword);\n  }\n  \n  generateAuthToken(user) {\n    const jwt = require('jsonwebtoken');\n    return jwt.sign(\n      { userId: user.id, email: user.email },\n      process.env.JWT_SECRET,\n      { expiresIn: '7d' }\n    );\n  }\n}\n\n// Understanding when to pause for batch vs. letting streaming work\n// improves productivity and reduces context switching",
+        "// Example 3: Working with Context Boundaries\n// Demonstrates how to structure code to maximize AI effectiveness\n\n// File: api/client.js - API client with clear structure\n// The AI can only consider a limited context window, so organization matters\n\nconst API_BASE_URL = 'https://api.example.com';\nconst DEFAULT_TIMEOUT = 5000;\n\nclass ApiClient {\n  constructor(baseUrl = API_BASE_URL, timeout = DEFAULT_TIMEOUT) {\n    this.baseUrl = baseUrl;\n    this.timeout = timeout;\n    this.headers = {\n      'Content-Type': 'application/json'\n    };\n  }\n  \n  setAuthToken(token) {\n    this.headers['Authorization'] = `Bearer ${token}`;\n  }\n  \n  // Method 1: Get endpoint (AI sees this pattern)\n  async get(endpoint, params = {}) {\n    const url = new URL(`${this.baseUrl}${endpoint}`);\n    Object.keys(params).forEach(key => {\n      url.searchParams.append(key, params[key]);\n    });\n    \n    const response = await fetch(url.toString(), {\n      method: 'GET',\n      headers: this.headers\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // Method 2: Post endpoint (AI recognizes the pattern)\n  async post(endpoint, data) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'POST',\n      headers: this.headers,\n      body: JSON.stringify(data)\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // Method 3: Put endpoint (AI can suggest based on similar methods)\n  async put(endpoint, data) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'PUT',\n      headers: this.headers,\n      body: JSON.stringify(data)\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  // The AI can suggest the delete method because it sees the pattern\n  // Your next method suggestion will be more accurate due to context\n  \n  async delete(endpoint) {\n    const response = await fetch(`${this.baseUrl}${endpoint}`, {\n      method: 'DELETE',\n      headers: this.headers\n    });\n    \n    return this.handleResponse(response);\n  }\n  \n  async handleResponse(response) {\n    if (!response.ok) {\n      const error = new Error(`HTTP ${response.status}`);\n      error.status = response.status;\n      error.response = await response.json().catch(() => null);\n      throw error;\n    }\n    \n    return response.json();\n  }\n}\n\n// The context window captures these method patterns\n// When you start typing 'async patch(', the AI recognizes the pattern\n// and suggests appropriate implementation based on get, post, put, delete"
+      ]
+    },
+    "436": {
+      "detail_id": 187,
+      "subnode_id": 436,
+      "title": "Writing and Refining Prompts",
+      "description": "Techniques to formulate prompts that produce high‑quality, context‑aware code.",
+      "key_points": [
+        "Specifying language, framework, and naming conventions",
+        "Using comments and docstrings as hints for the model",
+        "Iterative prompt refinement based on output quality"
+      ],
+      "detailed_content": "# Concept Explanation\n\nWhen you use an AI‑assisted coding tool like Cursor, the model generates code based on the textual prompt you provide. A prompt is not just a request; it is a specification that the model interprets through its learned patterns. The more precise and context‑rich the prompt, the higher the chance that the generated code meets your expectations.\n\n- **Specifying language, framework, and naming conventions** helps the model narrow down the probable correct syntax and style. For example, saying 'Write a Python function that follows PEP8 and uses snake_case' tells the model to avoid camelCase or other language idioms.\n- **Using comments and docstrings as hints** lets you embed structural hints directly in the prompt. The model can treat a comment like '# TODO: implement error handling' as a directive to insert error handling code.\n- **Iterative prompt refinement** acknowledges that the first output may not be perfect. By evaluating the generated code and feeding back observations (e.g., 'Add handling for empty input'), you can adjust the prompt for the next iteration.\n\n# Core Mechanics\n\nThe model processes your prompt by tokenizing it, mapping tokens to embeddings, and then predicting the next tokens that form the response. This prediction is conditioned on:\n\n- The entire conversation history (including system messages).\n- The constraints and context you supplied.\n- The model's knowledge of code patterns from its training data.\n\nBecause the context window is limited, you should keep prompts concise yet comprehensive. Including too much irrelevant information can crowd out critical details.\n\n## How Constraints Shape Output\n\nWhen you specify a constraint (e.g., 'Use only built‑in libraries'), the model treats it as a filter that eliminates many possible code paths. Similarly, naming conventions act as a stylistic filter.\n\n## Role of System vs. User Messages\n\nMany AI coding assistants differentiate between a system message (high‑level instructions) and a user message (the actual task). You can set the system message to 'You are a Python expert who always follows PEP8' and then supply the user message with the specific function you need.\n\n## Iterative Refinement Loop\n\n1. **Generate** – Submit the initial prompt.\n2. **Review** – Inspect the generated code for correctness, style, and coverage of edge cases.\n3. **Feedback** – Formulate a concise note about what needs to change (e.g., 'Add handling for empty input').\n4. **Refine** – Append the feedback to the original prompt or create a new prompt that includes the earlier output and the new instruction.\n5. **Repeat** – Continue until the code meets your standards.\n\n# Practical Advice\n\n- **Start with a clear goal** – Describe what the code should do, not just the technical implementation.\n- **Include environment details** – Mention the language version, framework, and any libraries you must use.\n- **Specify naming and style** – If your project uses a particular naming convention, state it explicitly.\n- **Add constraints** – Performance, security, testability, or regulatory constraints should be listed.\n- **Use comments as placeholders** – For example, '# generate Fibonacci numbers' can guide the model to fill in the implementation.\n- **Provide examples** – Showing expected input/output helps the model understand the desired behavior.\n- **Keep prompts modular** – Instead of asking for an entire application in one prompt, break it into smaller components (functions, classes, modules).\n- **Test early** – Run the generated code as soon as you receive it to catch logical errors promptly.\n\n# Common Pitfalls\n\n- **Vague prompts** that lack language or framework details often produce generic code that does not fit the project.\n- **Overloading the prompt** with too much information can exceed the context window and cause the model to ignore subtle constraints.\n- **Ignoring style guides** – The model may generate code that works but does not adhere to your project's coding standards.\n- **Skipping the feedback loop** – Expecting a perfect first output is unrealistic; iterative refinement is essential.\n- **Assuming the model understands implicit requirements** – Always state requirements explicitly, even if they seem obvious.\n\n# Best Practices\n\n- **Be explicit and concise** – State the language, framework, naming conventions, and any constraints in bullet points.\n- **Use system messages** to set a consistent persona and style for the model.\n- **Iterate based on output quality** – Treat each generated snippet as a draft and refine it incrementally.\n- **Leverage comments and docstrings** to guide the model's implementation details.\n- **Maintain a prompt library** – Reuse well‑crafted prompts for common tasks to save time and improve consistency.\n\n## Code Examples\n\n### Example 1\n\n```python\nimport openai\n\ndef generate_code(prompt):\n    response = openai.ChatCompletion.create(\n        model='gpt-4',\n        messages=[{'role': 'system', 'content': 'You are an expert programmer.'},\n                  {'role': 'user', 'content': prompt}]\n    )\n    return response['choices'][0]['message']['content']\n\n# Example usage:\nprompt = '''Write a Python function that:\n- Takes a list of integers and returns the sum of even numbers.\n- Follows PEP8 naming conventions.\n- Includes a docstring explaining the function's behavior.\n'''\ncode = generate_code(prompt)\nprint(code)\n```\n\n### Example 2\n\n```python\ndef refine_prompt(initial_prompt, feedback):\n    refined = f'''{initial_prompt}\n\nFeedback: {feedback}'''\n    return refined\n\n# Initial prompt\ninitial = 'Create a React component that displays a list of todos.'\n# First iteration feedback\nfeedback = 'The component should also allow deleting a todo item.'\nrefined = refine_prompt(initial, feedback)\nprint(refined)\n```\n\n\n\n## Common Mistakes\n\n- Vague prompts that lack language or framework details\n- Ignoring the model's output and not iterating\n- Overloading the prompt with too much information\n- Skipping style guide constraints\n- Assuming the model understands implicit requirements\n\n\n## Best Practices\n\n- Be explicit about language, framework, and naming conventions\n- Use comments and docstrings as hints for the model\n- Iteratively refine prompts based on output quality\n- Provide clear constraints and examples\n- Keep prompts concise and focused\n",
+      "code_examples": [
+        "import openai\n\ndef generate_code(prompt):\n    response = openai.ChatCompletion.create(\n        model='gpt-4',\n        messages=[{'role': 'system', 'content': 'You are an expert programmer.'},\n                  {'role': 'user', 'content': prompt}]\n    )\n    return response['choices'][0]['message']['content']\n\n# Example usage:\nprompt = '''Write a Python function that:\n- Takes a list of integers and returns the sum of even numbers.\n- Follows PEP8 naming conventions.\n- Includes a docstring explaining the function's behavior.\n'''\ncode = generate_code(prompt)\nprint(code)",
+        "def refine_prompt(initial_prompt, feedback):\n    refined = f'''{initial_prompt}\n\nFeedback: {feedback}'''\n    return refined\n\n# Initial prompt\ninitial = 'Create a React component that displays a list of todos.'\n# First iteration feedback\nfeedback = 'The component should also allow deleting a todo item.'\nrefined = refine_prompt(initial, feedback)\nprint(refined)"
+      ]
+    },
+    "437": {
+      "detail_id": 188,
+      "subnode_id": 437,
+      "title": "Merging AI Suggestions with Manual Code",
+      "description": "Strategies to accept, modify, or reject AI code without breaking the project.",
+      "key_points": [
+        "Selective acceptance and diff review",
+        "Handling partial suggestions and multi‑line edits",
+        "Keeping code style consistent across the team"
+      ],
+      "detailed_content": "## Concept Explanation\n\nWhen you work with AI code assistants like Cursor, the assistant generates code completions or whole blocks. While these suggestions can boost productivity, they must be reviewed and merged carefully to avoid breaking your project. Merging AI suggestions with manual code is about accepting only the parts that fit your design, discarding the rest, and keeping the final codebase coherent. This skill sits at the intersection of code review, version control, and style management.\n\n### Why It Matters\n- **Stability**: Unchecked AI code can introduce runtime errors or regressions.\n- **Maintainability**: Consistent style makes the codebase easier for the whole team to read and extend.\n- **Traceability**: Knowing which lines were added by AI helps during debugging and code reviews.\n\n### Core Mechanics\n- **Selective Acceptance**: Cursor’s diff view lets you accept individual lines or blocks. Use the *Accept* button or keyboard shortcut (e.g., Ctrl+Shift+Enter) for the current line, and Shift+Click to select a range.\n- **Diff Review**: Always open the diff view (Cursor shows a side‑by‑side or unified diff). Verify the logic, naming, and imports.\n- **Partial Suggestions**: When the AI proposes a multi‑line edit, you can treat each line as a separate change. Copy the needed lines, discard the rest, and integrate them manually.\n- **Multi‑Line Edits**: For large blocks, consider copy‑paste into a temporary file, then apply the patch with git apply or a diff tool.\n- **Style Consistency**: Rely on your project’s formatter (Prettier, Black, rustfmt) to automatically align AI code with the rest of the codebase.\n\n### Handling Partial Suggestions\n1. **Identify the Relevant Lines**: Read the diff and locate the code that solves the immediate problem.\n2. **Copy‑Paste the Snippet**: Do not use *Accept All*. Instead, copy the selected lines into your editor.\n3. **Adjust Imports/Variables**: AI may suggest new imports or variables that are not defined. Add or rename them as needed.\n4. **Run Formatter**: After insertion, trigger the formatter to fix indentation and line breaks.\n5. **Test Locally**: Execute the relevant unit tests or run the component to confirm the change works.\n\n### Keeping Code Style Consistent Across the Team\n- **Adopt a Style Guide**: Document naming conventions, comment style, and file layout.\n- **Use Automated Tools**: Configure ESLint, Pylint, Prettier, etc., to run on save or as a CI step.\n- **AI‑Friendly Config**: Some teams whitelist certain AI‑generated patterns (e.g., logging statements) so the AI knows the expected style.\n- **Review AI Changes in PR**: Treat AI suggestions like any other code review; require at least one peer to approve.\n\n### Practical Workflow Example\n1. **Request a completion** for a function that calculates statistics.\n2. **Cursor displays** a diff of the proposed implementation.\n3. **Select only the mean calculation**, discarding median (which may be out of scope).\n4. **Merge the mean line** into the existing function.\n5. **Run formatter** and **unit tests** to verify correctness.\n\nBy following these steps, you harness AI productivity without sacrificing reliability or consistency.\n\n## Code Examples\n\n### Example 1\n\n```python\n# Python example: selective acceptance of an AI suggestion\n\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    return total, count\n\n# AI suggests adding mean and median:\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    # Add mean calculation\n    mean = total / count if count > 0 else 0\n    # Add median calculation\n    sorted_data = sorted(data)\n    if count == 0:\n        median = 0\n    elif count % 2 == 1:\n        median = sorted_data[count // 2]\n    else:\n        median = (sorted_data[count // 2 - 1] + sorted_data[count // 2]) / 2\n    return total, count, mean, median\n\n# Selective accept: keep original return and only add mean to the function.\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    # Add mean (AI suggestion) but keep original return\n    mean = total / count if count > 0 else 0\n    # Return both original stats and mean\n    return total, count, mean\n\n```\n\n### Example 2\n\n```python\n// TypeScript example: handling a multi‑line AI suggestion in a React component\n\nimport React, { useState, useEffect } from 'react';\n\n\ninterface Props {\n  initialCount?: number;\n}\n\nconst Counter: React.FC<Props> = ({ initialCount = 0 }) => {\n  const [count, setCount] = useState(initialCount);\n  // AI suggestion: add a side‑effect that logs the count after each update\n  useEffect(() => {\n    console.log('Current count:', count);\n  }, [count]);\n\n  const increment = () => setCount(prev => prev + 1);\n  const decrement = () => setCount(prev => prev - 1);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={decrement}>-</button>\n      <button onClick={increment}>+</button>\n    </div>\n  );\n};\n\nexport default Counter;\n\n// Suppose you only want to accept the logging useEffect but keep the rest unchanged.\n// You can copy the useEffect block into your file and keep the rest as is.\n\n```\n\n\n\n## Common Mistakes\n\n- Accepting an entire AI suggestion without reviewing the diff, which can inject bugs or incompatible APIs.\n- Manually overwriting parts of your code after accepting an AI suggestion, leading to lost changes or duplication.\n- Ignoring linter or formatter warnings when AI code deviates from the project's style guide.\n- Leaving temporary comment markers or placeholder code that the AI inserted, causing confusion later.\n- Assuming the AI always understands the broader context, leading to incorrect suggestions for multi‑file changes.\n- Using AI suggestions in production without running tests, potentially breaking existing functionality.\n\n\n## Best Practices\n\n- Always open the diff view before accepting any AI suggestion, and verify each changed line.\n- Accept suggestions line‑by‑line or block‑by‑block rather than whole‑file when the suggestion is large.\n- Run the project's linter/formatter (e.g., Prettier, ESLint) after merging AI code to enforce style consistency.\n- Keep AI‑generated patches in a separate branch or pull request so you can revert easily if needed.\n- Document any accepted AI changes in a comment or commit message for future reference.\n- Write or update unit tests that cover the new AI‑generated logic to ensure it behaves as expected.\n- Coordinate with teammates on AI usage rules, such as which files are allowed to be edited by AI.\n- Periodically review the history of AI‑accepted changes to spot patterns or recurring issues.\n",
+      "code_examples": [
+        "# Python example: selective acceptance of an AI suggestion\n\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    return total, count\n\n# AI suggests adding mean and median:\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    # Add mean calculation\n    mean = total / count if count > 0 else 0\n    # Add median calculation\n    sorted_data = sorted(data)\n    if count == 0:\n        median = 0\n    elif count % 2 == 1:\n        median = sorted_data[count // 2]\n    else:\n        median = (sorted_data[count // 2 - 1] + sorted_data[count // 2]) / 2\n    return total, count, mean, median\n\n# Selective accept: keep original return and only add mean to the function.\ndef compute_stats(data):\n    # Original implementation\n    total = sum(data)\n    count = len(data)\n    # Add mean (AI suggestion) but keep original return\n    mean = total / count if count > 0 else 0\n    # Return both original stats and mean\n    return total, count, mean\n",
+        "// TypeScript example: handling a multi‑line AI suggestion in a React component\n\nimport React, { useState, useEffect } from 'react';\n\n\ninterface Props {\n  initialCount?: number;\n}\n\nconst Counter: React.FC<Props> = ({ initialCount = 0 }) => {\n  const [count, setCount] = useState(initialCount);\n  // AI suggestion: add a side‑effect that logs the count after each update\n  useEffect(() => {\n    console.log('Current count:', count);\n  }, [count]);\n\n  const increment = () => setCount(prev => prev + 1);\n  const decrement = () => setCount(prev => prev - 1);\n\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={decrement}>-</button>\n      <button onClick={increment}>+</button>\n    </div>\n  );\n};\n\nexport default Counter;\n\n// Suppose you only want to accept the logging useEffect but keep the rest unchanged.\n// You can copy the useEffect block into your file and keep the rest as is.\n"
+      ]
+    }
+  },
+  "errors": [
+    {
+      "step": "subnode-detail",
+      "section_title": "Foundations of Cursor AI Setup and Interface",
+      "subnode_id": 433,
+      "subnode_title": "Exploring the Editor UI",
+      "error": "Server disconnected without sending a response."
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Foundations of Cursor AI Setup and Interface",
+      "subnode_id": 434,
+      "subnode_title": "Keyboard Shortcuts and Personalization",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Assisted Code Generation and Completion",
+      "subnode_id": 435,
+      "subnode_title": "Understanding AI Completions",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Assisted Code Generation and Completion",
+      "subnode_id": 436,
+      "subnode_title": "Writing and Refining Prompts",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Assisted Code Generation and Completion",
+      "subnode_id": 437,
+      "subnode_title": "Merging AI Suggestions with Manual Code",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Enhanced Debugging and Refactoring",
+      "subnode_id": 438,
+      "subnode_title": "Interactive Bug Diagnosis",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Enhanced Debugging and Refactoring",
+      "subnode_id": 439,
+      "subnode_title": "AI‑Driven Refactoring",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI‑Enhanced Debugging and Refactoring",
+      "subnode_id": 440,
+      "subnode_title": "Automated Test Generation",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Collaboration, Version Control, and Documentation",
+      "subnode_id": 441,
+      "subnode_title": "AI‑Assisted Code Reviews",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Collaboration, Version Control, and Documentation",
+      "subnode_id": 442,
+      "subnode_title": "AI‑Generated Commit Messages and Changelogs",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Collaboration, Version Control, and Documentation",
+      "subnode_id": 443,
+      "subnode_title": "Documentation Generation",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Advanced Workflows and End‑to‑End Project Integration",
+      "subnode_id": 444,
+      "subnode_title": "Custom Prompts and Persona Configuration",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Advanced Workflows and End‑to‑End Project Integration",
+      "subnode_id": 445,
+      "subnode_title": "Scripting and Automation",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Advanced Workflows and End‑to‑End Project Integration",
+      "subnode_id": 446,
+      "subnode_title": "Full‑Stack Project Walkthrough",
+      "error": "[Errno 61] Connection refused"
+    }
+  ],
+  "finished_at": null,
+  "english_title": "Cursor AI Programming Workflow"
+}

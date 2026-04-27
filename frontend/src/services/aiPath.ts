@@ -61,6 +61,13 @@ export interface AiPathGenerateResponse {
   warnings: string[];
 }
 
+export interface AiPathProjectListItem {
+  id: number;
+  topic: string;
+  outline_overview?: string;
+  created_at?: string;
+}
+
 export interface AiPathPreferences {
   level?: "beginner" | "intermediate" | "advanced";
   learning_depth?: "quick" | "standard" | "deep";
@@ -73,7 +80,8 @@ export function generateAiPath(query: string, preferences?: AiPathPreferences) {
     "/ai-path/generate-outline",
     { query, ...preferences },
     {
-      timeout: 120000,
+      // Outline generation may take 2-3 minutes depending on the topic and provider.
+      timeout: 300000,
     }
   );
 }
@@ -87,6 +95,12 @@ export function getAiPathProject(projectId: number) {
 export function getLatestAiPathProject() {
   return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
     "/ai-path/projects/latest"
+  );
+}
+
+export function listAiPathProjects(limit = 8, offset = 0) {
+  return request.get<AiPathProjectListItem[], AiPathProjectListItem[]>(
+    `/ai-path/projects?limit=${limit}&offset=${offset}`
   );
 }
 

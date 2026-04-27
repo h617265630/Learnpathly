@@ -39,20 +39,20 @@ async def generate_queries(
     n_queries = _QUERY_COUNTS.get(resource_count, 6)
 
     content_hints = {
-        "video": "视频教程 课程",
-        "article": "文章 博客 教程",
-        "mixed": "教程 学习 资料",
+        "video": "video course tutorial",
+        "article": "article blog tutorial",
+        "mixed": "tutorial learning resources",
     }
     content_hint = content_hints.get(content_type, content_hints["mixed"])
 
     # Build search queries (template only, no LLM)
     queries = [
         f"{topic} {content_hint}",
-        f"{topic} 入门 基础",
-        f"{topic} 实战 项目",
-        f"{topic} 最佳实践",
+        f"{topic} fundamentals",
+        f"{topic} hands-on project",
+        f"{topic} best practices",
         f"site:github.com {topic}",
-        f"{topic} 官方文档",
+        f"{topic} official documentation",
     ][:n_queries]
 
     return [
@@ -112,61 +112,64 @@ async def generate_outline(
 
     # Practical ratio hint
     ratio_hints = {
-        "theory_first": "先打牢理论基础，再进入实践",
-        "balanced": "理论与实践交替进行",
-        "practice_first": "以实践为主，理论为辅",
+        "theory_first": "Build strong fundamentals first, then move into practice.",
+        "balanced": "Alternate theory and practice.",
+        "practice_first": "Prioritize hands-on practice with light theory.",
     }
 
     # Build search snippets text for LLM
-    snippets_text = "\n".join([
-        f"- {r.title}: {r.snippet[:200]}"
-        for r in search_results[:10]
-    ]) if search_results else "（暂无搜索结果）"
+    snippets_text = "\n".join(
+        [f"- {r.title}: {r.snippet[:200]}" for r in search_results[:10]]
+    ) if search_results else "(no search results)"
 
     # Merged prompt: generate outline + sub_nodes in one call
-    prompt = f"""根据搜索结果，为「{topic}」设计一个完整的学习大纲（包含子节点）。
+    prompt = f"""Based on the search results, design a complete learning path outline for "{topic}" (including sub-nodes/knowledge points).
 
-主题：{topic}
-难度级别：{level}
-章节数量：{min_s}-{max_s} 章
-学习风格：{ratio_hints.get(practical_ratio, "")}
+Topic: {topic}
+Level: {level}
+Chapters: {min_s}-{max_s}
+Learning style: {ratio_hints.get(practical_ratio, "")}
 
-搜索到的资源（可作为参考）：
+Resources found (for reference):
 {snippets_text}
 
-请返回以下 JSON 格式（不要加 markdown 代码块）：
+Return the following JSON only (no markdown code fences):
 {{
-  "overview": "整体学习路径的简短描述（1-2句话）",
-  "total_duration_hours": 总学习时长估算（小时，浮点数）,
+  "title": "A short English title for the learning topic",
+  "overview": "A brief overview of what you will learn/build (1-2 sentences).",
+  "total_duration_hours": 12.5,
   "sections": [
     {{
-      "title": "第X章：章节标题",
-      "description": "本章学习内容概述（2-3句话）",
-      "learning_goals": ["学习目标1", "学习目标2", "学习目标3"],
+      "title": "Chapter X: Title",
+      "description": "A short chapter description (2-3 sentences).",
+      "learning_goals": ["Goal 1", "Goal 2", "Goal 3"],
       "sub_nodes": [
         {{
-          "title": "子节点标题1",
-          "description": "子节点详细说明",
-          "key_points": ["关键点1", "关键点2", "关键点3"]
+          "title": "Sub-node title 1",
+          "description": "What this knowledge point covers.",
+          "key_points": ["Key point 1", "Key point 2", "Key point 3"]
         }},
         {{
-          "title": "子节点标题2",
-          "description": "子节点详细说明",
-          "key_points": ["关键点1", "关键点2"]
+          "title": "Sub-node title 2",
+          "description": "What this knowledge point covers.",
+          "key_points": ["Key point 1", "Key point 2"]
         }}
       ],
-      "order": 序号（从0开始）
+      "order": 0
     }}
   ]
 }}
 
-要求：
-- 必须完整保留用户主题中的学习目标、focus/重点、技术栈、产出目标；不要只围绕第一个工具词或编程语言展开
-- 如果主题包含多个重点（例如 Python、Pandas、visualization、real-world projects），每个重点都应在章节或子节点中明确出现
-- 章节标题应优先体现总目标和阶段能力，而不是只写某个工具名
-- 每个章节必须包含 2-4 个 sub_nodes（子知识点）
-- sub_nodes 要具体、可操作
-- 用中文回答"""
+Requirements:
+- Return all titles in English (including sections.title and sub_nodes[].title), even if the input topic is not English.
+- Translate/normalize the input topic into a clear English learning topic title for the top-level title field.
+- overview must be direct and concrete. Do NOT start with meta phrases like "This learning path...", "This course...", "In this path...".
+- Preserve all goals, focus areas, tech stack, and intended outcomes from the user's topic. Do not over-focus on only the first tool keyword.
+- If the topic includes multiple focus areas (e.g., Python, Pandas, visualization, real-world projects), each must be explicitly reflected in chapters or sub_nodes.
+- Chapter titles should reflect the goal and stage capability, not just a tool name.
+- Each chapter must include 2-4 sub_nodes.
+- sub_nodes must be concrete and actionable.
+- Write everything in English."""
 
     try:
         llm = get_llm(temperature=0.4)
@@ -197,7 +200,9 @@ async def generate_outline(
                 order=s.get("order", len(sections)),
             ))
 
+        outline_title = str(parsed.get("title") or "").strip()
         return LearningOutline(
+            title=outline_title,
             topic=topic,
             level=level,
             overview=parsed.get("overview", ""),

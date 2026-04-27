@@ -232,7 +232,7 @@ export default function ResourceLibrary() {
           <div className="flex items-end justify-between gap-4 sm:gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2 sm:mb-3">
-                <span className="h-px w-6 sm:w-8 bg-amber-500"></span>
+                <span className="h-px w-6 sm:w-8 bg-sky-500"></span>
                 <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
                   Discover
                 </span>
@@ -240,7 +240,7 @@ export default function ResourceLibrary() {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-stone-900 leading-[0.92]">
                 Resource
                 <br />
-                <span className="text-amber-600">Library.</span>
+                <span className="text-sky-600">Library.</span>
               </h1>
             </div>
             <p className="hidden lg:block text-sm leading-relaxed text-stone-500 max-w-xs">

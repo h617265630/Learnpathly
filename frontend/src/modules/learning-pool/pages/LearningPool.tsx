@@ -9,6 +9,8 @@ import {
 import { Button } from "@/components/ui/Button";
 import { PathCard, type PoolPath } from "@/components/PathCard";
 import { PathTCard } from "@/components/PathTCard";
+import { LearnPathCard, type LearnPathProject } from "@/components/LearnPathCard";
+import { listAiPathProjects } from "@/services/aiPath";
 
 const FALLBACK_THUMB =
   "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&h=506&fit=crop";
@@ -189,6 +191,9 @@ export default function LearningPool() {
 
   const [activeType, setActiveType] = useState("all");
 
+  const [aiProjects, setAiProjects] = useState<LearnPathProject[]>([]);
+  const [loadingAiProjects, setLoadingAiProjects] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     listPublicLearningPaths()
@@ -202,6 +207,22 @@ export default function LearningPool() {
       .finally(() => {
         setLoading(false);
       });
+  }, []);
+
+  useEffect(() => {
+    setLoadingAiProjects(true);
+    listAiPathProjects(8, 0)
+      .then((res) => {
+        const next = (res || []).map((p) => ({
+          id: Number((p as any).id),
+          topic: String((p as any).topic || "").trim(),
+          outline_overview: String((p as any).outline_overview || "").trim(),
+          created_at: (p as any).created_at,
+        }));
+        setAiProjects(next.filter((p) => Number.isFinite(p.id) && p.id > 0 && p.topic));
+      })
+      .catch(() => setAiProjects([]))
+      .finally(() => setLoadingAiProjects(false));
   }, []);
 
   // Sync search input with URL param
@@ -335,6 +356,36 @@ export default function LearningPool() {
               />
             ))}
           </div>
+        </section>
+      )}
+
+      {/* AI-generated LearnPaths */}
+      {searchQuery === "" && (loadingAiProjects || aiProjects.length > 0) && (
+        <section className="mb-14">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold uppercase tracking-[0.15em] text-sky-600">
+                AI LearnPaths
+              </span>
+            </div>
+            <span className="text-xs text-stone-400">
+              {aiProjects.length} paths
+            </span>
+          </div>
+
+          {loadingAiProjects ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <SkeletonCard key={`ai-skel-${i}`} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {aiProjects.slice(0, 8).map((p) => (
+                <LearnPathCard key={p.id} project={p} />
+              ))}
+            </div>
+          )}
         </section>
       )}
 

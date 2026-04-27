@@ -28,10 +28,34 @@ def _is_video_url(url: str) -> bool:
 
 
 def _search_tavily(query: str, max_results: int = 5) -> List[SearchResult]:
-    from tavily import TavilyClient
-    client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
+    """
+    Tavily search with a hard timeout.
+
+    NOTE: The official `tavily` client does not consistently expose request timeouts across
+    versions. We call the HTTP API directly to guarantee `timeout=` works, so requests
+    don't hang the whole /ai-path/generate-outline endpoint.
+    """
+    import requests
+    api_key = os.getenv("TAVILY_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("TAVILY_API_KEY is not set")
+
+    timeout_s = float(os.getenv("TAVILY_TIMEOUT_S", "10") or 10)
     # Fetch extra results to account for GitHub URLs being filtered out
-    resp = client.search(query, max_results=max_results + 3)
+    payload = {
+        "api_key": api_key,
+        "query": query,
+        "max_results": int(max_results) + 3,
+        "include_answer": False,
+        "include_raw_content": False,
+    }
+    resp = requests.post(
+        "https://api.tavily.com/search",
+        json=payload,
+        timeout=timeout_s,
+    )
+    resp.raise_for_status()
+    resp = resp.json()
     results = []
     for r in resp.get("results", []):
         url = r.get("url", "")

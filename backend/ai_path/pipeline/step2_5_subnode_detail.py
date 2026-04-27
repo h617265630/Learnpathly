@@ -15,6 +15,7 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import re
 from pathlib import Path
 
 from ai_path.models.schemas import SubNode
@@ -25,6 +26,22 @@ from ai_path.utils.llm import get_llm, parse_json_response
 
 _CACHE_DIR = Path(__file__).resolve().parent.parent / "result" / "subnode_cache"
 _CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+_RE_CJK = re.compile(r"[\u4e00-\u9fff]")
+_RE_LATIN = re.compile(r"[A-Za-z]")
+
+
+def _looks_english_text(text: str) -> bool:
+    s = (text or "").strip()
+    if not s:
+        return False
+    if _RE_CJK.search(s):
+        return False
+    return bool(_RE_LATIN.search(s))
+
+
+def _wants_english(topic: str, subnode_title: str) -> bool:
+    return _looks_english_text(topic) or _looks_english_text(subnode_title)
 
 
 def _get_cache_key(topic: str, section_title: str, subnode_title: str, detail_level: str = "detailed") -> str:
@@ -82,68 +99,68 @@ async def generate_subnode_detail(
 
     # Concise prompt (30-60 seconds)
     if detail_level == "concise":
-        prompt = f"""你是一位技术教育专家。请为以下知识点生成简洁的讲解。
+        prompt = f"""You are a technical educator. Generate a concise explanation for the following knowledge point.
 
-## 上下文
-- 学习主题：{topic}
-- 知识点：{subnode_title}
-- 简介：{subnode_description}
-- 难度：{level}
+## Context
+- Topic: {topic}
+- Knowledge point: {subnode_title}
+- Summary: {subnode_description}
+- Level: {level}
 
-## 已有关键点
+## Provided key points
 {key_points_text}
 
-## 任务
-生成简洁讲解（控制在300字以内），包括：
-1. 一段概念解释
-2. 一个简短代码示例
-3. 3条核心要点
+## Task
+Generate a concise explanation (<= 200 words) including:
+1. A short concept explanation
+2. One short runnable code example
+3. 3 core takeaways
 
-返回 JSON（不要 markdown 代码块）：
+Return JSON only (no markdown code fences):
 {{
-  "detailed_content": "简洁的 Markdown 讲解",
-  "code_examples": ["一个简短代码示例"]
+  "detailed_content": "Concise Markdown explanation",
+  "code_examples": ["One short runnable code example"]
 }}
 
-要求：用中文，简洁明了，直击要点。"""
+Requirements: write everything in English, be clear and to-the-point."""
     else:
         # Detailed prompt (2 minutes)
-        prompt = f"""你是一位专业的技术教育专家。请为以下知识点生成详细的讲解内容。
+        prompt = f"""You are a professional technical educator. Generate a detailed explanation for the following knowledge point.
 
-## 上下文
-- 学习主题：{topic}
-- 所属章节：{section_title}
-- 知识点：{subnode_title}
-- 简介：{subnode_description}
-- 难度级别：{level}
+## Context
+- Topic: {topic}
+- Chapter: {section_title}
+- Knowledge point: {subnode_title}
+- Summary: {subnode_description}
+- Level: {level}
 
-## 已有关键点
+## Provided key points
 {key_points_text}
 
-## 任务
-请生成详细的讲解内容，包括：
-1. 概念解释（为什么需要这个知识点）
-2. 核心原理（它是如何工作的）
-3. 代码示例（可运行的代码）
-4. 常见问题与注意事项
-5. 实践建议
+## Task
+Generate detailed content including:
+1. Concept explanation (why it matters)
+2. Core mechanics (how it works)
+3. Runnable code examples
+4. Common pitfalls and gotchas
+5. Practical advice
 
-请返回 JSON 格式（不要加 markdown 代码块）：
+Return JSON only (no markdown code fences):
 {{
-  "detailed_content": "详细的 Markdown 讲解内容（包含标题、段落、列表等）",
+  "detailed_content": "Detailed Markdown explanation (with headings, paragraphs, lists, etc.)",
   "code_examples": [
-    "代码示例1（带注释）",
-    "代码示例2（带注释）"
+    "Code example 1 (with comments)",
+    "Code example 2 (with comments)"
   ],
-  "common_mistakes": ["常见错误1", "常见错误2"],
-  "best_practices": ["最佳实践1", "最佳实践2"]
+  "common_mistakes": ["Common mistake 1", "Common mistake 2"],
+  "best_practices": ["Best practice 1", "Best practice 2"]
 }}
 
-要求：
-- 用中文回答
-- detailed_content 要详细、易懂，使用 Markdown 格式
-- code_examples 要可运行、带注释
-- 内容要针对 {level} 级别的学习者"""
+Requirements:
+- Write everything in English.
+- detailed_content should be detailed and easy to understand, in Markdown.
+- code_examples must be runnable and include comments.
+- Tailor the content for {level} learners."""
 
     try:
         llm = get_llm(temperature=0.3)
@@ -155,19 +172,19 @@ async def generate_subnode_detail(
 
         # Enhance detailed_content with code examples
         if code_examples:
-            code_section = "\n\n## 代码示例\n\n"
+            code_section = "\n\n## Code Examples\n\n"
             for i, code in enumerate(code_examples, 1):
-                code_section += f"### 示例 {i}\n\n```python\n{code}\n```\n\n"
+                code_section += f"### Example {i}\n\n```python\n{code}\n```\n\n"
             detailed_content += code_section
 
         # Add common mistakes and best practices
         if parsed.get("common_mistakes"):
-            detailed_content += "\n\n## 常见错误\n\n"
+            detailed_content += "\n\n## Common Mistakes\n\n"
             for mistake in parsed["common_mistakes"]:
                 detailed_content += f"- {mistake}\n"
 
         if parsed.get("best_practices"):
-            detailed_content += "\n\n## 最佳实践\n\n"
+            detailed_content += "\n\n## Best Practices\n\n"
             for practice in parsed["best_practices"]:
                 detailed_content += f"- {practice}\n"
 
@@ -225,7 +242,10 @@ async def run_step2_5(
     cache_key = _get_cache_key(topic, section_title, subnode_title, detail_level)
     cached_result = _load_from_cache(cache_key)
     if cached_result:
-        return cached_result
+        if _wants_english(topic, subnode_title) and not _looks_english_text(cached_result.detailed_content or ""):
+            cached_result = None
+        else:
+            return cached_result
 
     # Generate new content
     result = await generate_subnode_detail(

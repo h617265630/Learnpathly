@@ -6,6 +6,7 @@ Handles async pipeline invocation and output transformation.
 from __future__ import annotations
 
 import asyncio
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,35 @@ _VALID_LEVELS = {"beginner", "intermediate", "advanced"}
 _VALID_DEPTHS = {"quick", "standard", "deep"}
 _VALID_CONTENT = {"video", "article", "mixed"}
 _VALID_RATIOS = {"theory_first", "balanced", "practice_first"}
+
+_RE_OVERVIEW_META = re.compile(
+    r"(?is)^\s*this\s+(learning\s+path|course|path)\s+"
+    r"(guides|helps|walks|takes|teaches|shows)\s+"
+    r".{0,160}?\s+(through|to)\s+"
+)
+
+
+def _normalize_overview_text(text: str) -> str:
+    """
+    Make overview/summary more direct.
+    We specifically remove meta openers like:
+      "This learning path guides ... through ..."
+    so the UI shows a concrete description immediately.
+    """
+    s = (text or "").strip()
+    if not s:
+        return ""
+
+    if s.lower().startswith("this learning path") or s.lower().startswith("this course") or s.lower().startswith("this path"):
+        s2 = _RE_OVERVIEW_META.sub("", s).strip()
+        if s2:
+            s = s2
+        # Fallback: drop just the leading "This learning path" clause if present.
+        s = re.sub(r"(?is)^\s*this\s+(learning\s+path|course|path)\s+", "", s).strip()
+
+    if s:
+        s = s[0].upper() + s[1:]
+    return s
 
 
 def _sanitize(prefs: dict[str, Any] | None) -> dict[str, str]:
@@ -148,8 +178,14 @@ async def generate_ai_path_outline(
         resource_count=_DEFAULT_RESOURCE_COUNT,
     )
 
-    if step1_result.get("search_results"):
-        warnings.append(f"Found {len(step1_result['search_results'])} web results")
+    search_results = step1_result.get("search_results") or []
+    if isinstance(search_results, list) and search_results:
+        warnings.append(f"Found {len(search_results)} web results")
+    else:
+        warnings.append(
+            "Web search returned 0 results (search provider may be unavailable or quota exhausted). "
+            "Outline was generated from the LLM without external search context."
+        )
 
     # Extract outline (already contains sub_nodes)
     outline = step1_result.get("outline")
@@ -165,22 +201,27 @@ async def generate_ai_path_outline(
         for idx, sec in enumerate(outline_data.get("sections", []))
     ]
 
+    # Prefer an English, normalized title produced by Step 1.
+    normalized_title = str(outline_data.get("title") or "").strip() or query
+
     # Build overview text
-    overview = outline_data.get("overview", "") or f"关于「{query}」的完整学习路径，包含 {len(nodes)} 个章节"
+    overview = outline_data.get("overview", "") or f'A complete learning path for "{normalized_title}" with {len(nodes)} chapters.'
+    overview = _normalize_overview_text(overview)
 
     data = {
-        "title": query,
+        "title": normalized_title,
         "summary": overview,
         "description": overview,
         "nodes": nodes,
         "recommendations": [
-            f"共 {len(nodes)} 个章节",
-            f"约 {outline_data.get('total_duration_hours', 0):.1f} 小时学习时长",
+            f"{len(nodes)} chapters",
+            f"~ {outline_data.get('total_duration_hours', 0):.1f} hours",
         ],
         "_raw": {
             "total_duration_hours": outline_data.get("total_duration_hours"),
             "level": outline_data.get("level"),
         },
+        "_input_query": query,
     }
 
     return data, warnings
@@ -235,9 +276,11 @@ async def generate_ai_path_pipeline(
 
     final_summary = workflow_result.get("final_summary", "")
     summary = outline_data.get("overview", "") or (final_summary[:300] if final_summary else "")
+    summary = _normalize_overview_text(summary)
 
+    normalized_title = str(outline_data.get("title") or "").strip() or query
     data = {
-        "title": query,
+        "title": normalized_title,
         "summary": summary,
         "nodes": nodes,
         "recommendations": [
@@ -254,6 +297,11 @@ async def generate_ai_path_pipeline(
 
     # Add metrics as warnings
     warnings.append(f"Found {len(workflow_result.get('exclude_urls', []))} total URLs discovered")
+    if not (workflow_result.get("search_results") or []):
+        warnings.append(
+            "Web search returned 0 results (search provider may be unavailable or quota exhausted). "
+            "Some recommendations may be more generic."
+        )
 
     return data, warnings
 

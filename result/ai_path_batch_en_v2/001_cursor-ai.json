@@ -1,0 +1,747 @@
+{
+  "topic": "Cursor AI 编程工作流",
+  "status": "started",
+  "api_base": "http://127.0.0.1:8000",
+  "started_at": "2026-04-27T11:39:58.152520+00:00",
+  "project_id": 31,
+  "outline_response": {
+    "project_id": 31,
+    "data": {
+      "title": "Mastering Cursor AI: Integrated Programming Workflow",
+      "summary": "A practical, intermediate guide that teaches you how to leverage Cursor AI's advanced models, interaction patterns, and spec‑driven development workflows to build, test, and ship production‑ready applications efficiently.",
+      "description": "A practical, intermediate guide that teaches you how to leverage Cursor AI's advanced models, interaction patterns, and spec‑driven development workflows to build, test, and ship production‑ready applications efficiently.",
+      "nodes": [
+        {
+          "title": "Chapter 1: Getting Started with Cursor AI",
+          "description": "Learn how to install and configure Cursor, select the most suitable AI models, and become familiar with the editor’s core UI elements and shortcuts for a smooth AI‑assisted coding experience.",
+          "learning_points": [
+            "Install and configure Cursor on Windows and macOS",
+            "Set up supporting tools (Git, Node.js, Python)",
+            "Choose and switch between AI models (OpenAI GPT‑4, Claude, etc.)",
+            "Navigate the UI, command palette, AI panel, and keyboard shortcuts"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Environment Setup",
+              "description": "Step‑by‑step installation of Cursor and required development tools, including environment variables and basic extensions.",
+              "learning_points": [
+                "Download and install Cursor from the official site",
+                "Install Git, Node.js, and Python with version managers (nvm, pyenv)",
+                "Configure PATH and verify installations with CLI commands"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "AI Model Selection & Configuration",
+              "description": "Understand the available AI backends, API key management, and how to tune model parameters for optimal performance.",
+              "learning_points": [
+                "Compare OpenAI GPT‑4, Claude, and internal models",
+                "Add API keys to Cursor settings securely",
+                "Adjust temperature, max tokens, and other generation parameters"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "UI Overview & Keyboard Shortcuts",
+              "description": "A tour of Cursor’s interface components, the AI panel, Composer, and essential shortcuts for rapid navigation.",
+              "learning_points": [
+                "Open AI panel (Cmd/Ctrl+L) and Composer (Cmd/Ctrl+I)",
+                "Master command palette (Cmd/Ctrl+Shift+P)",
+                "Customize keybindings for personal workflow"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "First AI‑Assisted Code Snippet",
+              "description": "Hands‑on exercise to generate, accept, and refine a simple code block using AI suggestions.",
+              "learning_points": [
+                "Write a natural‑language prompt for a basic function",
+                "Accept or modify AI‑generated code",
+                "Run the function and verify output"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 2: Core AI Interaction Techniques",
+          "description": "Deep dive into Rules, Skills, Composer, and prompt engineering to maximize code quality and relevance when working with AI.",
+          "learning_points": [
+            "Create and manage permanent AI instructions using Rules and Skills",
+            "Use Composer for multi‑file editing and refactoring",
+            "Craft effective prompts and manage conversation context",
+            "Practice real‑world scenarios by generating and revising code"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Rules & Skills: Permanent AI Instructions",
+              "description": "How to write, version‑control, and apply project‑wide instructions that the AI follows in every session.",
+              "learning_points": [
+                "Define coding standards, naming conventions, and security guidelines",
+                "Organize Rules files per module or feature",
+                "Debug and iterate on instruction quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Composer for Multi‑File Editing",
+              "description": "Leverage Cursor’s Composer to generate or refactor several files in a single request, maintaining consistency across the codebase.",
+              "learning_points": [
+                "Draft composite prompts that specify multiple file targets",
+                "Review generated diffs before committing changes",
+                "Apply bulk refactors (e.g., renaming, import cleanup)"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Prompt Engineering & Context Management",
+              "description": "Techniques for structuring prompts, injecting relevant context, and steering AI behavior for precise code generation.",
+              "learning_points": [
+                "Break complex tasks into sequential, incremental prompts",
+                "Embed code snippets, comments, and API docs as context",
+                "Use explicit constraints to limit scope and enforce style"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Hands‑On: Generate a REST API Endpoint",
+              "description": "Build a realistic CRUD endpoint, iterate on AI suggestions, and integrate the result into a small Express application.",
+              "learning_points": [
+                "Prompt AI for route handler, validation, and error handling",
+                "Accept suggestions, adjust naming, and add middleware",
+                "Test the endpoint locally and review AI‑generated tests"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 3: Spec‑Driven Development (SDD) Workflow",
+          "description": "Combine Cursor AI with an OpenSpec‑based SDD methodology to go from high‑level requirements to a fully functional application.",
+          "learning_points": [
+            "Write clear, testable specifications using OpenSpec",
+            "Scaffold a project structure with AI assistance",
+            "Implement core features by following specs and leveraging AI prompts",
+            "Deliver a runnable ‘Smart Todo’ application end‑to‑end"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "OpenSpec & Requirements Engineering",
+              "description": "Introduce the OpenSpec format, how to capture functional and non‑functional requirements, and translate them into testable criteria.",
+              "learning_points": [
+                "Define user stories, acceptance criteria, and edge‑case rules",
+                "Map spec items to code modules",
+                "Create a spec checklist for AI to validate against"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Project Scaffolding with AI",
+              "description": "Automate folder creation, configuration files, and base classes by prompting AI to generate a consistent project layout.",
+              "learning_points": [
+                "Request AI to produce a file tree with all necessary boilerplate",
+                "Include CI/CD configs, linting rules, and environment files",
+                "Validate generated scaffolding against the spec"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "AI‑Assisted Implementation",
+              "description": "Iteratively implement business logic, data models, and API routes guided by the spec, using AI to write and refactor code.",
+              "learning_points": [
+                "Translate spec sections into targeted prompts",
+                "Use AI to generate domain logic and integrate third‑party libraries",
+                "Apply incremental testing and AI‑driven debugging"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Capstone Practice: Smart Todo App",
+              "description": "End‑to‑end mini‑project: write the spec, scaffold the app, implement features (add, list, filter, persist), and ensure it runs locally.",
+              "learning_points": [
+                "Create OpenSpec document for a Smart Todo app",
+                "Prompt AI to generate UI components and backend services",
+                "Integrate a database (e.g., SQLite) using AI‑generated migrations",
+                "Deploy locally and verify all acceptance criteria"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 4: Advanced Workflow Integration & Production Readiness",
+          "description": "Polish the development workflow by integrating automated testing, debugging, version control, and CI/CD pipelines with AI assistance.",
+          "learning_points": [
+            "Automate unit and integration test creation using AI",
+            "Diagnose and fix runtime errors with AI‑driven debugging",
+            "Manage Git history with AI‑generated commit messages and branch strategies",
+            "Optimize AI usage, ensure security, and set up CI/CD for continuous quality"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "AI‑Generated Automated Tests",
+              "description": "Leverage AI to write unit tests for functions, integration tests for API routes, and edge‑case coverage reports.",
+              "learning_points": [
+                "Prompt AI to produce Jest/Mocha or pytest test cases",
+                "Generate mock data and edge‑case scenarios",
+                "Run tests, interpret coverage output, and iterate"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Debugging with AI Assistance",
+              "description": "Use AI to parse stack traces, suggest fixes, and guide you through error resolution with contextual context.",
+              "learning_points": [
+                "Paste error logs into AI panel and request root‑cause analysis",
+                "Apply AI‑proposed patches and verify behavior",
+                "Create a debugging checklist for common runtime issues"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Version Control Workflow",
+              "description": "Integrate AI into Git processes: write meaningful commit messages, create branch naming conventions, and handle pull requests.",
+              "learning_points": [
+                "Use AI to generate conventional commit messages",
+                "Set up branch policies (feature/, hotfix/, etc.)",
+                "Draft pull request descriptions and review comments"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Performance, Security & CI/CD",
+              "description": "Optimize AI token usage, enforce security best practices, and embed AI‑assisted checks into CI pipelines for continuous quality.",
+              "learning_points": [
+                "Implement token budgeting and prompt caching strategies",
+                "Scan generated code for common security pitfalls",
+                "Configure GitHub Actions or GitLab CI to run AI‑generated tests and lint checks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        }
+      ],
+      "recommendations": [
+        "4 chapters",
+        "~ 12.5 hours"
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_input_query": "Cursor AI 编程工作流"
+    },
+    "warnings": [
+      "Found 23 web results",
+      "Generated 4 sections with sub_nodes",
+      "Saved outline to DB (ai_path_projects.id=31)"
+    ]
+  },
+  "project_before_details": {
+    "project_id": 31,
+    "data": {
+      "title": "Mastering Cursor AI: Integrated Programming Workflow",
+      "summary": "A practical, intermediate guide that teaches you how to leverage Cursor AI's advanced models, interaction patterns, and spec‑driven development workflows to build, test, and ship production‑ready applications efficiently.",
+      "description": "A practical, intermediate guide that teaches you how to leverage Cursor AI's advanced models, interaction patterns, and spec‑driven development workflows to build, test, and ship production‑ready applications efficiently.",
+      "recommendations": [
+        "4 chapters",
+        "~ 12.5 hours"
+      ],
+      "nodes": [
+        {
+          "id": 125,
+          "project_id": 31,
+          "title": "Chapter 1: Getting Started with Cursor AI",
+          "description": "Learn how to install and configure Cursor, select the most suitable AI models, and become familiar with the editor’s core UI elements and shortcuts for a smooth AI‑assisted coding experience.",
+          "learning_points": [
+            "Install and configure Cursor on Windows and macOS",
+            "Set up supporting tools (Git, Node.js, Python)",
+            "Choose and switch between AI models (OpenAI GPT‑4, Claude, etc.)",
+            "Navigate the UI, command palette, AI panel, and keyboard shortcuts"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 447,
+              "section_id": 125,
+              "title": "Environment Setup",
+              "description": "Step‑by‑step installation of Cursor and required development tools, including environment variables and basic extensions.",
+              "learning_points": [
+                "Download and install Cursor from the official site",
+                "Install Git, Node.js, and Python with version managers (nvm, pyenv)",
+                "Configure PATH and verify installations with CLI commands"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 448,
+              "section_id": 125,
+              "title": "AI Model Selection & Configuration",
+              "description": "Understand the available AI backends, API key management, and how to tune model parameters for optimal performance.",
+              "learning_points": [
+                "Compare OpenAI GPT‑4, Claude, and internal models",
+                "Add API keys to Cursor settings securely",
+                "Adjust temperature, max tokens, and other generation parameters"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 449,
+              "section_id": 125,
+              "title": "UI Overview & Keyboard Shortcuts",
+              "description": "A tour of Cursor’s interface components, the AI panel, Composer, and essential shortcuts for rapid navigation.",
+              "learning_points": [
+                "Open AI panel (Cmd/Ctrl+L) and Composer (Cmd/Ctrl+I)",
+                "Master command palette (Cmd/Ctrl+Shift+P)",
+                "Customize keybindings for personal workflow"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 450,
+              "section_id": 125,
+              "title": "First AI‑Assisted Code Snippet",
+              "description": "Hands‑on exercise to generate, accept, and refine a simple code block using AI suggestions.",
+              "learning_points": [
+                "Write a natural‑language prompt for a basic function",
+                "Accept or modify AI‑generated code",
+                "Run the function and verify output"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 126,
+          "project_id": 31,
+          "title": "Chapter 2: Core AI Interaction Techniques",
+          "description": "Deep dive into Rules, Skills, Composer, and prompt engineering to maximize code quality and relevance when working with AI.",
+          "learning_points": [
+            "Create and manage permanent AI instructions using Rules and Skills",
+            "Use Composer for multi‑file editing and refactoring",
+            "Craft effective prompts and manage conversation context",
+            "Practice real‑world scenarios by generating and revising code"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 451,
+              "section_id": 126,
+              "title": "Rules & Skills: Permanent AI Instructions",
+              "description": "How to write, version‑control, and apply project‑wide instructions that the AI follows in every session.",
+              "learning_points": [
+                "Define coding standards, naming conventions, and security guidelines",
+                "Organize Rules files per module or feature",
+                "Debug and iterate on instruction quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 452,
+              "section_id": 126,
+              "title": "Composer for Multi‑File Editing",
+              "description": "Leverage Cursor’s Composer to generate or refactor several files in a single request, maintaining consistency across the codebase.",
+              "learning_points": [
+                "Draft composite prompts that specify multiple file targets",
+                "Review generated diffs before committing changes",
+                "Apply bulk refactors (e.g., renaming, import cleanup)"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 453,
+              "section_id": 126,
+              "title": "Prompt Engineering & Context Management",
+              "description": "Techniques for structuring prompts, injecting relevant context, and steering AI behavior for precise code generation.",
+              "learning_points": [
+                "Break complex tasks into sequential, incremental prompts",
+                "Embed code snippets, comments, and API docs as context",
+                "Use explicit constraints to limit scope and enforce style"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 454,
+              "section_id": 126,
+              "title": "Hands‑On: Generate a REST API Endpoint",
+              "description": "Build a realistic CRUD endpoint, iterate on AI suggestions, and integrate the result into a small Express application.",
+              "learning_points": [
+                "Prompt AI for route handler, validation, and error handling",
+                "Accept suggestions, adjust naming, and add middleware",
+                "Test the endpoint locally and review AI‑generated tests"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 127,
+          "project_id": 31,
+          "title": "Chapter 3: Spec‑Driven Development (SDD) Workflow",
+          "description": "Combine Cursor AI with an OpenSpec‑based SDD methodology to go from high‑level requirements to a fully functional application.",
+          "learning_points": [
+            "Write clear, testable specifications using OpenSpec",
+            "Scaffold a project structure with AI assistance",
+            "Implement core features by following specs and leveraging AI prompts",
+            "Deliver a runnable ‘Smart Todo’ application end‑to‑end"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 455,
+              "section_id": 127,
+              "title": "OpenSpec & Requirements Engineering",
+              "description": "Introduce the OpenSpec format, how to capture functional and non‑functional requirements, and translate them into testable criteria.",
+              "learning_points": [
+                "Define user stories, acceptance criteria, and edge‑case rules",
+                "Map spec items to code modules",
+                "Create a spec checklist for AI to validate against"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 456,
+              "section_id": 127,
+              "title": "Project Scaffolding with AI",
+              "description": "Automate folder creation, configuration files, and base classes by prompting AI to generate a consistent project layout.",
+              "learning_points": [
+                "Request AI to produce a file tree with all necessary boilerplate",
+                "Include CI/CD configs, linting rules, and environment files",
+                "Validate generated scaffolding against the spec"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 457,
+              "section_id": 127,
+              "title": "AI‑Assisted Implementation",
+              "description": "Iteratively implement business logic, data models, and API routes guided by the spec, using AI to write and refactor code.",
+              "learning_points": [
+                "Translate spec sections into targeted prompts",
+                "Use AI to generate domain logic and integrate third‑party libraries",
+                "Apply incremental testing and AI‑driven debugging"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 458,
+              "section_id": 127,
+              "title": "Capstone Practice: Smart Todo App",
+              "description": "End‑to‑end mini‑project: write the spec, scaffold the app, implement features (add, list, filter, persist), and ensure it runs locally.",
+              "learning_points": [
+                "Create OpenSpec document for a Smart Todo app",
+                "Prompt AI to generate UI components and backend services",
+                "Integrate a database (e.g., SQLite) using AI‑generated migrations",
+                "Deploy locally and verify all acceptance criteria"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 128,
+          "project_id": 31,
+          "title": "Chapter 4: Advanced Workflow Integration & Production Readiness",
+          "description": "Polish the development workflow by integrating automated testing, debugging, version control, and CI/CD pipelines with AI assistance.",
+          "learning_points": [
+            "Automate unit and integration test creation using AI",
+            "Diagnose and fix runtime errors with AI‑driven debugging",
+            "Manage Git history with AI‑generated commit messages and branch strategies",
+            "Optimize AI usage, ensure security, and set up CI/CD for continuous quality"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 459,
+              "section_id": 128,
+              "title": "AI‑Generated Automated Tests",
+              "description": "Leverage AI to write unit tests for functions, integration tests for API routes, and edge‑case coverage reports.",
+              "learning_points": [
+                "Prompt AI to produce Jest/Mocha or pytest test cases",
+                "Generate mock data and edge‑case scenarios",
+                "Run tests, interpret coverage output, and iterate"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 460,
+              "section_id": 128,
+              "title": "Debugging with AI Assistance",
+              "description": "Use AI to parse stack traces, suggest fixes, and guide you through error resolution with contextual context.",
+              "learning_points": [
+                "Paste error logs into AI panel and request root‑cause analysis",
+                "Apply AI‑proposed patches and verify behavior",
+                "Create a debugging checklist for common runtime issues"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 461,
+              "section_id": 128,
+              "title": "Version Control Workflow",
+              "description": "Integrate AI into Git processes: write meaningful commit messages, create branch naming conventions, and handle pull requests.",
+              "learning_points": [
+                "Use AI to generate conventional commit messages",
+                "Set up branch policies (feature/, hotfix/, etc.)",
+                "Draft pull request descriptions and review comments"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 462,
+              "section_id": 128,
+              "title": "Performance, Security & CI/CD",
+              "description": "Optimize AI token usage, enforce security best practices, and embed AI‑assisted checks into CI pipelines for continuous quality.",
+              "learning_points": [
+                "Implement token budgeting and prompt caching strategies",
+                "Scan generated code for common security pitfalls",
+                "Configure GitHub Actions or GitLab CI to run AI‑generated tests and lint checks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        }
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_from_db": true
+    },
+    "warnings": [
+      "Loaded from DB (ai_path_projects.id=31)"
+    ]
+  },
+  "subnode_details": {
+    "447": {
+      "detail_id": 184,
+      "subnode_id": 447,
+      "title": "Environment Setup",
+      "description": "Step‑by‑step installation of Cursor and required development tools, including environment variables and basic extensions.",
+      "key_points": [
+        "Download and install Cursor from the official site",
+        "Install Git, Node.js, and Python with version managers (nvm, pyenv)",
+        "Configure PATH and verify installations with CLI commands"
+      ],
+      "detailed_content": "## Concept Explanation\n\nSetting up a clean, reproducible programming environment is the first and most critical step when you adopt a new editor like Cursor AI. Cursor relies on the underlying toolchain (Git for version control, Node.js for JavaScript/TypeScript tooling, Python for AI‑powered scripts, and optional runtimes such as Java or Go) to provide features such as real‑time linting, intelligent code completions, integrated terminal sessions, and seamless Git integration. If any of these tools are missing, mis‑configured, or at an incompatible version, you’ll encounter cryptic errors, missing suggestions, or broken shortcuts.\n\nA well‑tuned environment also speeds up day‑to‑day workflows: you can open a project with `cursor .`, run tests from the editor, and have AI‑driven refactors automatically respect the language versions defined in your repository.\n\n## Core Mechanics\n\n1. **Cursor Launch Process** – When you start Cursor, it reads the system `PATH` to locate executables (`git`, `node`, `python`, etc.). It also scans for version‑manager shims (`nvm`, `pyenv`) that dynamically expose the currently‑selected runtime version.\n2. **AI Backend** – Cursor’s AI model runs locally (or connects to a cloud service) and invokes language servers (e.g., `typescript-language-server`, `pylsp`) to understand code context. Those servers depend on the exact runtime versions you have installed.\n3. **Git Integration** – Cursor uses the `git` CLI to power the source‑control UI. A properly configured `git` with user name/email ensures that commit messages, blame annotations, and branch visualizations work correctly.\n4. **Extension Ecosystem** – Cursor’s marketplace hosts extensions (ESLint, Prettier, Black, etc.) that are themselves Node or Python scripts. They must be able to locate the correct interpreter via `PATH`.\n5. **Shell Sessions** – The integrated terminal spawns a login shell (bash/zsh) that sources your profile (`~/.bashrc`, `~/.zshrc`). All environment variables set there become available to all tools launched from Cursor.\n\n## Step‑by‑Step Setup\n\n### 1. Download & Install Cursor\n\n- Go to **https://cursor.sh** and download the installer for your OS (Windows, macOS, Linux).\n- Run the installer and follow the prompts. On Linux, you may need to make the downloaded AppImage executable:\n  \n  chmod +x Cursor-linux-x.x.x.AppImage\n  ./Cursor-linux-x.x.x.AppImage\n  \n- Verify the installation by opening a terminal and typing:\n  \n  cursor --version\n  \n  You should see the current Cursor version printed.\n\n### 2. Install Git\n\nMost systems already have Git, but if not:\n\n- **macOS** – `brew install git`\n- **Debian/Ubuntu** – `sudo apt-get install git`\n- **Windows** – Download from **https://git-scm.com** or use `winget install Git.Git`.\n\nConfigure your identity (required for Cursor’s Git UI):\n\ngit config --global user.name \"Your Name\"\ngit config --global user.email \"you@example.com\"\n\n\n### 3. Install Node.js with nvm\n\nUsing a version manager ensures you can switch between Node versions without permission‑related headaches.\n\n- **macOS/Linux – Install nvm**:\n  \n  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\n  \n- **Windows – Use nvm‑windows**: Download the installer from **https://github.com/coreybutler/nvm-windows/releases**.\n\nAfter installation, reload your shell and install a recent LTS Node:\n\nsource ~/.bashrc   # or source ~/.zshrc\nnvm install 18\nnvm use 18\n\n\nCreate an `.nvmrc` file in your project (optional) so that `nvm` automatically picks the right version:\n\necho \"18\" > .nvmrc\n\n\n### 4. Install Python with pyenv\n\n- **macOS/Linux – Install pyenv**:\n  \n  git clone https://github.com/pyenv/pyenv.git ~/.pyenv\n  \n- **Windows – Use pyenv‑win** or **Conda** (pyenv‑win can be installed via `pip install pyenv-win`).\n\nAdd pyenv to your shell startup file:\n\necho 'export PYENV_ROOT=\"$HOME/.pyenv\"' >> ~/.bashrc\necho 'export PATH=\"$PYENV_ROOT/bin:$PATH\"' >> ~/.bashrc\necho 'eval \"$(pyenv init -)\"' >> ~/.bashrc\nsource ~/.bashrc\n\n\nInstall a specific Python version:\n\npyenv install 3.11.0\npyenv global 3.11.0\n\n\nCreate a `.python-version` file in your project to lock the interpreter:\n\necho \"3.11.0\" > .python-version\n\n\n### 5. Configure PATH and Verify Installations\n\nAfter adding version managers to your PATH, ensure the order is correct: the shims of `nvm`/`pyenv` should appear before any system‑wide binaries to guarantee the correct runtime is used.\n\nYou can check the resolved paths with:\n\nwhich node   # should point to ~/.nvm/versions/node/v18.x.x/bin/node\nwhich python # should point to ~/.pyenv/shims/python\n\n\nRun a quick sanity check:\n\nnode -v\nnpm -v\npython -V\ngit --version\ncursor --version\n\n\nAll commands should report version numbers without errors.\n\n### 6. Install Essential Extensions (Optional but Recommended)\n\nOpen Cursor, press `Ctrl+Shift+X` (or `Cmd+Shift+X` on macOS) to open the Extensions view, and install:\n\n- **ESLint** – For JavaScript/TypeScript linting.\n- **Prettier** – Code formatter.\n- **Python (Pylance)** – Provides rich language support for Python.\n- **GitLens** – Enhances Git integration (requires Git to be on PATH).\n\nEach extension will detect the interpreter you installed via `nvm` or `pyenv` automatically.\n\n## Verifying the Complete Setup\n\n1. **Open a project folder** – Run `cursor .` in a terminal from any repository. Cursor should start with the folder’s files listed in the Explorer.\n2. **Run a quick AI request** – Type a comment like `# TODO: Write a function that returns the sum of two numbers` and wait for Cursor’s AI suggestion. The suggestion should be generated without any runtime errors in the status bar.\n3. **Check the integrated terminal** – Open a terminal (`Ctrl+``) and execute `node -e \"console.log('Hello from Node')\"` and `python -c \"print('Hello from Python')\"`. Both should print their respective messages.\n4. **Git operations** – Click the Source Control icon, stage a file, and commit. The commit should succeed, and the author information should match the `git config` you set earlier.\n\nIf any of these steps fail, revisit the PATH configuration and ensure the version managers are sourced in the shell that Cursor spawns.\n\n## Optional Tips for Power Users\n\n- **Shell Profiles**: If you use multiple shells (bash, zsh, fish), create a common file (e.g., `~/.profile`) that defines all environment variables and source it from each shell’s startup file. This guarantees consistent behavior regardless of which shell Cursor launches.\n- **Docker Integration**: For languages like Go or Rust, you can keep the toolchain inside a container. Cursor can attach to a container via the **Remote - Containers** extension, which still requires the same Git/Node/Python base tools on the host for seamless AI features.\n- **Continuous Integration**: Mirror your local environment in CI by installing the same Node and Python versions. Use `.nvmrc` and `.python-version` files as CI inputs (`nvm install` and `pyenv install` respectively).\n- **Backup Configuration**: Export your Cursor settings (`cursor --export-settings`) and keep them in a dotfiles repository. This helps you reproduce the environment on a new machine quickly.\n\n## Summary\n\nA proper environment setup is the backbone of a smooth, AI‑augmented development experience with Cursor. By installing Cursor, Git, Node.js via `nvm`, and Python via `pyenv`, and by carefully managing your `PATH`, you ensure that Cursor can locate all required tools, provide accurate code completions, and execute scripts exactly as intended. Verifying each component with simple CLI commands eliminates hidden pitfalls and lets you focus on writing code rather than debugging tooling issues.\n\n## Code Examples\n\n### Example 1\n\n```python\n# Install nvm (macOS/Linux) and reload shell\nexport NVM_DIR=\"$HOME/.nvm\"\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\nsource ~/.bashrc\n\n# Install and activate a specific Node version\nnvm install 18\nnvm use 18\n\n# Create an .nvmrc file for automatic version switching\necho \"18\" > .nvmrc\n```\n\n### Example 2\n\n```python\n# Install pyenv (macOS/Linux)\ngit clone https://github.com/pyenv/pyenv.git ~/.pyenv\n\n# Add pyenv to PATH and initialize\ncat >> ~/.bashrc <<'EOF'\nexport PYENV_ROOT=\"$HOME/.pyenv\"\nexport PATH=\"$PYENV_ROOT/bin:$PATH\"\neval \"$(pyenv init -)\"\nEOF\nsource ~/.bashrc\n\n# Install a specific Python version and set global interpreter\npyenv install 3.11.0\npyenv global 3.11.0\n\n# Pin the version in the project\necho \"3.11.0\" > .python-version\n```\n\n### Example 3\n\n```python\n# Verify all tools are accessible from PATH\nwhich node   # should output something like ~/.nvm/versions/node/v18.x.x/bin/node\nwhich python # should output something like ~/.pyenv/shims/python\nwhich git    # should output /usr/bin/git (or the installed path)\n\n# Print version numbers for a sanity check\nnode -v\nnpm -v\npython -V\ngit --version\n```\n\n### Example 4\n\n```python\n# Open a project folder with Cursor from the command line\ncursor .   # Launches Cursor with the current directory as workspace\n\n# Inside Cursor, open the integrated terminal (Ctrl+`) and run a quick test\nnode -e \"console.log('Node is working')\"\npython -c \"print('Python is working')\"\n```\n\n\n\n## Common Mistakes\n\n- Skipping the `source ~/.bashrc` (or equivalent) after installing nvm or pyenv, which leaves the shims unavailable in the current shell session.\n- Installing Node or Python globally without a version manager, leading to version conflicts when different projects require different runtime versions.\n- Placing version‑manager PATH entries after system binaries, causing the wrong (often older) system version to be used instead of the managed one.\n- Installing Cursor in a directory that contains spaces or special characters (e.g., `C:\\Program Files\\Cursor`) without quoting paths, which can break CLI shortcuts.\n- Forgetting to configure Git user name/email, causing Cursor’s Git UI to show “author unknown” for commits and blame annotations.\n- Not verifying the installations with simple `which` and version commands, so misconfigurations remain hidden until an error occurs during development.\n\n\n## Best Practices\n\n- Always use version managers (nvm, pyenv) and lock runtime versions per project using `.nvmrc` and `.python-version` files, ensuring every teammate and CI job uses identical toolchains.\n- Add only the necessary tools to PATH and keep the order correct: user‑local bin directories (nvm shims, pyenv shims) should appear before system directories.\n- Create a unified shell profile (e.g., `~/.profile`) that defines all environment variables and source it from all shell init files, guaranteeing consistency across shells opened by Cursor.\n- Run a quick sanity check after installation: `which node && node -v && npm -v && which python && python -V && git --version && cursor --version`. This confirms that every required binary is reachable.\n- Keep Cursor updated; new releases often include tighter integration with the latest Node/Python versions and improved AI performance.\n- Document your environment setup in a README or a dedicated `docs/setup.md` file, including the exact commands you used to install each tool, so others (or future you) can reproduce the environment easily.\n",
+      "code_examples": [
+        "# Install nvm (macOS/Linux) and reload shell\nexport NVM_DIR=\"$HOME/.nvm\"\ncurl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash\nsource ~/.bashrc\n\n# Install and activate a specific Node version\nnvm install 18\nnvm use 18\n\n# Create an .nvmrc file for automatic version switching\necho \"18\" > .nvmrc",
+        "# Install pyenv (macOS/Linux)\ngit clone https://github.com/pyenv/pyenv.git ~/.pyenv\n\n# Add pyenv to PATH and initialize\ncat >> ~/.bashrc <<'EOF'\nexport PYENV_ROOT=\"$HOME/.pyenv\"\nexport PATH=\"$PYENV_ROOT/bin:$PATH\"\neval \"$(pyenv init -)\"\nEOF\nsource ~/.bashrc\n\n# Install a specific Python version and set global interpreter\npyenv install 3.11.0\npyenv global 3.11.0\n\n# Pin the version in the project\necho \"3.11.0\" > .python-version",
+        "# Verify all tools are accessible from PATH\nwhich node   # should output something like ~/.nvm/versions/node/v18.x.x/bin/node\nwhich python # should output something like ~/.pyenv/shims/python\nwhich git    # should output /usr/bin/git (or the installed path)\n\n# Print version numbers for a sanity check\nnode -v\nnpm -v\npython -V\ngit --version",
+        "# Open a project folder with Cursor from the command line\ncursor .   # Launches Cursor with the current directory as workspace\n\n# Inside Cursor, open the integrated terminal (Ctrl+`) and run a quick test\nnode -e \"console.log('Node is working')\"\npython -c \"print('Python is working')\""
+      ]
+    },
+    "448": {
+      "detail_id": 189,
+      "subnode_id": 448,
+      "title": "AI Model Selection & Configuration",
+      "description": "Understand the available AI backends, API key management, and how to tune model parameters for optimal performance.",
+      "key_points": [
+        "Compare OpenAI GPT‑4, Claude, and internal models",
+        "Add API keys to Cursor settings securely",
+        "Adjust temperature, max tokens, and other generation parameters"
+      ],
+      "detailed_content": "## Concept Explanation\n\nIn Cursor AI, the model you choose determines how code completions, refactorings, and conversational assistance feel and perform. The selection influences latency, cost, privacy, and the kinds of suggestions you receive. Understanding the trade‑offs helps you pick the right backend for each task and avoid unnecessary spend or security risks.\n\n### Why Model Selection Matters\n\n- **Quality vs Speed** – Larger models like GPT‑4 produce more accurate suggestions but have higher latency.\n- **Cost** – Each API call consumes tokens; internal models may be cheaper or free.\n- **Privacy** – Using an internal model keeps code on‑premises, reducing data‑exposure risk.\n- **Domain Strength** – Claude excels at long‑range reasoning; GPT‑4 is strong in broad language understanding; internal models may be fine‑tuned on code.\n\n### Overview of Available Backends\n\n| Backend | Provider | Context Window | Typical Use‑Case | Pricing |\n|---|---|---|---|---|\n| OpenAI GPT‑4 | OpenAI | 8K / 32K tokens | General coding, complex logic | Pay‑per‑token |\n| Anthropic Claude | Anthropic | 100K tokens | Long codebases, deep reasoning | Pay‑per‑token |\n| Cursor Internal | Cursor | 4K tokens | Fast suggestions, low‑cost | Included with Cursor subscription |\n\nChoose the backend that aligns with your project size, latency tolerance, and budget.\n\n## Core Mechanics\n\n### How Cursor Communicates with Backends\n\nCursor acts as a thin wrapper around the underlying REST APIs. When you request a completion, Cursor:\n\n1. **Resolves the model** from the active configuration.\n2. **Builds an HTTP request** with the appropriate endpoint (e.g., `https://api.openai.com/v1/chat/completions`).\n3. **Attaches authentication** using the API key stored in the environment.\n4. **Sends generation parameters** (temperature, max_tokens, …) as JSON payload.\n5. **Returns the streamed or batched response** to the editor.\n\n### Adding API Keys Securely\n\n1. **Environment Variables** – Store keys in a `.env` file and load them with a library like `dotenv`. Cursor reads `process.env` automatically.\n2. **Cursor Settings UI** – Navigate to **Edit → Preferences → AI** and paste the key into the dedicated field. The key is encrypted at rest.\n3. **Secret Managers** – For CI/CD, use services such as AWS Secrets Manager or HashiCorp Vault, and inject the key at runtime.\n\nNever commit API keys to version control. Add `.env` to `.gitignore`.\n\n### Model Configuration Parameters\n\n| Parameter | Description | Typical Range |\n|---|---|---|\n| temperature | Controls randomness. Low → deterministic, high → creative. | 0.0 – 1.0 |\n| max_tokens | Maximum number of tokens the model can generate. | 1 – model limit |\n| top_p | Nucleus sampling threshold. | 0.0 – 1.0 |\n| presence_penalty | Discourages repeating topics already mentioned. | -2.0 – 2.0 |\n| frequency_penalty | Penalizes repeated token usage. | -2.0 – 2.0 |\n| stop | List of tokens that stop generation. | array of strings |\n\n### Switching Models in Cursor\n\n- **UI**: Click the model indicator in the status bar and pick a new backend.\n- **Config File**: Edit `~/.cursor/config.json` (or the workspace‑level `.cursor.json`) and set the `model` field.\n\n## Parameter Tuning Guidance\n\n- **Deterministic Code Generation** (e.g., boilerplate): Use temperature 0.0 – 0.2, max_tokens 256.\n- **Creative Solutions** (e.g., algorithm brainstorming): Use temperature 0.7 – 0.9, max_tokens 512.\n- **Long‑Range Refactoring** (e.g., cross‑file changes): Choose Claude’s 100K context and keep temperature 0.5.\n- **Balanced Tasks**: Start with defaults (temperature 0.7, max_tokens 512) and adjust based on output quality.\n\n## Practical Advice\n\n1. **Start Small** – Test new parameters with a handful of prompts before applying them globally.\n2. **Monitor Token Usage** – Most providers expose usage endpoints; set alerts when you approach monthly caps.\n3. **Leverage System Prompts** – Use a system message to guide behavior (e.g., You are a senior JavaScript developer specializing in performance).\n4. **Keep Secrets Out of Code** – Use environment variables or secret managers; never embed keys in scripts.\n5. **Version‑Control Configurations** – Store non‑secret settings (model name, default parameters) in version control so the team shares a consistent setup.\n6. **Iterate Based on Feedback** – If completions are too generic, raise temperature; if they wander, lower it.\n\n## Code Examples\n\n### Example 1\n\n```python\n// Example 1: Using environment variable for API key with OpenAI\nrequire('dotenv').config();\nconst { OpenAI } = require('openai');\n\nconst client = new OpenAI({\n  apiKey: process.env.OPENAI_API_KEY\n});\n\nasync function getCompletion(prompt, model = 'gpt-4', temperature = 0.7, maxTokens = 150) {\n  const response = await client.chat.completions.create({\n    model: model,\n    messages: [{role: 'user', content: prompt}],\n    temperature: temperature,\n    max_tokens: maxTokens\n  });\n  return response.choices[0].message.content;\n}\n\n// Example usage\ngetCompletion('Explain the difference between let and const in JavaScript')\n  .then(console.log)\n  .catch(console.error);\n```\n\n### Example 2\n\n```python\n# Example 2: Using environment variable for API key with Anthropic Claude\nimport os\nimport anthropic\n\nclient = anthropic.Anthropic(\n    api_key=os.environ.get('ANTHROPIC_API_KEY')\n)\n\ndef get_completion(prompt, model='claude-3-opus-20240229', temperature=0.5, max_tokens=512):\n    message = client.messages.create(\n        model=model,\n        max_tokens=max_tokens,\n        temperature=temperature,\n        messages=[\n            {'role': 'user', 'content': prompt}\n        ]\n    )\n    return message.content[0].text\n\n# Example usage\nprint(get_completion('What are the benefits of using type hints in Python?'))\n```\n\n### Example 3\n\n```python\n{\n  \"model\": \"cursor-internal-1\",\n  \"parameters\": {\n    \"temperature\": 0.8,\n    \"max_tokens\": 512,\n    \"top_p\": 0.95,\n    \"presence_penalty\": 0.0,\n    \"frequency_penalty\": 0.0\n  }\n}\n```\n\n\n\n## Common Mistakes\n\n- Storing API keys directly in source code files, leading to accidental exposure in version control.\n- Using a high temperature (e.g., 1.0) for deterministic tasks such as code generation, which produces unpredictable output.\n- Not setting max_tokens, causing responses to be cut off unexpectedly or exceeding the model's context limit.\n- Ignoring the model's context window size, which leads to truncation of long prompts or completions.\n- Using the same API key for development and production environments, increasing security risk.\n- Failing to handle API errors like rate limits and timeouts, resulting in broken builds or silent failures.\n\n\n## Best Practices\n\n- Store API keys in environment variables or a secret manager and never commit them to version control.\n- Use separate API keys for different environments (dev, staging, prod) to limit exposure.\n- Set a reasonable max_tokens based on the expected length of the output to avoid truncation.\n- Start with default temperature and adjust based on task; lower values for precise code, higher for creative solutions.\n- Monitor token usage and set budget alerts to avoid unexpected costs.\n- Version‑control non‑secret configuration files (model name, default parameters) to ensure reproducibility across the team.\n",
+      "code_examples": [
+        "// Example 1: Using environment variable for API key with OpenAI\nrequire('dotenv').config();\nconst { OpenAI } = require('openai');\n\nconst client = new OpenAI({\n  apiKey: process.env.OPENAI_API_KEY\n});\n\nasync function getCompletion(prompt, model = 'gpt-4', temperature = 0.7, maxTokens = 150) {\n  const response = await client.chat.completions.create({\n    model: model,\n    messages: [{role: 'user', content: prompt}],\n    temperature: temperature,\n    max_tokens: maxTokens\n  });\n  return response.choices[0].message.content;\n}\n\n// Example usage\ngetCompletion('Explain the difference between let and const in JavaScript')\n  .then(console.log)\n  .catch(console.error);",
+        "# Example 2: Using environment variable for API key with Anthropic Claude\nimport os\nimport anthropic\n\nclient = anthropic.Anthropic(\n    api_key=os.environ.get('ANTHROPIC_API_KEY')\n)\n\ndef get_completion(prompt, model='claude-3-opus-20240229', temperature=0.5, max_tokens=512):\n    message = client.messages.create(\n        model=model,\n        max_tokens=max_tokens,\n        temperature=temperature,\n        messages=[\n            {'role': 'user', 'content': prompt}\n        ]\n    )\n    return message.content[0].text\n\n# Example usage\nprint(get_completion('What are the benefits of using type hints in Python?'))",
+        "{\n  \"model\": \"cursor-internal-1\",\n  \"parameters\": {\n    \"temperature\": 0.8,\n    \"max_tokens\": 512,\n    \"top_p\": 0.95,\n    \"presence_penalty\": 0.0,\n    \"frequency_penalty\": 0.0\n  }\n}"
+      ]
+    },
+    "449": {
+      "detail_id": 190,
+      "subnode_id": 449,
+      "title": "UI Overview & Keyboard Shortcuts",
+      "description": "A tour of Cursor’s interface components, the AI panel, Composer, and essential shortcuts for rapid navigation.",
+      "key_points": [
+        "Open AI panel (Cmd/Ctrl+L) and Composer (Cmd/Ctrl+I)",
+        "Master command palette (Cmd/Ctrl+Shift+P)",
+        "Customize keybindings for personal workflow"
+      ],
+      "detailed_content": "",
+      "code_examples": []
+    },
+    "450": {
+      "detail_id": 191,
+      "subnode_id": 450,
+      "title": "First AI‑Assisted Code Snippet",
+      "description": "Hands‑on exercise to generate, accept, and refine a simple code block using AI suggestions.",
+      "key_points": [
+        "Write a natural‑language prompt for a basic function",
+        "Accept or modify AI‑generated code",
+        "Run the function and verify output"
+      ],
+      "detailed_content": "## Concept Explanation\n\n### Why It Matters\n\nAI‑assisted code generation is more than a novelty; it’s a productivity multiplier. By feeding a concise natural‑language description to Cursor AI, you can obtain a ready‑to‑use function in seconds. This workflow helps you:\n\n- **Reduce boilerplate**: Instead of typing repetitive patterns, you get a clean implementation that you can review and refine.\n- **Accelerate learning**: When you see a generated solution, you can study idiomatic patterns, naming conventions, and algorithmic approaches you may not have known.\n- **Focus on logic**: By offloading syntax‑level work to the AI, you can concentrate on higher‑level design and problem solving.\n\n### Core Mechanics\n\n1. **Write a natural‑language prompt**\n   - Describe the function signature, input types, and expected behavior.\n   - Mention edge cases if they are important (e.g., “handle an empty list”).\n2. **Review the generated code**\n   - Cursor AI will display a code block with comments.\n   - You may **accept** the suggestion, **modify** parts, or **reject** and refine the prompt.\n3. **Run the function and verify output**\n   - Execute the code in your environment (REPL, notebook, script).\n   - Compare the result against a set of known test cases, including edge cases.\n\n### Hands‑On Example: Factorial in Python\n\nBelow is a minimal prompt and the code you might receive. The example shows how to accept the snippet, optionally tweak it, and then test it.\n\npython\n# Prompt: Write a Python function that returns the factorial of a non‑negative integer.\ndef factorial(n):\n    \"\"\"Return n! for non‑negative integer n.\"\"\"\n    if n < 0:\n        raise ValueError(\"Factorial is not defined for negative numbers.\")\n    if n == 0 or n == 1:\n        return 1\n    # Use recursion for clarity\n    return n * factorial(n - 1)\n\n# Quick test\nprint(factorial(5))  # Expected: 120\n\n\n### Hands‑On Example: Sum of Numbers in JavaScript\n\nA similar workflow for JavaScript demonstrates how the language specifics affect the generated code.\n\njavascript\n// Prompt: Write a JavaScript function that takes an array of numbers and returns their sum.\nfunction sumArray(arr) {\n    // Guard against non‑array input\n    if (!Array.isArray(arr)) {\n        throw new TypeError(\"Input must be an array.\");\n    }\n    // Use reduce to accumulate values\n    return arr.reduce((acc, val) => acc + (typeof val === 'number' ? val : 0), 0);\n}\n\n// Test cases\nconsole.log(sumArray([1, 2, 3]));      // Expected: 6\nconsole.log(sumArray([]));            // Expected: 0\nconsole.log(sumArray([4, 'a', 2]));    // Expected: 6 (non‑numbers are ignored)\n\n\n### Why Iteration Matters\n\nAI models generate plausible code, but they can also introduce subtle bugs or ignore edge cases. By iterating—changing the prompt, adding constraints, or editing the generated snippet—you achieve a solution that truly fits your project’s requirements.\n\n### Tips for Effective Prompts\n\n- **Be explicit about types**: e.g., “parameter `n` is an integer”.\n- **State expected output**: e.g., “return the factorial as an integer”.\n- **Mention constraints**: e.g., “do not use built‑in factorial functions”.\n- **Include test scenarios**: “the function should return 0 for an empty array”.\n\n### Summary\n\n- Write a clear, concise prompt.\n- Review, accept, or modify the AI suggestion.\n- Run the code and validate with a suite of test cases.\n- Iterate to refine both the prompt and the implementation.\n\nBy mastering this first AI‑assisted snippet workflow, you lay the foundation for more complex, multi‑step AI‑augmented development sessions.\n\n## Code Examples\n\n### Example 1\n\n```python\n# Python: Compute factorial\n# Prompt: Write a Python function that returns the factorial of a non‑negative integer.\ndef factorial(n):\n    \"\"\"Return n! for non‑negative integer n.\"\"\"\n    if n < 0:\n        raise ValueError(\"Factorial is not defined for negative numbers.\")\n    if n == 0 or n == 1:\n        return 1\n    # Recursive case\n    return n * factorial(n - 1)\n\n# Simple test\nprint(\"5! =\", factorial(5))  # Expected: 120\n```\n\n### Example 2\n\n```python\n# JavaScript: Sum an array of numbers\n// Prompt: Write a JavaScript function that takes an array of numbers and returns their sum.\nfunction sumArray(arr) {\n    if (!Array.isArray(arr)) {\n        throw new TypeError('Input must be an array.');\n    }\n    // Use reduce, ignoring non‑numeric values\n    return arr.reduce((sum, val) => sum + (typeof val === 'number' ? val : 0), 0);\n}\n\n// Test cases\nconsole.log(sumArray([1, 2, 3]));      // Expected: 6\nconsole.log(sumArray([]));            // Expected: 0\nconsole.log(sumArray([4, 'a', 2]));   // Expected: 6\n```\n\n\n\n## Common Mistakes\n\n- Writing vague prompts that do not specify input types or expected behavior, leading to unexpected function signatures.\n- Accepting AI‑generated code without reviewing it for correctness, missing edge‑case handling or off‑by‑one errors.\n- Not testing the snippet with a variety of inputs, especially boundary conditions like empty collections or negative numbers.\n- Assuming the AI always follows language‑specific best practices, which can result in deprecated APIs or non‑idiomatic style.\n- Skipping documentation or comments, making future maintenance harder when the original intent is unclear.\n\n\n## Best Practices\n\n- Craft prompts that are concise yet complete: state the function name (if desired), input types, output type, and notable constraints.\n- Always review the generated code line‑by‑line before integrating it; treat it as a draft, not a final product.\n- Add your own comments and docstrings to clarify purpose, parameters, and return values, reinforcing your understanding.\n- Test the snippet with a suite of test cases, including normal, edge, and error‑case inputs, and verify the output matches expectations.\n- Use version control to commit each iteration of the prompt and resulting code, allowing you to roll back if later changes introduce bugs.\n- Iterate quickly: if the first suggestion is not ideal, refine the prompt and request a new generation rather than patching extensively.\n",
+      "code_examples": [
+        "# Python: Compute factorial\n# Prompt: Write a Python function that returns the factorial of a non‑negative integer.\ndef factorial(n):\n    \"\"\"Return n! for non‑negative integer n.\"\"\"\n    if n < 0:\n        raise ValueError(\"Factorial is not defined for negative numbers.\")\n    if n == 0 or n == 1:\n        return 1\n    # Recursive case\n    return n * factorial(n - 1)\n\n# Simple test\nprint(\"5! =\", factorial(5))  # Expected: 120",
+        "# JavaScript: Sum an array of numbers\n// Prompt: Write a JavaScript function that takes an array of numbers and returns their sum.\nfunction sumArray(arr) {\n    if (!Array.isArray(arr)) {\n        throw new TypeError('Input must be an array.');\n    }\n    // Use reduce, ignoring non‑numeric values\n    return arr.reduce((sum, val) => sum + (typeof val === 'number' ? val : 0), 0);\n}\n\n// Test cases\nconsole.log(sumArray([1, 2, 3]));      // Expected: 6\nconsole.log(sumArray([]));            // Expected: 0\nconsole.log(sumArray([4, 'a', 2]));   // Expected: 6"
+      ]
+    },
+    "451": {
+      "detail_id": 192,
+      "subnode_id": 451,
+      "title": "Rules & Skills: Permanent AI Instructions",
+      "description": "How to write, version‑control, and apply project‑wide instructions that the AI follows in every session.",
+      "key_points": [
+        "Define coding standards, naming conventions, and security guidelines",
+        "Organize Rules files per module or feature",
+        "Debug and iterate on instruction quality"
+      ],
+      "detailed_content": "",
+      "code_examples": []
+    },
+    "452": {
+      "detail_id": 193,
+      "subnode_id": 452,
+      "title": "Composer for Multi‑File Editing",
+      "description": "Leverage Cursor’s Composer to generate or refactor several files in a single request, maintaining consistency across the codebase.",
+      "key_points": [
+        "Draft composite prompts that specify multiple file targets",
+        "Review generated diffs before committing changes",
+        "Apply bulk refactors (e.g., renaming, import cleanup)"
+      ],
+      "detailed_content": "# Composer for Multi-File Editing\n\n## Concept Overview\n\nCursor's Composer is a powerful feature designed to handle multi-file generation and refactoring in a single request. Unlike traditional single-file editing where you work with one file at a time, Composer enables you to target multiple files simultaneously while maintaining structural consistency and code coherence across your entire codebase.\n\n### Why It Matters\n\nModern applications rarely exist in isolation. A typical feature might require changes to:\n\n- A component file\n- Its corresponding styles\n- Test files\n- Type definitions\n- State management logic\n\nWithout Composer, you'd need to make these changes sequentially, risking inconsistency and requiring you to manually track which files you've already modified. Composer solves this by treating your codebase as a cohesive unit rather than a collection of disconnected files.\n\n## Core Mechanics\n\n### How Composer Processes Multi-File Requests\n\n1. **Composite Prompt Structure**: You construct a prompt that explicitly identifies target files and describes the desired changes for each.\n\n2. **Context Awareness**: Composer analyzes relationships between files—imports, dependencies, and shared types—to ensure changes align with existing architecture.\n\n3. **Atomic Generation**: All specified files are generated or modified in a single pass, ensuring consistency in naming conventions, coding style, and implementation patterns.\n\n4. **Diff Presentation**: Changes appear as a unified diff view, allowing you to review all modifications before applying them.\n\n### Key Capabilities\n\n| Capability | Description |\n|------------|-------------|\n| Batch Generation | Create multiple related files from a single prompt |\n| Bulk Refactoring | Rename symbols or restructure code across multiple files |\n| Import Management | Automatically update import statements when files move |\n| Consistency Enforcement | Apply uniform patterns across all targeted files |\n\n## Practical Workflow\n\n### Drafting Composite Prompts\n\nWhen writing multi-file prompts, structure matters. Include these elements:\n\n- **Explicit file paths**: Specify exact locations for each file\n- **Clear purpose**: Describe what each file should contain\n- **Relationships**: Explain how files interact with each other\n- **Constraints**: Mention coding standards or patterns to follow\n\n### Review Process\n\n1. Generate the changes\n2. Review the diff view thoroughly\n3. Check each file individually for accuracy\n4. Verify imports and exports are correct\n5. Confirm changes align with your codebase conventions\n6. Apply only if satisfied\n\n## Common Use Cases\n\n### Feature Creation\n\nCreate a complete feature module including:\n\n- Main component\n- Sub-components\n- Utility functions\n- Type definitions\n- Associated tests\n\n### Architectural Changes\n\nRefactor codebases by:\n\n- Renaming variables across multiple files\n- Extracting shared logic into utility modules\n- Restructuring folder hierarchies\n- Updating deprecated patterns\n\n### Import Cleanup\n\nRemove unused imports, organize import statements, or update paths when restructuring files.\n\n## Important Considerations\n\nWhile Composer is powerful, it requires careful usage. Always verify generated code matches your expectations, especially when working with critical files or making architectural changes.\n\n## Best Practices Summary\n\n- Always review diffs before committing\n- Use explicit file paths in prompts\n- Keep prompts focused on specific features\n- Maintain regular version control check-ins\n\n\n## Code Examples\n\n### Example 1\n\n```python\n// Example 1: Multi-file feature generation prompt\n// Use this pattern when you need to create multiple related files\n// Paste this into Composer to generate a complete feature module\n\n/*\nCreate a user authentication module with the following structure:\n\n1. src/auth/context/AuthContext.tsx\n   - React Context with user state management\n   - Include login(), logout(), and useAuth() hook\n   - Handle loading and error states\n\n2. src/auth/types/index.ts\n   - Export User interface with id, email, name, role\n   - Export AuthState interface with user, isAuthenticated, isLoading\n   - Export AuthContextType interface\n\n3. src/auth/hooks/useAuth.ts\n   - Custom hook that wraps useContext(AuthContext)\n   - Provide TypeScript types for the return value\n   - Include error handling for missing provider\n\n4. src/auth/services/authService.ts\n   - Async functions: loginUser(), logoutUser(), fetchCurrentUser()\n   - Mock API delay of 500ms for simulation\n   - Return proper success/error responses\n\n5. src/auth/__tests__/AuthContext.test.tsx\n   - Test provider rendering\n   - Test login/logout functionality\n   - Test auth state transitions\n   - Use @testing-library/react\n\nFollow these conventions:\n- Use TypeScript strict mode\n- No console.log statements\n- Include JSDoc comments for public functions\n- Use named exports only\n*/\n```\n\n### Example 2\n\n```python\n// Example 2: Bulk refactoring prompt\n// Use this pattern when you need to rename or restructure code across files\n\n/*\nPerform the following refactoring across the entire codebase to rename legacy patterns to modern patterns:\n\nFile targets:\n1. All .ts and .tsx files in src/components/\n2. All .ts files in src/utils/\n3. src/types/index.ts\n\nChanges to apply:\n\nA. Rename pattern (API-first to promise-based):\n   - `getDataUsingCallback(callback)` → `getData()` returning Promise\n   - Update all call sites to use async/await\n   - Remove callback parameters from function signatures\n\nB. Rename utility functions:\n   - `formatDateString(date: Date)` → `formatDate(date: Date)`\n   - `calculateSumOfArray(arr: number[])` → `sum(numbers: number[])`\n   - `createUUID()` → `generateId()`\n\nC. Update import statements:\n   - Remove imports from 'utils/helpers' (now in 'utils/')\n   - Add 'type' keyword to type-only imports\n\nD. Code style fixes:\n   - Convert all function declarations to arrow functions\n   - Replace var with const where appropriate\n   - Add explicit return types to all exported functions\n\nBefore generating, analyze the dependency graph to ensure imports are updated correctly.\nAfter generating, verify all exports/imports remain consistent.\n*/\n```\n\n### Example 3\n\n```python\n// Example 3: Import cleanup and organization prompt\n// Use this pattern for bulk import management\n\n/*\nClean up imports across the following files:\n\nTarget files:\n- src/features/user/*.tsx\n- src/features/user/*.ts\n- src/features/user/components/*.tsx\n\nCleanup tasks:\n\n1. Remove unused imports:\n   - Scan each file for imports that are not referenced\n   - Remove only truly unused imports, not conditional ones\n\n2. Organize import order:\n   - React and Next.js imports first (external frameworks)\n   - Third-party libraries (alphabetical)\n   - Internal imports (shorter paths first)\n   - Type imports (use 'import type' syntax)\n\n3. Simplify import paths:\n   - Replace '../components/Button' with '@/components/Button' if using path aliases\n   - Consolidate multiple imports from same package into single line\n\n4. Convert default imports to named where applicable:\n   - Look for 'import React from \"react\"' → 'import { useState } from \"react\"'\n   - Only convert if fewer than 3 named imports from package\n\n5. Add missing type imports:\n   - Convert 'import { User }' to 'import type { User }' where User is only used as a type\n\nProvide a summary of all changes made for review.\n*/\n```\n\n\n\n## Common Mistakes\n\n- Not reviewing generated diffs thoroughly before applying changes, which can introduce subtle bugs or inconsistencies across files\n- Writing vague prompts that don't specify exact file paths, causing Composer to generate files in unexpected locations or with inconsistent naming\n- Overloading a single prompt with too many files or too many types of changes, leading to partial or incorrect implementations\n- Forgetting to check inter-file dependencies like imports, exports, and shared types after bulk generation\n- Assuming changes are atomic and complete without verifying that all referenced files have been updated\n- Not committing to version control before applying bulk changes, making rollback difficult if issues are discovered later\n\n\n## Best Practices\n\n- Always draft prompts that explicitly list each target file with its path and intended purpose, making your intent unambiguous\n- Review generated changes incrementally—apply and test changes in small batches rather than committing all files at once\n- Use consistent naming conventions and code style guidelines in your prompts to ensure uniformity across generated files\n- Maintain regular version control commits so you can easily revert if bulk changes introduce unexpected issues\n- Verify inter-file consistency by checking that imports, exports, and shared types align correctly after generation\n- Split complex multi-file requests into smaller, focused prompts that handle single concerns (e.g., separate prompts for types, components, and utilities)\n- Test generated code in isolation and then verify integration works correctly before considering the task complete\n",
+      "code_examples": [
+        "// Example 1: Multi-file feature generation prompt\n// Use this pattern when you need to create multiple related files\n// Paste this into Composer to generate a complete feature module\n\n/*\nCreate a user authentication module with the following structure:\n\n1. src/auth/context/AuthContext.tsx\n   - React Context with user state management\n   - Include login(), logout(), and useAuth() hook\n   - Handle loading and error states\n\n2. src/auth/types/index.ts\n   - Export User interface with id, email, name, role\n   - Export AuthState interface with user, isAuthenticated, isLoading\n   - Export AuthContextType interface\n\n3. src/auth/hooks/useAuth.ts\n   - Custom hook that wraps useContext(AuthContext)\n   - Provide TypeScript types for the return value\n   - Include error handling for missing provider\n\n4. src/auth/services/authService.ts\n   - Async functions: loginUser(), logoutUser(), fetchCurrentUser()\n   - Mock API delay of 500ms for simulation\n   - Return proper success/error responses\n\n5. src/auth/__tests__/AuthContext.test.tsx\n   - Test provider rendering\n   - Test login/logout functionality\n   - Test auth state transitions\n   - Use @testing-library/react\n\nFollow these conventions:\n- Use TypeScript strict mode\n- No console.log statements\n- Include JSDoc comments for public functions\n- Use named exports only\n*/",
+        "// Example 2: Bulk refactoring prompt\n// Use this pattern when you need to rename or restructure code across files\n\n/*\nPerform the following refactoring across the entire codebase to rename legacy patterns to modern patterns:\n\nFile targets:\n1. All .ts and .tsx files in src/components/\n2. All .ts files in src/utils/\n3. src/types/index.ts\n\nChanges to apply:\n\nA. Rename pattern (API-first to promise-based):\n   - `getDataUsingCallback(callback)` → `getData()` returning Promise\n   - Update all call sites to use async/await\n   - Remove callback parameters from function signatures\n\nB. Rename utility functions:\n   - `formatDateString(date: Date)` → `formatDate(date: Date)`\n   - `calculateSumOfArray(arr: number[])` → `sum(numbers: number[])`\n   - `createUUID()` → `generateId()`\n\nC. Update import statements:\n   - Remove imports from 'utils/helpers' (now in 'utils/')\n   - Add 'type' keyword to type-only imports\n\nD. Code style fixes:\n   - Convert all function declarations to arrow functions\n   - Replace var with const where appropriate\n   - Add explicit return types to all exported functions\n\nBefore generating, analyze the dependency graph to ensure imports are updated correctly.\nAfter generating, verify all exports/imports remain consistent.\n*/",
+        "// Example 3: Import cleanup and organization prompt\n// Use this pattern for bulk import management\n\n/*\nClean up imports across the following files:\n\nTarget files:\n- src/features/user/*.tsx\n- src/features/user/*.ts\n- src/features/user/components/*.tsx\n\nCleanup tasks:\n\n1. Remove unused imports:\n   - Scan each file for imports that are not referenced\n   - Remove only truly unused imports, not conditional ones\n\n2. Organize import order:\n   - React and Next.js imports first (external frameworks)\n   - Third-party libraries (alphabetical)\n   - Internal imports (shorter paths first)\n   - Type imports (use 'import type' syntax)\n\n3. Simplify import paths:\n   - Replace '../components/Button' with '@/components/Button' if using path aliases\n   - Consolidate multiple imports from same package into single line\n\n4. Convert default imports to named where applicable:\n   - Look for 'import React from \"react\"' → 'import { useState } from \"react\"'\n   - Only convert if fewer than 3 named imports from package\n\n5. Add missing type imports:\n   - Convert 'import { User }' to 'import type { User }' where User is only used as a type\n\nProvide a summary of all changes made for review.\n*/"
+      ]
+    },
+    "453": {
+      "detail_id": 194,
+      "subnode_id": 453,
+      "title": "Prompt Engineering & Context Management",
+      "description": "Techniques for structuring prompts, injecting relevant context, and steering AI behavior for precise code generation.",
+      "key_points": [
+        "Break complex tasks into sequential, incremental prompts",
+        "Embed code snippets, comments, and API docs as context",
+        "Use explicit constraints to limit scope and enforce style"
+      ],
+      "detailed_content": "## Prompt Engineering & Context Management in Cursor AI\n\n### Concept Explanation: Why This Matters\n\nPrompt engineering is the art of communicating your intent to an AI system in ways that consistently produce the desired output. In the context of integrated programming workflows with Cursor AI, effective prompt engineering isn't just about getting code to work—it's about creating a collaborative environment where the AI understands not just *what* you want, but *how* you want it, *why* you need it that way, and *where* it fits into your broader project architecture.\n\nWhen you master prompt engineering and context management, you transform Cursor AI from a simple autocomplete tool into a true pair programming partner. The difference between a junior developer who struggles with AI tools and a senior developer who integrates them seamlessly often comes down to their ability to articulate requirements, provide appropriate context, and guide the AI's reasoning process through structured communication.\n\nContext management is equally critical because AI systems have limited working memory. The model processes text sequentially, and information presented earlier in a conversation has a outsized influence on subsequent outputs. Without proper context management, you might find the AI contradicting itself, ignoring your previous instructions, or generating code that doesn't integrate with your existing codebase.\n\n### Core Mechanics: How It Works\n\n#### The Sequential Prompting Strategy\n\nComplex programming tasks rarely succeed when attempted in a single prompt. When you ask Cursor AI to build an entire feature from scratch, the model must juggle architecture decisions, implementation details, error handling, testing considerations, and style consistency—all within a single response. This cognitive overload leads to suboptimal results.\n\nThe sequential prompting strategy addresses this by breaking tasks into digestible pieces. Instead of asking \"build a user authentication system,\" you decompose the request into logical phases: first establish the data models, then implement the core authentication logic, add security middleware, create the API endpoints, and finally write tests. Each prompt builds upon the previous work, creating a coherent development trajectory.\n\nThis approach offers several advantages. First, it allows you to catch and correct errors early, before they compound. Second, it gives you granular control over each component's implementation. Third, it reduces the AI's working memory burden, allowing it to focus its attention on the specific task at hand. Fourth, it creates natural checkpoints where you can evaluate progress and adjust direction.\n\n#### Context Injection Techniques\n\nContext injection involves providing Cursor AI with relevant information that shapes its responses. Effective context injection goes beyond simply pasting your entire codebase into the prompt—it's about selecting and presenting information strategically.\n\n**Code Snippets as Context**: When you want the AI to follow existing patterns, provide concrete examples from your codebase. Instead of describing \"our error handling style,\" show actual error handling code from your project. The model can then extract patterns and apply them consistently.\n\n**Documentation References**: Including relevant documentation—whether from language standard libraries, framework APIs, or your own project documentation—helps the AI generate code that uses APIs correctly and follows established conventions.\n\n**Comments and Annotations**: Adding explanatory comments within code snippets helps the AI understand not just what the code does, but why it was written that way. This prevents well-intentioned \"improvements\" that might break implicit assumptions.\n\n**Project Structure Information**: Providing a brief overview of your project structure helps the AI place new code in the right locations and understand import/export relationships.\n\n#### Constraint-Based Steering\n\nExplicit constraints guide AI behavior by narrowing the solution space. Without constraints, the AI may generate code that's technically correct but doesn't fit your requirements—perhaps using a different coding style, targeting a different Node.js version, or solving a slightly different problem than intended.\n\nConstraints can be positive (requirements the code must satisfy) or negative (restrictions on what the code can do). Positive constraints include performance requirements, compatibility targets, and feature specifications. Negative constraints include avoiding certain patterns, libraries, or approaches that have proven problematic in your context.\n\nEffective constraints are specific and measurable. \"Make the function fast\" is less useful than \"Ensure the function processes 10,000 records in under 100ms on the target hardware.\" The more precisely you can specify your requirements, the more reliably the AI can meet them.\n\n### Practical Implementation\n\nThe three key techniques—sequential prompting, context injection, and constraint-based steering—work best when applied together. When crafting a prompt for Cursor AI, consider each element:\n\n1. **Clear objective**: What specific task do you want accomplished in this prompt?\n2. **Relevant context**: What information does the AI need to understand your situation?\n3. **Explicit constraints**: What requirements or restrictions apply to this task?\n4. **Feedback mechanism**: How will you evaluate whether the output meets your needs?\n\n### Common Pitfalls and Gotchas\n\n**Context Overload**: Providing too much context dilutes the important information. The AI weights information by recency and prominence, so burying critical requirements in a sea of background noise often results in those requirements being ignored. Include only the context directly relevant to the current task.\n\n**Implicit Assumptions**: The AI cannot read your mind. Assumptions you consider obvious may be completely invisible to the model. When something matters, state it explicitly. If you need the code to work offline, say so. If alphabetical ordering is important, mention it.\n\n**Overly Broad Prompts**: Asking for \"the best\" or \"optimal\" solution invites the AI to make trade-offs based on its training data's priorities, which may not align with yours. Define what \"best\" means in your specific context.\n\n**Inconsistent Terminology**: Using different terms for the same concept confuses the AI and leads to inconsistent code. Establish terminology early and maintain it throughout the conversation.\n\n**Ignoring Error Messages**: When Cursor AI generates code that produces errors, simply complaining to the AI isn't enough. Analyze the error, provide the error message along with relevant context about what you were trying to accomplish, and ask for a specific fix.\n\n### Practical Advice for Intermediate Users\n\n**Start with Exploration**: Before diving into implementation, use a prompt to understand the problem space. Ask Cursor AI to explain concepts, suggest approaches, or outline architecture. This exploration phase often reveals considerations you'd otherwise miss.\n\n**Iterate Incrementally**: Build your solution piece by piece. Get each component working correctly before moving to the next. This creates a solid foundation and makes debugging easier when issues arise.\n\n**Maintain a Prompt Journal**: Keep notes on which prompts work well for your projects. Over time, you'll develop a library of effective prompting patterns specific to your tech stack and coding style.\n\n**Use System Messages Wisely**: If your project has consistent requirements—coding standards, architecture patterns, testing requirements—establish these in early interactions and reference them when needed. You can create reference prompts that define these standards for reuse.\n\n**Validate Before Proceeding**: Don't assume the AI's output is correct. Test it, review it, and validate it against your requirements before building upon it. Catching errors early saves significant time.\n\n**Embrace Collaboration**: Think of Cursor AI as a junior colleague who is extremely knowledgeable but needs clear direction. Your role is to provide context, clarify requirements, and review work. The quality of your guidance directly determines the quality of the output.\n\n## Code Examples\n\n### Example 1\n\n```python\npython\n# Example 1: Sequential Prompting for Building a REST API Endpoint\n# This demonstrates breaking a complex task into incremental prompts\n\n# PROMPT 1: Define the data model and schema\n\"\"\"\nI'm building a Python FastAPI application with SQLAlchemy. Create a User model \nwith the following fields:\n- id: UUID primary key\n- email: unique string, required\n- hashed_password: string, required\n- created_at: datetime, auto-set on creation\n- is_active: boolean, default True\n- role: string enum ['admin', 'user', 'guest']\n\nInclude proper type hints and SQLAlchemy column definitions.\n\"\"\"\n\n# After receiving the model, proceed to PROMPT 2\n# PROMPT 2: Add repository layer for database operations\n\"\"\"\nBased on the User model from our previous conversation, create a UserRepository \nclass with async methods for:\n- get_by_id(user_id: UUID) -> Optional[User]\n- get_by_email(email: str) -> Optional[User]\n- create(user_data: UserCreate) -> User\n- update(user_id: UUID, update_data: UserUpdate) -> Optional[User]\n\nUse SQLAlchemy async session patterns. Include proper error handling and logging.\n\"\"\"\n\n# PROMPT 3: Create the API endpoint with constraints\n\"\"\"\nCreate a POST /users endpoint that:\n- Accepts email and password in the request body\n- Validates email format and password strength (min 8 chars, 1 uppercase, 1 number)\n- Uses the UserRepository to create the user\n- Returns 201 on success with the created user (excluding password)\n- Returns 409 if email already exists\n- Uses dependency injection for the repository\n- Follows our project's error handling pattern with custom HTTPExceptions\n\nKeep the response model minimal: only include id, email, created_at, and role.\n\"\"\"\n\n# RESULT: Each step builds on the previous, creating a coherent API endpoint\n# with proper separation of concerns and consistent patterns throughout.\n\n```\n\n### Example 2\n\n```python\npython\n# Example 2: Context Injection with Code Snippets and Constraints\n# This demonstrates how to guide AI behavior through explicit context\n\n# INITIAL PROMPT WITH ESTABLISHED CONTEXT\n\"\"\"\nI'm adding pagination to our existing API. Here's our current pagination utility \nthat you should follow as a pattern:\n\npython\nclass Paginator:\n    def __init__(self, page: int, per_page: int, total: int):\n        self.page = page\n        self.per_page = per_page\n        self.total = total\n        self.pages = (total + per_page - 1) // per_page\n    \n    @property\n    def has_prev(self) -> bool:\n        return self.page > 1\n    \n    @property\n    def has_next(self) -> bool:\n        return self.page < self.pages\n    \n    @property\n    def offset(self) -> int:\n        return (self.page - 1) * self.per_page\n    \n    def to_dict(self) -> dict:\n        return {\n            'page': self.page,\n            'per_page': self.per_page,\n            'total': self.total,\n            'pages': self.pages,\n            'has_prev': self.has_prev,\n            'has_next': self.has_next\n        }\n\n\nCreate a paginated response wrapper for our list endpoints with these constraints:\n1. MUST follow the Paginator class pattern exactly (same method names, properties)\n2. The response wrapper should include 'items' (list) and 'pagination' (Paginator)\n3. Add a classmethod from_count(total: int) that accepts just the total count\n4. Include proper generic typing for the items list\n5. Do NOT add any additional fields beyond 'items' and 'pagination'\n6. Follow the same docstring style used in the example\n\nThis approach ensures consistency with existing code while adding new functionality.\n\"\"\"\n\n# The resulting code will integrate seamlessly with existing pagination utilities\n# because we provided the exact pattern to follow and explicit constraints.\n\n# Example of how to then USE the paginated response:\ndef get_users(page: int = 1, per_page: int = 20) -> PaginatedResponse[UserSchema]:\n    \"\"\"Example endpoint using the paginated response wrapper.\"\"\"\n    users = user_repository.get_users(offset=(page-1)*per_page, limit=per_page)\n    total = user_repository.count_users()\n    \n    return PaginatedResponse[\n        UserSchema\n    ].from_count(items=users, page=page, per_page=per_page, total=total)\n\n```\n\n\n\n## Common Mistakes\n\n- Providing too much context at once, burying critical requirements in verbose background information that the AI may not fully process\n- Assuming the AI remembers previous conversation turns perfectly—each new prompt should include necessary context rather than relying on implicit memory\n- Using vague constraints like 'make it good' or 'follow best practices' instead of specific, measurable requirements that the AI can actually satisfy\n- Pasting entire files when only specific snippets are relevant, causing the AI to focus on irrelevant details and miss the actual point\n- Not specifying the tech stack, version requirements, or library constraints, leading to code that uses unavailable features or incompatible patterns\n- Asking multiple unrelated questions in a single prompt, which splits the AI's attention and results in partial or unfocused answers\n- Neglecting to mention existing code patterns or style conventions, resulting in new code that doesn't match the project's established approach\n- Assuming the AI will catch errors or edge cases without explicit instruction to do so—the AI often takes the most direct path unless told otherwise\n\n\n## Best Practices\n\n- Structure complex tasks into a series of focused, sequential prompts where each builds upon the previous, allowing for iterative refinement and early error detection\n- Always provide concrete code examples from your project when you want the AI to follow existing patterns—this is far more effective than describing patterns in words\n- Include explicit constraints using keywords like 'MUST', 'MUST NOT', 'REQUIRED', and 'DO NOT' to clearly delineate boundaries on acceptable solutions\n- Reference specific documentation, API versions, or configuration details relevant to the task to ensure the AI generates compatible code\n- After receiving output, verify it meets your requirements before proceeding to the next step—this prevents compounding errors throughout a project\n- Maintain consistent terminology throughout your conversation and with your codebase to avoid confusion between similar concepts\n- When encountering errors, provide the full error message along with context about what you were attempting, asking for specific fixes rather than general help\n- Use the AI's strength in pattern matching by showing examples of both what you want AND what you want to avoid, providing contrast that clarifies your intent\n",
+      "code_examples": [
+        "python\n# Example 1: Sequential Prompting for Building a REST API Endpoint\n# This demonstrates breaking a complex task into incremental prompts\n\n# PROMPT 1: Define the data model and schema\n\"\"\"\nI'm building a Python FastAPI application with SQLAlchemy. Create a User model \nwith the following fields:\n- id: UUID primary key\n- email: unique string, required\n- hashed_password: string, required\n- created_at: datetime, auto-set on creation\n- is_active: boolean, default True\n- role: string enum ['admin', 'user', 'guest']\n\nInclude proper type hints and SQLAlchemy column definitions.\n\"\"\"\n\n# After receiving the model, proceed to PROMPT 2\n# PROMPT 2: Add repository layer for database operations\n\"\"\"\nBased on the User model from our previous conversation, create a UserRepository \nclass with async methods for:\n- get_by_id(user_id: UUID) -> Optional[User]\n- get_by_email(email: str) -> Optional[User]\n- create(user_data: UserCreate) -> User\n- update(user_id: UUID, update_data: UserUpdate) -> Optional[User]\n\nUse SQLAlchemy async session patterns. Include proper error handling and logging.\n\"\"\"\n\n# PROMPT 3: Create the API endpoint with constraints\n\"\"\"\nCreate a POST /users endpoint that:\n- Accepts email and password in the request body\n- Validates email format and password strength (min 8 chars, 1 uppercase, 1 number)\n- Uses the UserRepository to create the user\n- Returns 201 on success with the created user (excluding password)\n- Returns 409 if email already exists\n- Uses dependency injection for the repository\n- Follows our project's error handling pattern with custom HTTPExceptions\n\nKeep the response model minimal: only include id, email, created_at, and role.\n\"\"\"\n\n# RESULT: Each step builds on the previous, creating a coherent API endpoint\n# with proper separation of concerns and consistent patterns throughout.\n",
+        "python\n# Example 2: Context Injection with Code Snippets and Constraints\n# This demonstrates how to guide AI behavior through explicit context\n\n# INITIAL PROMPT WITH ESTABLISHED CONTEXT\n\"\"\"\nI'm adding pagination to our existing API. Here's our current pagination utility \nthat you should follow as a pattern:\n\npython\nclass Paginator:\n    def __init__(self, page: int, per_page: int, total: int):\n        self.page = page\n        self.per_page = per_page\n        self.total = total\n        self.pages = (total + per_page - 1) // per_page\n    \n    @property\n    def has_prev(self) -> bool:\n        return self.page > 1\n    \n    @property\n    def has_next(self) -> bool:\n        return self.page < self.pages\n    \n    @property\n    def offset(self) -> int:\n        return (self.page - 1) * self.per_page\n    \n    def to_dict(self) -> dict:\n        return {\n            'page': self.page,\n            'per_page': self.per_page,\n            'total': self.total,\n            'pages': self.pages,\n            'has_prev': self.has_prev,\n            'has_next': self.has_next\n        }\n\n\nCreate a paginated response wrapper for our list endpoints with these constraints:\n1. MUST follow the Paginator class pattern exactly (same method names, properties)\n2. The response wrapper should include 'items' (list) and 'pagination' (Paginator)\n3. Add a classmethod from_count(total: int) that accepts just the total count\n4. Include proper generic typing for the items list\n5. Do NOT add any additional fields beyond 'items' and 'pagination'\n6. Follow the same docstring style used in the example\n\nThis approach ensures consistency with existing code while adding new functionality.\n\"\"\"\n\n# The resulting code will integrate seamlessly with existing pagination utilities\n# because we provided the exact pattern to follow and explicit constraints.\n\n# Example of how to then USE the paginated response:\ndef get_users(page: int = 1, per_page: int = 20) -> PaginatedResponse[UserSchema]:\n    \"\"\"Example endpoint using the paginated response wrapper.\"\"\"\n    users = user_repository.get_users(offset=(page-1)*per_page, limit=per_page)\n    total = user_repository.count_users()\n    \n    return PaginatedResponse[\n        UserSchema\n    ].from_count(items=users, page=page, per_page=per_page, total=total)\n"
+      ]
+    },
+    "454": {
+      "detail_id": 195,
+      "subnode_id": 454,
+      "title": "Hands‑On: Generate a REST API Endpoint",
+      "description": "Build a realistic CRUD endpoint, iterate on AI suggestions, and integrate the result into a small Express application.",
+      "key_points": [
+        "Prompt AI for route handler, validation, and error handling",
+        "Accept suggestions, adjust naming, and add middleware",
+        "Test the endpoint locally and review AI‑generated tests"
+      ],
+      "detailed_content": "## Hands-On: Generate a REST API Endpoint\n\n### Why This Matters\n\nBuilding REST API endpoints is a fundamental skill in modern web development, yet it can be time-consuming and error-prone when done manually. Cursor AI accelerates this process by generating boilerplate code, validation logic, and error handling that follows best practices. However, the true power comes from understanding how to effectively prompt the AI, review its suggestions, and integrate them into your existing application. This hands-on exercise bridges the gap between AI suggestion and production-ready code.\n\n### Core Workflow Overview\n\nThe process follows a cyclical workflow: **Prompt → Review → Adjust → Integrate → Test → Iterate**. Each iteration refines the AI's output to better match your application's requirements and coding standards. This workflow emphasizes collaboration between you and the AI, not blind acceptance of suggestions.\n\n### Step 1: Setting Up Your Express Application\n\nBefore prompting the AI, ensure your Express application has a proper structure. This gives the AI context about your existing patterns and makes integration smoother. A typical structure includes separate directories for routes, controllers, middleware, and models.\n\n### Step 2: Crafting Effective Prompts\n\nThe quality of AI-generated code directly correlates with prompt specificity. When requesting a REST endpoint, include: the HTTP method, resource name, expected request/response shapes, validation requirements, authentication needs, and any existing patterns in your codebase. For example, instead of asking \"create a user endpoint\", specify \"create a POST /api/users endpoint that accepts email, password, and name, returns the created user without the password field, and uses our existing error handling middleware.\"\n\n### Step 3: Reviewing AI Suggestions\n\nAI-generated code requires careful review. Check for:\n\n- **Naming consistency**: Does the code follow your project's naming conventions?\n- **Security considerations**: Are there potential injection vulnerabilities or missing authentication checks?\n- **Error handling**: Does the code properly handle both expected errors (validation) and unexpected errors (database failures)?\n- **Validation coverage**: Are all required fields validated? Are edge cases handled?\n\n### Step 4: Integrating and Iterating\n\nAfter reviewing, integrate the code incrementally. Add the route to your router, connect middleware, and verify the integration doesn't break existing functionality. Use Cursor AI to suggest improvements like adding pagination, filtering, or caching as your API matures.\n\n### Step 5: Testing the Endpoint\n\nAI can generate tests, but you must verify they cover critical paths. Review generated tests for:\n\n- Happy path scenarios (successful creation, retrieval, update, deletion)\n- Validation failures (missing fields, invalid formats)\n- Authentication requirements (unauthorized access attempts)\n- Edge cases (duplicate entries, empty results)\n\n### Middleware Integration\n\nMiddleware is crucial for cross-cutting concerns like authentication, logging, and error handling. When integrating AI-generated routes, ensure they use your existing middleware stack. This maintains consistency and prevents security gaps.\n\n### Iterative Refinement\n\nThe first AI suggestion is rarely production-ready. Use iterative prompting to refine the code: ask for better error messages, request specific validation rules, or ask the AI to explain complex logic. Each iteration brings the code closer to your standards while leveraging the AI's ability to quickly generate and modify code.\n\n\n## Code Examples\n\n### Example 1\n\n```python\nconst express = require('express');\nconst helmet = require('helmet');\nconst cors = require('cors');\n\nconst app = express();\n\n// Security middleware\napp.use(helmet());\napp.use(cors());\n\n// Body parsing middleware\napp.use(express.json());\n\n// Import routes\nconst userRoutes = require('./routes/userRoutes');\n\n// Mount routes\napp.use('/api/users', userRoutes);\n\n// Global error handling middleware\napp.use((err, req, res, next) => {\n  console.error('Error:', err.message);\n  console.error('Stack:', err.stack);\n  \n  // Handle specific error types\n  if (err.name === 'ValidationError') {\n    return res.status(400).json({\n      success: false,\n      error: 'Validation failed',\n      details: err.details || err.message\n    });\n  }\n  \n  if (err.name === 'UnauthorizedError') {\n    return res.status(401).json({\n      success: false,\n      error: 'Authentication required'\n    });\n  }\n  \n  // Generic server error\n  res.status(500).json({\n    success: false,\n    error: process.env.NODE_ENV === 'production' \n      ? 'Internal server error' \n      : err.message\n  });\n});\n\n// 404 handler\napp.use((req, res) => {\n  res.status(404).json({\n    success: false,\n    error: 'Endpoint not found'\n  });\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});\n```\n\n### Example 2\n\n```python\nconst express = require('express');\nconst router = express.Router();\n\n// Mock database - replace with real database in production\nconst users = new Map();\nlet idCounter = 1;\n\n// Validation helper function\nconst validateUserInput = (data, isUpdate = false) => {\n  const errors = [];\n  \n  if (!isUpdate) {\n    // Required fields for creation\n    if (!data.email) {\n      errors.push('Email is required');\n    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)) {\n      errors.push('Invalid email format');\n    }\n    \n    if (!data.password) {\n      errors.push('Password is required');\n    } else if (data.password.length < 8) {\n      errors.push('Password must be at least 8 characters long');\n    }\n    \n    if (!data.name) {\n      errors.push('Name is required');\n    } else if (data.name.trim().length < 2) {\n      errors.push('Name must be at least 2 characters long');\n    }\n  } else {\n    // Optional validation for updates\n    if (data.email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)) {\n      errors.push('Invalid email format');\n    }\n    \n    if (data.password && data.password.length < 8) {\n      errors.push('Password must be at least 8 characters long');\n    }\n    \n    if (data.name && data.name.trim().length < 2) {\n      errors.push('Name must be at least 2 characters long');\n    }\n  }\n  \n  return errors;\n};\n\n// Helper to sanitize user response (remove sensitive data)\nconst sanitizeUser = (user) => {\n  const { password, ...safeUser } = user;\n  return safeUser;\n};\n\n// POST /api/users - Create a new user\nrouter.post('/', async (req, res, next) => {\n  try {\n    const { email, password, name } = req.body;\n    \n    // Validate input\n    const validationErrors = validateUserInput(req.body);\n    if (validationErrors.length > 0) {\n      return res.status(400).json({\n        success: false,\n        error: 'Validation failed',\n        details: validationErrors\n      });\n    }\n    \n    // Check for duplicate email\n    const existingUser = Array.from(users.values()).find(\n      user => user.email.toLowerCase() === email.toLowerCase()\n    );\n    if (existingUser) {\n      return res.status(409).json({\n        success: false,\n        error: 'User with this email already exists'\n      });\n    }\n    \n    // Create user (in real app, hash the password!)\n    const newUser = {\n      id: idCounter++,\n      email: email.toLowerCase().trim(),\n      password: password, // Should be hashed in production\n      name: name.trim(),\n      createdAt: new Date().toISOString(),\n      updatedAt: new Date().toISOString()\n    };\n    \n    users.set(newUser.id, newUser);\n    \n    res.status(201).json({\n      success: true,\n      data: sanitizeUser(newUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// GET /api/users - Get all users (with optional filtering)\nrouter.get('/', async (req, res, next) => {\n  try {\n    const { name, email } = req.query;\n    let result = Array.from(users.values());\n    \n    // Apply filters if provided\n    if (name) {\n      result = result.filter(user => \n        user.name.toLowerCase().includes(name.toLowerCase())\n      );\n    }\n    \n    if (email) {\n      result = result.filter(user => \n        user.email.toLowerCase().includes(email.toLowerCase())\n      );\n    }\n    \n    res.json({\n      success: true,\n      count: result.length,\n      data: result.map(sanitizeUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// GET /api/users/:id - Get a single user by ID\nrouter.get('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    const user = users.get(userId);\n    \n    if (!user) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    res.json({\n      success: true,\n      data: sanitizeUser(user)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// PUT /api/users/:id - Update a user\nrouter.put('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    const user = users.get(userId);\n    \n    if (!user) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    // Validate update input\n    const validationErrors = validateUserInput(req.body, true);\n    if (validationErrors.length > 0) {\n      return res.status(400).json({\n        success: false,\n        error: 'Validation failed',\n        details: validationErrors\n      });\n    }\n    \n    // Check for duplicate email if email is being updated\n    if (req.body.email) {\n      const existingUser = Array.from(users.values()).find(\n        u => u.id !== userId && \n             u.email.toLowerCase() === req.body.email.toLowerCase()\n      );\n      if (existingUser) {\n        return res.status(409).json({\n          success: false,\n          error: 'Email already in use by another user'\n        });\n      }\n    }\n    \n    // Update user fields\n    const updatedUser = {\n      ...user,\n      ...(req.body.email && { email: req.body.email.toLowerCase().trim() }),\n      ...(req.body.password && { password: req.body.password }),\n      ...(req.body.name && { name: req.body.name.trim() }),\n      updatedAt: new Date().toISOString()\n    };\n    \n    users.set(userId, updatedUser);\n    \n    res.json({\n      success: true,\n      data: sanitizeUser(updatedUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// DELETE /api/users/:id - Delete a user\nrouter.delete('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    if (!users.has(userId)) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    users.delete(userId);\n    \n    res.json({\n      success: true,\n      message: 'User deleted successfully'\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\nmodule.exports = router;\n```\n\n### Example 3\n\n```python\nconst request = require('supertest');\nconst express = require('express');\nconst userRoutes = require('./routes/userRoutes');\n\n// Create test app instance\nconst createTestApp = () => {\n  const app = express();\n  app.use(express.json());\n  app.use('/api/users', userRoutes);\n  \n  // Simple error handler for tests\n  app.use((err, req, res, next) => {\n    res.status(500).json({\n      success: false,\n      error: err.message\n    });\n  });\n  \n  return app;\n};\n\ndescribe('User API Endpoints', () => {\n  let app;\n  \n  beforeAll(() => {\n    app = createTestApp();\n  });\n  \n  describe('POST /api/users - Create User', () => {\n    it('should create a new user with valid data', async () => {\n      const newUser = {\n        email: 'test@example.com',\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(newUser)\n        .expect(201);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.email).toBe('test@example.com');\n      expect(response.body.data.name).toBe('Test User');\n      expect(response.body.data.password).toBeUndefined(); // Password should not be returned\n      expect(response.body.data.id).toBeDefined();\n    });\n    \n    it('should reject user creation with missing email', async () => {\n      const invalidUser = {\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Email is required');\n    });\n    \n    it('should reject user creation with invalid email format', async () => {\n      const invalidUser = {\n        email: 'not-an-email',\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Invalid email format');\n    });\n    \n    it('should reject user creation with short password', async () => {\n      const invalidUser = {\n        email: 'test@example.com',\n        password: 'short',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Password must be at least 8 characters long');\n    });\n    \n    it('should reject duplicate email registration', async () => {\n      const user = {\n        email: 'duplicate@example.com',\n        password: 'securepass123',\n        name: 'First User'\n      };\n      \n      // Create first user\n      await request(app)\n        .post('/api/users')\n        .send(user)\n        .expect(201);\n      \n      // Try to create second user with same email\n      const response = await request(app)\n        .post('/api/users')\n        .send(user)\n        .expect(409);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('already exists');\n    });\n  });\n  \n  describe('GET /api/users - List Users', () => {\n    it('should return all users', async () => {\n      const response = await request(app)\n        .get('/api/users')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(Array.isArray(response.body.data)).toBe(true);\n      expect(response.body.count).toBeDefined();\n    });\n    \n    it('should filter users by name', async () => {\n      const response = await request(app)\n        .get('/api/users?name=Test')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      // Verify all returned users match the filter\n      response.body.data.forEach(user => {\n        expect(user.name.toLowerCase()).toContain('test');\n      });\n    });\n  });\n  \n  describe('GET /api/users/:id - Get Single User', () => {\n    it('should return a user by valid ID', async () => {\n      const response = await request(app)\n        .get('/api/users/1')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.id).toBe(1);\n    });\n    \n    it('should return 404 for non-existent user', async () => {\n      const response = await request(app)\n        .get('/api/users/99999')\n        .expect(404);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('not found');\n    });\n    \n    it('should return 400 for invalid ID format', async () => {\n      const response = await request(app)\n        .get('/api/users/invalid')\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('Invalid user ID');\n    });\n  });\n  \n  describe('PUT /api/users/:id - Update User', () => {\n    it('should update user with valid data', async () => {\n      const updateData = {\n        name: 'Updated Name'\n      };\n      \n      const response = await request(app)\n        .put('/api/users/1')\n        .send(updateData)\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.name).toBe('Updated Name');\n    });\n    \n    it('should reject partial update with invalid email', async () => {\n      const updateData = {\n        email: 'invalid-email'\n      };\n      \n      const response = await request(app)\n        .put('/api/users/1')\n        .send(updateData)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n    });\n  });\n  \n  describe('DELETE /api/users/:id - Delete User', () => {\n    it('should delete existing user', async () => {\n      const response = await request(app)\n        .delete('/api/users/1')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.message).toContain('deleted');\n    });\n    \n    it('should return 404 when deleting non-existent user', async () => {\n      const response = await request(app)\n        .delete('/api/users/99999')\n        .expect(404);\n      \n      expect(response.body.success).toBe(false);\n    });\n  });\n});\n```\n\n\n\n## Common Mistakes\n\n- Accepting AI-generated code without reviewing it for security vulnerabilities or logic errors\n- Not providing enough context in prompts, leading to generic or mismatched code patterns\n- Skipping input validation, especially for edge cases like empty strings, special characters, or boundary values\n- Forgetting to handle async errors properly, leading to unhandled promise rejections\n- Not sanitizing response data, accidentally exposing sensitive fields like passwords or tokens\n- Missing proper HTTP status codes for different error scenarios (400 for validation, 401 for auth, 404 for not found, 500 for server errors)\n- Over-relying on AI without understanding the generated code, making debugging difficult later\n- Not integrating AI-generated endpoints with existing middleware or error handling patterns\n\n\n## Best Practices\n\n- Start prompts with context about your existing codebase structure, naming conventions, and patterns\n- Always review AI-generated code before integration, checking for security, performance, and consistency\n- Add comprehensive input validation that handles both format checking and business rules\n- Implement consistent error handling with proper HTTP status codes and meaningful error messages\n- Sanitize all responses to exclude sensitive data before sending to clients\n- Write tests for AI-generated endpoints to verify functionality and catch regressions\n- Iterate on AI suggestions using follow-up prompts to refine specific aspects like error messages or validation rules\n- Document any custom business logic or requirements that the AI should know about for future suggestions\n- Use middleware for cross-cutting concerns rather than duplicating logic in each route handler\n- Keep AI-generated code aligned with your project's coding standards through explicit guidance in prompts\n",
+      "code_examples": [
+        "const express = require('express');\nconst helmet = require('helmet');\nconst cors = require('cors');\n\nconst app = express();\n\n// Security middleware\napp.use(helmet());\napp.use(cors());\n\n// Body parsing middleware\napp.use(express.json());\n\n// Import routes\nconst userRoutes = require('./routes/userRoutes');\n\n// Mount routes\napp.use('/api/users', userRoutes);\n\n// Global error handling middleware\napp.use((err, req, res, next) => {\n  console.error('Error:', err.message);\n  console.error('Stack:', err.stack);\n  \n  // Handle specific error types\n  if (err.name === 'ValidationError') {\n    return res.status(400).json({\n      success: false,\n      error: 'Validation failed',\n      details: err.details || err.message\n    });\n  }\n  \n  if (err.name === 'UnauthorizedError') {\n    return res.status(401).json({\n      success: false,\n      error: 'Authentication required'\n    });\n  }\n  \n  // Generic server error\n  res.status(500).json({\n    success: false,\n    error: process.env.NODE_ENV === 'production' \n      ? 'Internal server error' \n      : err.message\n  });\n});\n\n// 404 handler\napp.use((req, res) => {\n  res.status(404).json({\n    success: false,\n    error: 'Endpoint not found'\n  });\n});\n\nconst PORT = process.env.PORT || 3000;\napp.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});",
+        "const express = require('express');\nconst router = express.Router();\n\n// Mock database - replace with real database in production\nconst users = new Map();\nlet idCounter = 1;\n\n// Validation helper function\nconst validateUserInput = (data, isUpdate = false) => {\n  const errors = [];\n  \n  if (!isUpdate) {\n    // Required fields for creation\n    if (!data.email) {\n      errors.push('Email is required');\n    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)) {\n      errors.push('Invalid email format');\n    }\n    \n    if (!data.password) {\n      errors.push('Password is required');\n    } else if (data.password.length < 8) {\n      errors.push('Password must be at least 8 characters long');\n    }\n    \n    if (!data.name) {\n      errors.push('Name is required');\n    } else if (data.name.trim().length < 2) {\n      errors.push('Name must be at least 2 characters long');\n    }\n  } else {\n    // Optional validation for updates\n    if (data.email && !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(data.email)) {\n      errors.push('Invalid email format');\n    }\n    \n    if (data.password && data.password.length < 8) {\n      errors.push('Password must be at least 8 characters long');\n    }\n    \n    if (data.name && data.name.trim().length < 2) {\n      errors.push('Name must be at least 2 characters long');\n    }\n  }\n  \n  return errors;\n};\n\n// Helper to sanitize user response (remove sensitive data)\nconst sanitizeUser = (user) => {\n  const { password, ...safeUser } = user;\n  return safeUser;\n};\n\n// POST /api/users - Create a new user\nrouter.post('/', async (req, res, next) => {\n  try {\n    const { email, password, name } = req.body;\n    \n    // Validate input\n    const validationErrors = validateUserInput(req.body);\n    if (validationErrors.length > 0) {\n      return res.status(400).json({\n        success: false,\n        error: 'Validation failed',\n        details: validationErrors\n      });\n    }\n    \n    // Check for duplicate email\n    const existingUser = Array.from(users.values()).find(\n      user => user.email.toLowerCase() === email.toLowerCase()\n    );\n    if (existingUser) {\n      return res.status(409).json({\n        success: false,\n        error: 'User with this email already exists'\n      });\n    }\n    \n    // Create user (in real app, hash the password!)\n    const newUser = {\n      id: idCounter++,\n      email: email.toLowerCase().trim(),\n      password: password, // Should be hashed in production\n      name: name.trim(),\n      createdAt: new Date().toISOString(),\n      updatedAt: new Date().toISOString()\n    };\n    \n    users.set(newUser.id, newUser);\n    \n    res.status(201).json({\n      success: true,\n      data: sanitizeUser(newUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// GET /api/users - Get all users (with optional filtering)\nrouter.get('/', async (req, res, next) => {\n  try {\n    const { name, email } = req.query;\n    let result = Array.from(users.values());\n    \n    // Apply filters if provided\n    if (name) {\n      result = result.filter(user => \n        user.name.toLowerCase().includes(name.toLowerCase())\n      );\n    }\n    \n    if (email) {\n      result = result.filter(user => \n        user.email.toLowerCase().includes(email.toLowerCase())\n      );\n    }\n    \n    res.json({\n      success: true,\n      count: result.length,\n      data: result.map(sanitizeUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// GET /api/users/:id - Get a single user by ID\nrouter.get('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    const user = users.get(userId);\n    \n    if (!user) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    res.json({\n      success: true,\n      data: sanitizeUser(user)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// PUT /api/users/:id - Update a user\nrouter.put('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    const user = users.get(userId);\n    \n    if (!user) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    // Validate update input\n    const validationErrors = validateUserInput(req.body, true);\n    if (validationErrors.length > 0) {\n      return res.status(400).json({\n        success: false,\n        error: 'Validation failed',\n        details: validationErrors\n      });\n    }\n    \n    // Check for duplicate email if email is being updated\n    if (req.body.email) {\n      const existingUser = Array.from(users.values()).find(\n        u => u.id !== userId && \n             u.email.toLowerCase() === req.body.email.toLowerCase()\n      );\n      if (existingUser) {\n        return res.status(409).json({\n          success: false,\n          error: 'Email already in use by another user'\n        });\n      }\n    }\n    \n    // Update user fields\n    const updatedUser = {\n      ...user,\n      ...(req.body.email && { email: req.body.email.toLowerCase().trim() }),\n      ...(req.body.password && { password: req.body.password }),\n      ...(req.body.name && { name: req.body.name.trim() }),\n      updatedAt: new Date().toISOString()\n    };\n    \n    users.set(userId, updatedUser);\n    \n    res.json({\n      success: true,\n      data: sanitizeUser(updatedUser)\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\n// DELETE /api/users/:id - Delete a user\nrouter.delete('/:id', async (req, res, next) => {\n  try {\n    const userId = parseInt(req.params.id, 10);\n    \n    if (isNaN(userId)) {\n      return res.status(400).json({\n        success: false,\n        error: 'Invalid user ID format'\n      });\n    }\n    \n    if (!users.has(userId)) {\n      return res.status(404).json({\n        success: false,\n        error: 'User not found'\n      });\n    }\n    \n    users.delete(userId);\n    \n    res.json({\n      success: true,\n      message: 'User deleted successfully'\n    });\n  } catch (error) {\n    next(error);\n  }\n});\n\nmodule.exports = router;",
+        "const request = require('supertest');\nconst express = require('express');\nconst userRoutes = require('./routes/userRoutes');\n\n// Create test app instance\nconst createTestApp = () => {\n  const app = express();\n  app.use(express.json());\n  app.use('/api/users', userRoutes);\n  \n  // Simple error handler for tests\n  app.use((err, req, res, next) => {\n    res.status(500).json({\n      success: false,\n      error: err.message\n    });\n  });\n  \n  return app;\n};\n\ndescribe('User API Endpoints', () => {\n  let app;\n  \n  beforeAll(() => {\n    app = createTestApp();\n  });\n  \n  describe('POST /api/users - Create User', () => {\n    it('should create a new user with valid data', async () => {\n      const newUser = {\n        email: 'test@example.com',\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(newUser)\n        .expect(201);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.email).toBe('test@example.com');\n      expect(response.body.data.name).toBe('Test User');\n      expect(response.body.data.password).toBeUndefined(); // Password should not be returned\n      expect(response.body.data.id).toBeDefined();\n    });\n    \n    it('should reject user creation with missing email', async () => {\n      const invalidUser = {\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Email is required');\n    });\n    \n    it('should reject user creation with invalid email format', async () => {\n      const invalidUser = {\n        email: 'not-an-email',\n        password: 'securepass123',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Invalid email format');\n    });\n    \n    it('should reject user creation with short password', async () => {\n      const invalidUser = {\n        email: 'test@example.com',\n        password: 'short',\n        name: 'Test User'\n      };\n      \n      const response = await request(app)\n        .post('/api/users')\n        .send(invalidUser)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.details).toContain('Password must be at least 8 characters long');\n    });\n    \n    it('should reject duplicate email registration', async () => {\n      const user = {\n        email: 'duplicate@example.com',\n        password: 'securepass123',\n        name: 'First User'\n      };\n      \n      // Create first user\n      await request(app)\n        .post('/api/users')\n        .send(user)\n        .expect(201);\n      \n      // Try to create second user with same email\n      const response = await request(app)\n        .post('/api/users')\n        .send(user)\n        .expect(409);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('already exists');\n    });\n  });\n  \n  describe('GET /api/users - List Users', () => {\n    it('should return all users', async () => {\n      const response = await request(app)\n        .get('/api/users')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(Array.isArray(response.body.data)).toBe(true);\n      expect(response.body.count).toBeDefined();\n    });\n    \n    it('should filter users by name', async () => {\n      const response = await request(app)\n        .get('/api/users?name=Test')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      // Verify all returned users match the filter\n      response.body.data.forEach(user => {\n        expect(user.name.toLowerCase()).toContain('test');\n      });\n    });\n  });\n  \n  describe('GET /api/users/:id - Get Single User', () => {\n    it('should return a user by valid ID', async () => {\n      const response = await request(app)\n        .get('/api/users/1')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.id).toBe(1);\n    });\n    \n    it('should return 404 for non-existent user', async () => {\n      const response = await request(app)\n        .get('/api/users/99999')\n        .expect(404);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('not found');\n    });\n    \n    it('should return 400 for invalid ID format', async () => {\n      const response = await request(app)\n        .get('/api/users/invalid')\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n      expect(response.body.error).toContain('Invalid user ID');\n    });\n  });\n  \n  describe('PUT /api/users/:id - Update User', () => {\n    it('should update user with valid data', async () => {\n      const updateData = {\n        name: 'Updated Name'\n      };\n      \n      const response = await request(app)\n        .put('/api/users/1')\n        .send(updateData)\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.data.name).toBe('Updated Name');\n    });\n    \n    it('should reject partial update with invalid email', async () => {\n      const updateData = {\n        email: 'invalid-email'\n      };\n      \n      const response = await request(app)\n        .put('/api/users/1')\n        .send(updateData)\n        .expect(400);\n      \n      expect(response.body.success).toBe(false);\n    });\n  });\n  \n  describe('DELETE /api/users/:id - Delete User', () => {\n    it('should delete existing user', async () => {\n      const response = await request(app)\n        .delete('/api/users/1')\n        .expect(200);\n      \n      expect(response.body.success).toBe(true);\n      expect(response.body.message).toContain('deleted');\n    });\n    \n    it('should return 404 when deleting non-existent user', async () => {\n      const response = await request(app)\n        .delete('/api/users/99999')\n        .expect(404);\n      \n      expect(response.body.success).toBe(false);\n    });\n  });\n});"
+      ]
+    }
+  },
+  "errors": [],
+  "finished_at": null,
+  "english_title": "Mastering Cursor AI: Integrated Programming Workflow"
+}

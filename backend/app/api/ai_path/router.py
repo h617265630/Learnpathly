@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import sys
 from pathlib import Path
+import re
 
 # Ensure ai_path is importable
 _AI_PATH_ROOT = Path(__file__).resolve().parents[4]
@@ -26,6 +27,54 @@ import hashlib
 router = APIRouter(prefix="/ai-path", tags=["ai-path"])
 
 
+def _normalize_overview_text(text: str) -> str:
+    """
+    Normalize overview/summary text to be direct (no meta narration like
+    'This learning path guides ...').
+    """
+    import re as _re
+
+    s = (text or "").strip()
+    if not s:
+        return ""
+
+    lowered = s.lower()
+    if lowered.startswith("this learning path") or lowered.startswith("this course") or lowered.startswith("this path"):
+        s2 = _re.sub(
+            r"(?is)^\s*this\s+(learning\s+path|course|path)\s+"
+            r"(guides|helps|walks|takes|teaches|shows)\s+"
+            r".{0,160}?\s+(through|to)\s+",
+            "",
+            s,
+            count=1,
+        ).strip()
+        if s2:
+            s = s2
+        s = _re.sub(r"(?is)^\s*this\s+(learning\s+path|course|path)\s+", "", s).strip()
+
+    if s:
+        s = s[0].upper() + s[1:]
+    return s
+
+
+_RE_CJK = re.compile(r"[\u4e00-\u9fff]")
+_RE_LATIN = re.compile(r"[A-Za-z]")
+
+
+def _looks_english_text(text: str) -> bool:
+    s = (text or "").strip()
+    if not s:
+        return False
+    if _RE_CJK.search(s):
+        return False
+    return bool(_RE_LATIN.search(s))
+
+
+def _wants_english_detail(payload: "SubNodeDetailRequest") -> bool:
+    # Heuristic: if topic/subnode title looks English, we treat the request as "want English".
+    return _looks_english_text(payload.topic) or _looks_english_text(payload.subnode_title)
+
+
 class AiPathGenerateRequest(BaseModel):
     query: str = Field(..., min_length=1, description="User natural-language goal")
     exclude_urls: list[str] = Field(default_factory=list, description="URLs to exclude from results (for shuffle)")
@@ -40,6 +89,12 @@ class AiPathGenerateResponse(BaseModel):
     project_id: int | None = None
     data: dict
     warnings: list[str] = Field(default_factory=list)
+
+class AiPathProjectListItem(BaseModel):
+    id: int
+    topic: str
+    outline_overview: str = ""
+    created_at: str | None = None
 
 
 class SectionTutorialRequest(BaseModel):
@@ -443,9 +498,10 @@ async def generate_ai_path_outline_endpoint(
         # Persist outline + subnodes for admin/batch generation workflows.
         project_id: int | None = None
         try:
+            project_topic = str(data.get("title") or "").strip() or query
             project = AiPathProject(
                 user_id=None,
-                topic=query,
+                topic=project_topic,
                 level=prefs.get("level") or "intermediate",
                 learning_depth=prefs.get("learning_depth") or "standard",
                 content_type=prefs.get("content_type") or "mixed",
@@ -595,6 +651,7 @@ async def generate_subnode_detail_endpoint(
     db=Depends(get_db_dep),
 ):
     """Generate detailed content for a sub-node (Step 2.5). Called on-demand when user clicks a sub-node."""
+    want_english = _wants_english_detail(payload)
     subnode: AiPathSubNode | None = None
     if payload.subnode_id:
         subnode = db.query(AiPathSubNode).filter(AiPathSubNode.id == payload.subnode_id).first()
@@ -610,7 +667,12 @@ async def generate_subnode_detail_endpoint(
             .first()
         )
         if linked_detail and linked_detail.detailed_content:
-            return _subnode_detail_response_from_record(linked_detail, payload)
+            # If client wants English but the stored detail is non-English (likely CJK),
+            # regenerate and overwrite instead of returning stale content.
+            if want_english and not _looks_english_text(linked_detail.detailed_content):
+                linked_detail = None
+            else:
+                return _subnode_detail_response_from_record(linked_detail, payload)
 
     # Legacy title-based cache fallback for old clients/data.
     key_str = f"{payload.topic}|{payload.section_title}|{payload.subnode_title}|{payload.detail_level}"
@@ -621,6 +683,9 @@ async def generate_subnode_detail_endpoint(
         .filter(AiPathSubNodeDetailCache.cache_key == cache_key)
         .first()
     )
+    if cached and cached.detailed_content:
+        if want_english and not _looks_english_text(cached.detailed_content):
+            cached = None
     if cached and cached.detailed_content:
         linked_detail_id: int | None = None
         if payload.subnode_id:
@@ -781,14 +846,14 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
             "estimated_minutes": section.estimated_minutes or 0,
         })
 
-    overview = project.outline_overview or ""
+    overview = _normalize_overview_text(project.outline_overview or "")
     data = {
         "title": project.topic,
         "summary": overview,
         "description": overview,
         "recommendations": [
-            f"共 {len(nodes)} 个章节",
-            f"约 {float(project.total_duration_hours or 0):.1f} 小时学习时长",
+            f"{len(nodes)} chapters",
+            f"~ {float(project.total_duration_hours or 0):.1f} hours",
         ],
         "nodes": nodes,
         "_raw": project.raw_outline_json or {},
@@ -811,6 +876,33 @@ async def get_latest_ai_path_project(db=Depends(get_db_dep)):
     if not project:
         raise HTTPException(status_code=404, detail="No ai_path projects found")
     return _project_to_response(project)
+
+@router.get("/projects", response_model=list[AiPathProjectListItem])
+async def list_ai_path_projects(
+    limit: int = 8,
+    offset: int = 0,
+    db=Depends(get_db_dep),
+):
+    limit = max(1, min(int(limit or 8), 50))
+    offset = max(0, int(offset or 0))
+    projects = (
+        db.query(AiPathProject)
+        .order_by(AiPathProject.created_at.desc(), AiPathProject.id.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+    items: list[AiPathProjectListItem] = []
+    for p in projects:
+        items.append(
+            AiPathProjectListItem(
+                id=p.id,
+                topic=p.topic,
+                outline_overview=_normalize_overview_text(p.outline_overview or ""),
+                created_at=p.created_at.isoformat() if getattr(p, "created_at", None) else None,
+            )
+        )
+    return items
 
 
 @router.get("/projects/{project_id}", response_model=AiPathGenerateResponse)

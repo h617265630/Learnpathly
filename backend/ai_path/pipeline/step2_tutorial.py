@@ -139,6 +139,7 @@ async def run_step2(
     # Build new LearningOutline
     if isinstance(outline, LearningOutline):
         expanded_outline = LearningOutline(
+            title=getattr(outline, "title", "") or "",
             topic=outline.topic,
             level=outline.level,
             overview=outline.overview,
@@ -147,6 +148,7 @@ async def run_step2(
         )
     else:
         expanded_outline = LearningOutline(
+            title=str(outline.get("title") or "").strip(),
             topic=topic,
             level=level,
             overview=outline.get("overview", ""),

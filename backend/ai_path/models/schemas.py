@@ -130,6 +130,9 @@ class OutlineSection(BaseModel):
 
 class LearningOutline(BaseModel):
     """The complete learning outline (Step 1 output)."""
+    # A short, user-facing title for display. Prefer English output so the UI is consistent.
+    # (Added 2026-04-27 to support AIPath UI + DB persistence.)
+    title: str = ""
     topic: str
     level: str
     overview: str
