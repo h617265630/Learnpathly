@@ -170,6 +170,16 @@ export default function Home() {
                   <li>• <strong>AI Learn Path:</strong> Look for paths marked as "Completed" for fully generated content</li>
                 </ul>
               </div>
+
+              {/* Notice */}
+              <div className="rounded-md border border-red-200 bg-red-50 p-4">
+                <h3 className="text-sm font-bold text-stone-900 mb-2">
+                  ⚠️ Notice
+                </h3>
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  The AI features in the navigation bar (AI Path Generator, AI Resource Search) are currently experiencing performance issues. Content generation may take longer than expected. We recommend exploring existing paths in the Pool page for now.
+                </p>
+              </div>
             </div>
 
             {/* Footer */}
