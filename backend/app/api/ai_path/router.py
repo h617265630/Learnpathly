@@ -17,6 +17,7 @@ from langchain_core.output_parsers import JsonOutputParser
 
 from .service import generate_ai_path_pipeline, generate_ai_path_outline, generate_section_tutorial, search_resources_pipeline
 from app.models.ai_path_project import AiPathProject
+from app.models.learning_path import LearningPath
 from app.models.ai_path_section import AiPathSection
 from app.models.ai_path_subnode import AiPathSubNode
 from app.models.ai_path_subnode_detail import AiPathSubNodeDetail
@@ -25,6 +26,29 @@ import hashlib
 
 
 router = APIRouter(prefix="/ai-path", tags=["ai-path"])
+
+def _normalise_resource_dict(resource: object, *, learning_stage: str = "") -> dict:
+    if not isinstance(resource, dict):
+        return {}
+    url = str(resource.get("url") or "").strip()
+    if not url:
+        return {}
+    title = str(resource.get("title") or "").strip() or url
+    description = str(resource.get("description") or "").strip()
+    summary = str(resource.get("summary") or "").strip()
+    image = resource.get("image") or resource.get("thumbnail") or None
+    return {
+        "url": url,
+        "title": title,
+        "description": description or summary,
+        "summary": summary or description,
+        "key_points": resource.get("key_points") or [],
+        "difficulty": resource.get("difficulty") or "",
+        "resource_type": resource.get("resource_type") or resource.get("type") or "",
+        "learning_stage": resource.get("learning_stage") or learning_stage or "",
+        "estimated_minutes": resource.get("estimated_minutes") or 0,
+        "image": image,
+    }
 
 
 def _normalize_overview_text(text: str) -> str:
@@ -94,6 +118,7 @@ class AiPathProjectListItem(BaseModel):
     id: int
     topic: str
     outline_overview: str = ""
+    cover_image_url: str | None = None
     created_at: str | None = None
 
 
@@ -161,6 +186,12 @@ def _build_ai_path_workflow_info() -> dict:
                     },
                 },
                 "backend_steps": [
+                    {
+                        "step": "Step 0",
+                        "name": "获取主题展示图",
+                        "code": "backend/app/api/ai_path/service.py::generate_topic_card_image",
+                        "description": "根据学习主题搜索 GitHub/Tavily/网页 OG 图片，生成并保存 AI LearnPath 卡片封面图。",
+                    },
                     {
                         "step": "Step 1a",
                         "name": "生成搜索关键词",
@@ -510,6 +541,7 @@ async def generate_ai_path_outline_endpoint(
                 status="outline_generated",
                 outline_overview=(data.get("summary") or ""),
                 total_duration_hours=(data.get("_raw") or {}).get("total_duration_hours"),
+                cover_image_url=data.get("cover_image_url") or None,
                 raw_outline_json=(data.get("_raw") or {}),
                 raw_result_json=data,
             )
@@ -591,6 +623,7 @@ class SubNodeDetailResponse(BaseModel):
     key_points: list[str]
     detailed_content: str = Field(..., description="Detailed Markdown content")
     code_examples: list[str] = Field(default_factory=list)
+    structured_content: dict = Field(default_factory=dict)
 
 
 def _upsert_subnode_detail(
@@ -600,6 +633,7 @@ def _upsert_subnode_detail(
     detail_level: str,
     detailed_content: str,
     code_examples: list[str],
+    structured_content: dict | None,
     raw_json: dict,
 ) -> AiPathSubNodeDetail:
     detail = (
@@ -613,6 +647,7 @@ def _upsert_subnode_detail(
     if detail:
         detail.detailed_content = detailed_content
         detail.code_examples = code_examples
+        detail.structured_content = structured_content or {}
         detail.raw_json = raw_json
     else:
         detail = AiPathSubNodeDetail(
@@ -620,6 +655,7 @@ def _upsert_subnode_detail(
             detail_level=detail_level,
             detailed_content=detailed_content,
             code_examples=code_examples,
+            structured_content=structured_content or {},
             raw_json=raw_json,
         )
         db.add(detail)
@@ -642,6 +678,7 @@ def _subnode_detail_response_from_record(
         key_points=raw.get("key_points") or payload.subnode_key_points,
         detailed_content=detail.detailed_content or "",
         code_examples=detail.code_examples or [],
+        structured_content=detail.structured_content or raw.get("structured_content") or {},
     )
 
 
@@ -696,6 +733,7 @@ async def generate_subnode_detail_endpoint(
                     detail_level=payload.detail_level,
                     detailed_content=cached.detailed_content,
                     code_examples=cached.code_examples or [],
+                    structured_content=(cached.raw_json or {}).get("structured_content") or {},
                     raw_json=cached.raw_json or {},
                 )
                 linked_detail_id = linked_detail.id
@@ -713,6 +751,7 @@ async def generate_subnode_detail_endpoint(
             key_points=payload.subnode_key_points,
             detailed_content=cached.detailed_content,
             code_examples=cached.code_examples or [],
+            structured_content=(cached.raw_json or {}).get("structured_content") or {},
         )
 
     # Generate via LLM (Step 2.5)
@@ -746,12 +785,14 @@ async def generate_subnode_detail_endpoint(
                 detail_level=payload.detail_level,
                 detailed_content=result.detailed_content,
                 code_examples=result.code_examples,
+                structured_content=getattr(result, "structured_content", {}) or {},
                 raw_json={
                     "title": result.title,
                     "description": result.description,
                     "key_points": result.key_points,
                     "detailed_content": result.detailed_content,
                     "code_examples": result.code_examples,
+                    "structured_content": getattr(result, "structured_content", {}) or {},
                 },
             )
             linked_detail_id = linked_detail.id
@@ -777,6 +818,7 @@ async def generate_subnode_detail_endpoint(
                 "key_points": result.key_points,
                 "detailed_content": result.detailed_content,
                 "code_examples": result.code_examples,
+                "structured_content": getattr(result, "structured_content", {}) or {},
             },
         )
         db.add(record)
@@ -795,6 +837,7 @@ async def generate_subnode_detail_endpoint(
         key_points=result.key_points,
         detailed_content=result.detailed_content,
         code_examples=result.code_examples,
+        structured_content=getattr(result, "structured_content", {}) or {},
     )
 
 
@@ -804,8 +847,40 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
     sections = list(project.sections or [])
     sections.sort(key=lambda section: (section.order_index or 0, section.id or 0))
 
+    raw_nodes = []
+    try:
+        raw_nodes = (project.raw_result_json or {}).get("nodes") or []
+        if not isinstance(raw_nodes, list):
+            raw_nodes = []
+    except Exception:
+        raw_nodes = []
+
+    def _match_raw_node(section: AiPathSection) -> dict | None:
+        for node in raw_nodes:
+            if not isinstance(node, dict):
+                continue
+            if str(node.get("title") or "").strip() == str(section.title or "").strip():
+                return node
+        for node in raw_nodes:
+            if not isinstance(node, dict):
+                continue
+            order = node.get("order")
+            if order is None:
+                continue
+            try:
+                if int(order) == int(section.order_index or 0):
+                    return node
+            except Exception:
+                continue
+        return None
+
     nodes: list[dict] = []
     for section in sections:
+        raw_node = _match_raw_node(section) or {}
+        raw_section_resources = raw_node.get("resources") if isinstance(raw_node, dict) else []
+        if not isinstance(raw_section_resources, list):
+            raw_section_resources = []
+
         subnodes = list(section.subnodes or [])
         subnodes.sort(key=lambda subnode: (subnode.order_index or 0, subnode.id or 0))
         nodes.append({
@@ -814,7 +889,14 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
             "title": section.title,
             "description": section.description or "",
             "learning_points": section.learning_goals or [],
-            "resources": [],
+            "resources": [
+                item
+                for item in (
+                    _normalise_resource_dict(r, learning_stage=str(section.title or ""))
+                    for r in raw_section_resources
+                )
+                if item
+            ],
             "sub_nodes": [
                 {
                     "id": subnode.id,
@@ -831,6 +913,7 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
                             "detail_level": detail.detail_level,
                             "detailed_content": detail.detailed_content or "",
                             "code_examples": detail.code_examples or [],
+                            "structured_content": detail.structured_content or {},
                             "raw_json": detail.raw_json or {},
                         }
                         for detail in sorted(
@@ -846,11 +929,40 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
             "estimated_minutes": section.estimated_minutes or 0,
         })
 
+        # subnode resources from raw_result_json (match by title/order index)
+        raw_sub_nodes = raw_node.get("sub_nodes") if isinstance(raw_node, dict) else []
+        if isinstance(raw_sub_nodes, list) and raw_sub_nodes:
+            for sub_idx, subnode in enumerate(subnodes):
+                match: dict | None = None
+                for raw_sub in raw_sub_nodes:
+                    if not isinstance(raw_sub, dict):
+                        continue
+                    if str(raw_sub.get("title") or "").strip() == str(subnode.title or "").strip():
+                        match = raw_sub
+                        break
+                if match is None:
+                    try:
+                        match = raw_sub_nodes[sub_idx] if isinstance(raw_sub_nodes[sub_idx], dict) else None
+                    except Exception:
+                        match = None
+                raw_res = (match or {}).get("resources") if isinstance(match, dict) else []
+                if not isinstance(raw_res, list):
+                    raw_res = []
+                nodes[-1]["sub_nodes"][sub_idx]["resources"] = [
+                    item
+                    for item in (
+                        _normalise_resource_dict(r, learning_stage=str(section.title or ""))
+                        for r in raw_res
+                    )
+                    if item
+                ]
+
     overview = _normalize_overview_text(project.outline_overview or "")
     data = {
         "title": project.topic,
         "summary": overview,
         "description": overview,
+        "cover_image_url": project.cover_image_url or (project.raw_result_json or {}).get("cover_image_url"),
         "recommendations": [
             f"{len(nodes)} chapters",
             f"~ {float(project.total_duration_hours or 0):.1f} hours",
@@ -864,6 +976,30 @@ def _project_to_response(project: AiPathProject) -> AiPathGenerateResponse:
         data=data,
         warnings=[f"Loaded from DB (ai_path_projects.id={project.id})"],
     )
+
+
+@router.get("/projects/by-learning-path/{learning_path_id}", response_model=AiPathGenerateResponse)
+async def get_ai_path_project_by_learning_path(learning_path_id: int, db=Depends(get_db_dep)):
+    project = (
+        db.query(AiPathProject)
+        .filter(AiPathProject.published_learning_path_id == learning_path_id)
+        .order_by(AiPathProject.created_at.desc(), AiPathProject.id.desc())
+        .first()
+    )
+    if not project:
+        # Fallback: try to match by topic/title.
+        lp = db.query(LearningPath).filter(LearningPath.id == learning_path_id).first()
+        title = str(getattr(lp, "title", "") or "").strip()
+        if title:
+            project = (
+                db.query(AiPathProject)
+                .filter(AiPathProject.topic.ilike(f"%{title}%"))
+                .order_by(AiPathProject.created_at.desc(), AiPathProject.id.desc())
+                .first()
+            )
+    if not project:
+        raise HTTPException(status_code=404, detail="No ai_path project linked to this learning path")
+    return _project_to_response(project)
 
 
 @router.get("/projects/latest", response_model=AiPathGenerateResponse)
@@ -899,6 +1035,7 @@ async def list_ai_path_projects(
                 id=p.id,
                 topic=p.topic,
                 outline_overview=_normalize_overview_text(p.outline_overview or ""),
+                cover_image_url=p.cover_image_url,
                 created_at=p.created_at.isoformat() if getattr(p, "created_at", None) else None,
             )
         )

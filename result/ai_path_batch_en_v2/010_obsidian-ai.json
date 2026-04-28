@@ -1,0 +1,795 @@
+{
+  "topic": "Obsidian + AI 插件工作流",
+  "status": "started",
+  "api_base": "http://127.0.0.1:8000",
+  "started_at": "2026-04-27T17:52:52.003902+00:00",
+  "project_id": 40,
+  "outline_response": {
+    "project_id": 40,
+    "data": {
+      "title": "Obsidian AI Workflow: Integrating Plugins for Intelligent PKM",
+      "summary": "Master the integration of Obsidian with AI plugins to build intelligent note workflows, from setting up a semantic knowledge base to automating content generation and customizing AI agents.",
+      "description": "Master the integration of Obsidian with AI plugins to build intelligent note workflows, from setting up a semantic knowledge base to automating content generation and customizing AI agents.",
+      "nodes": [
+        {
+          "title": "Chapter 1: Foundations of Obsidian for AI-Driven Knowledge Management",
+          "description": "This chapter covers the basics of Obsidian, its vault architecture, and preparation steps to make your notes AI‑ready, including plugin installation and vault organization.",
+          "learning_points": [
+            "Understand Obsidian’s core concepts and vault structure",
+            "Set up a clean vault with proper folder hierarchy",
+            "Install essential AI plugins and configure API connections",
+            "Start your first AI conversation within Obsidian"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Obsidian Core Concepts and Vault Architecture",
+              "description": "Overview of how Obsidian stores notes as Markdown files, the role of YAML frontmatter, internal linking, tags, and the file system.",
+              "learning_points": [
+                "Vault vs folder distinction",
+                "Markdown and frontmatter essentials",
+                "Internal linking [[]] and transclusion",
+                "Tags and metadata conventions"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Vault Organization for AI Workflows",
+              "description": "Best practices for structuring folders, naming conventions, and using templates to make notes semantically clear for AI processing.",
+              "learning_points": [
+                "Folder hierarchy by projects or topics",
+                "Consistent naming and date conventions",
+                "Using Templater for dynamic note creation",
+                "Leveraging Dataview for metadata indexing"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Installing and Configuring Core AI Plugins",
+              "description": "Step‑by‑step guide to installing key AI plugins (Copilot, Smart Connections, AI Assistant) and linking them to LLM providers.",
+              "learning_points": [
+                "Adding plugins via Community Plugins browser",
+                "Configuring API keys for OpenAI/Claude",
+                "Adjusting plugin settings for privacy and safety",
+                "Verifying connectivity with a test query"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Initial AI Interaction: Prompting and Conversation Setup",
+              "description": "How to start your first AI conversation inside Obsidian, design effective prompts, and save AI responses as notes.",
+              "learning_points": [
+                "Opening a chat pane with Copilot or AI Assistant",
+                "Writing concise, context‑rich prompts",
+                "Saving AI outputs directly into notes",
+                "Using conversation templates for repeatable tasks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 2: Core AI Plugin Features and Capabilities",
+          "description": "Deep dive into the functionality of leading AI plugins for Obsidian, exploring semantic search, note generation, and programmable workflows.",
+          "learning_points": [
+            "Use Copilot for real‑time completion and summarization",
+            "Leverage Smart Connections for vector‑based semantic search",
+            "Build AI agents that read, decide, and write notes",
+            "Create and manage reusable prompt libraries"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Real-Time Completion and Summarization with Copilot",
+              "description": "Hands‑on with Copilot: inline suggestions, auto‑summaries, and batch processing of selected notes.",
+              "learning_points": [
+                "Inline completion in the editor",
+                "Summarizing selected text on demand",
+                "Batch processing multiple notes for quick overviews",
+                "Customizing completion style, tone, and length"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Semantic Search via Smart Connections",
+              "description": "Implementing vector embeddings and similarity search to retrieve related notes automatically.",
+              "learning_points": [
+                "Generating embeddings for the entire vault",
+                "Configuring similarity thresholds and ranking",
+                "Querying related notes with natural language",
+                "Updating embeddings when vault content changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Programmable AI Workflows with AI Agents",
+              "description": "Designing modular AI agents that read notes, decide actions, and write back results, using Obsidian as the cognitive hub.",
+              "learning_points": [
+                "Defining agent roles and capabilities",
+                "Reading vault content via plugin APIs",
+                "Conditional note creation based on LLM output",
+                "Triggering agents on vault events (file creation, tag changes)"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Prompt Libraries and Custom Instructions",
+              "description": "Building and managing reusable prompt templates for consistent AI behavior across different tasks.",
+              "learning_points": [
+                "Organizing prompts by category (review, ideation, etc.)",
+                "Using Templater to inject dynamic variables",
+                "Version‑controlling prompt libraries in Git",
+                "Testing prompts in sandbox mode before production"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 3: Building Integrated AI Workflows",
+          "description": "Focus on end‑to‑end workflows that combine Obsidian’s linking, templating, and AI capabilities to automate knowledge capture, elaboration, and retrieval.",
+          "learning_points": [
+            "Automate note capture from web clips, PDFs, and voice",
+            "Create AI‑assisted writing pipelines for drafts and revisions",
+            "Generate dynamic knowledge graphs reflecting AI‑derived relationships",
+            "Use Obsidian’s automation tools to trigger AI actions"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Capturing and Preprocessing External Sources",
+              "description": "Automating the import of web pages, PDFs, and audio transcriptions into Obsidian, then preprocessing with AI for tagging and summarization.",
+              "learning_points": [
+                "Using QuickAdd and browser clipper for web content",
+                "PDF extraction, chunking, and text preprocessing",
+                "Transcription pipelines (Whisper) combined with AI summarization",
+                "Auto‑tagging and frontmatter enrichment on import"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "AI-Assisted Writing Pipeline",
+              "description": "Orchestrating a writing process where AI generates outlines, drafts, and revisions while you control the final output.",
+              "learning_points": [
+                "Generate outline from bullet points using Copilot",
+                "Expand outline to full note with contextual details",
+                "Iterative refinement via user feedback loops",
+                "Insert citations and cross‑references automatically"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Dynamic Knowledge Graph with AI-Generated Links",
+              "description": "Leveraging AI to propose new links, categorize notes, and visualize relationships in Obsidian’s graph view.",
+              "learning_points": [
+                "AI‑driven link suggestions for related concepts",
+                "Automatic tagging and grouping of notes",
+                "Real‑time graph view updates on new AI content",
+                "Exporting graph data for external visualization tools"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Automation with Obsidian Shell Commands and Scripts",
+              "description": "Combining Obsidian’s built‑in automation (Templater, QuickAdd) with external scripts to trigger AI workflows on vault events.",
+              "learning_points": [
+                "Creating shell commands for repetitive AI tasks",
+                "Using Templater to generate AI prompts dynamically",
+                "Triggering AI agents on file creation via QuickAdd",
+                "Logging, debugging, and error handling for scripts"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+          "description": "Move beyond basic setups by developing custom plugins, optimizing performance, maintaining security, and scaling your AI vault for multi‑user or team environments.",
+          "learning_points": [
+            "Build a simple custom Obsidian plugin to tailor AI behavior",
+            "Optimize embedding generation and vector search for large vaults",
+            "Securely manage API keys and control costs",
+            "Prepare for collaborative AI workflows and data portability"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Developing a Custom Obsidian Plugin for AI Tasks",
+              "description": "Introduction to Obsidian plugin development: scaffold, manifest, and implementing an AI command that writes notes.",
+              "learning_points": [
+                "Setting up the plugin scaffold with esbuild",
+                "Registering commands and UI components",
+                "Calling LLM APIs via fetch or SDK",
+                "Testing and debugging with live reload"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Performance Optimization for Large Vaults",
+              "description": "Strategies for managing embedding generation, indexing, and query latency as the vault grows.",
+              "learning_points": [
+                "Incremental embedding updates on file changes",
+                "Caching vector results to avoid recomputation",
+                "Using efficient similarity algorithms (e.g., HNSW)",
+                "Monitoring indexing progress and memory usage"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Security, API Management, and Cost Control",
+              "description": "Best practices for storing API keys, handling rate limits, and monitoring usage to keep the workflow secure and cost‑effective.",
+              "learning_points": [
+                "Storing keys in Obsidian’s secure settings or .env",
+                "Implementing request throttling and retry logic",
+                "Setting usage budgets, alerts, and logging",
+                "Auditing API calls and reviewing cost reports"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Scaling to Team and Multi-Vault Environments",
+              "description": "Approaches for sharing AI‑enhanced vaults, synchronizing embeddings, and maintaining consistent workflows across users.",
+              "learning_points": [
+                "Git‑based vault synchronization with branching",
+                "Centralized vector store (e.g., Pinecone) for shared embeddings",
+                "Standardized plugin configurations via .obsidian folder",
+                "Documentation and onboarding for team members"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        }
+      ],
+      "recommendations": [
+        "4 chapters",
+        "~ 12.5 hours"
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_input_query": "Obsidian + AI 插件工作流"
+    },
+    "warnings": [
+      "Found 20 web results",
+      "Generated 4 sections with sub_nodes",
+      "Saved outline to DB (ai_path_projects.id=40)"
+    ]
+  },
+  "project_before_details": {
+    "project_id": 40,
+    "data": {
+      "title": "Obsidian AI Workflow: Integrating Plugins for Intelligent PKM",
+      "summary": "Master the integration of Obsidian with AI plugins to build intelligent note workflows, from setting up a semantic knowledge base to automating content generation and customizing AI agents.",
+      "description": "Master the integration of Obsidian with AI plugins to build intelligent note workflows, from setting up a semantic knowledge base to automating content generation and customizing AI agents.",
+      "recommendations": [
+        "4 chapters",
+        "~ 12.5 hours"
+      ],
+      "nodes": [
+        {
+          "id": 163,
+          "project_id": 40,
+          "title": "Chapter 1: Foundations of Obsidian for AI-Driven Knowledge Management",
+          "description": "This chapter covers the basics of Obsidian, its vault architecture, and preparation steps to make your notes AI‑ready, including plugin installation and vault organization.",
+          "learning_points": [
+            "Understand Obsidian’s core concepts and vault structure",
+            "Set up a clean vault with proper folder hierarchy",
+            "Install essential AI plugins and configure API connections",
+            "Start your first AI conversation within Obsidian"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 577,
+              "section_id": 163,
+              "title": "Obsidian Core Concepts and Vault Architecture",
+              "description": "Overview of how Obsidian stores notes as Markdown files, the role of YAML frontmatter, internal linking, tags, and the file system.",
+              "learning_points": [
+                "Vault vs folder distinction",
+                "Markdown and frontmatter essentials",
+                "Internal linking [[]] and transclusion",
+                "Tags and metadata conventions"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 578,
+              "section_id": 163,
+              "title": "Vault Organization for AI Workflows",
+              "description": "Best practices for structuring folders, naming conventions, and using templates to make notes semantically clear for AI processing.",
+              "learning_points": [
+                "Folder hierarchy by projects or topics",
+                "Consistent naming and date conventions",
+                "Using Templater for dynamic note creation",
+                "Leveraging Dataview for metadata indexing"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 579,
+              "section_id": 163,
+              "title": "Installing and Configuring Core AI Plugins",
+              "description": "Step‑by‑step guide to installing key AI plugins (Copilot, Smart Connections, AI Assistant) and linking them to LLM providers.",
+              "learning_points": [
+                "Adding plugins via Community Plugins browser",
+                "Configuring API keys for OpenAI/Claude",
+                "Adjusting plugin settings for privacy and safety",
+                "Verifying connectivity with a test query"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 580,
+              "section_id": 163,
+              "title": "Initial AI Interaction: Prompting and Conversation Setup",
+              "description": "How to start your first AI conversation inside Obsidian, design effective prompts, and save AI responses as notes.",
+              "learning_points": [
+                "Opening a chat pane with Copilot or AI Assistant",
+                "Writing concise, context‑rich prompts",
+                "Saving AI outputs directly into notes",
+                "Using conversation templates for repeatable tasks"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 164,
+          "project_id": 40,
+          "title": "Chapter 2: Core AI Plugin Features and Capabilities",
+          "description": "Deep dive into the functionality of leading AI plugins for Obsidian, exploring semantic search, note generation, and programmable workflows.",
+          "learning_points": [
+            "Use Copilot for real‑time completion and summarization",
+            "Leverage Smart Connections for vector‑based semantic search",
+            "Build AI agents that read, decide, and write notes",
+            "Create and manage reusable prompt libraries"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 581,
+              "section_id": 164,
+              "title": "Real-Time Completion and Summarization with Copilot",
+              "description": "Hands‑on with Copilot: inline suggestions, auto‑summaries, and batch processing of selected notes.",
+              "learning_points": [
+                "Inline completion in the editor",
+                "Summarizing selected text on demand",
+                "Batch processing multiple notes for quick overviews",
+                "Customizing completion style, tone, and length"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 582,
+              "section_id": 164,
+              "title": "Semantic Search via Smart Connections",
+              "description": "Implementing vector embeddings and similarity search to retrieve related notes automatically.",
+              "learning_points": [
+                "Generating embeddings for the entire vault",
+                "Configuring similarity thresholds and ranking",
+                "Querying related notes with natural language",
+                "Updating embeddings when vault content changes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 583,
+              "section_id": 164,
+              "title": "Programmable AI Workflows with AI Agents",
+              "description": "Designing modular AI agents that read notes, decide actions, and write back results, using Obsidian as the cognitive hub.",
+              "learning_points": [
+                "Defining agent roles and capabilities",
+                "Reading vault content via plugin APIs",
+                "Conditional note creation based on LLM output",
+                "Triggering agents on vault events (file creation, tag changes)"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 584,
+              "section_id": 164,
+              "title": "Prompt Libraries and Custom Instructions",
+              "description": "Building and managing reusable prompt templates for consistent AI behavior across different tasks.",
+              "learning_points": [
+                "Organizing prompts by category (review, ideation, etc.)",
+                "Using Templater to inject dynamic variables",
+                "Version‑controlling prompt libraries in Git",
+                "Testing prompts in sandbox mode before production"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 165,
+          "project_id": 40,
+          "title": "Chapter 3: Building Integrated AI Workflows",
+          "description": "Focus on end‑to‑end workflows that combine Obsidian’s linking, templating, and AI capabilities to automate knowledge capture, elaboration, and retrieval.",
+          "learning_points": [
+            "Automate note capture from web clips, PDFs, and voice",
+            "Create AI‑assisted writing pipelines for drafts and revisions",
+            "Generate dynamic knowledge graphs reflecting AI‑derived relationships",
+            "Use Obsidian’s automation tools to trigger AI actions"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 585,
+              "section_id": 165,
+              "title": "Capturing and Preprocessing External Sources",
+              "description": "Automating the import of web pages, PDFs, and audio transcriptions into Obsidian, then preprocessing with AI for tagging and summarization.",
+              "learning_points": [
+                "Using QuickAdd and browser clipper for web content",
+                "PDF extraction, chunking, and text preprocessing",
+                "Transcription pipelines (Whisper) combined with AI summarization",
+                "Auto‑tagging and frontmatter enrichment on import"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 586,
+              "section_id": 165,
+              "title": "AI-Assisted Writing Pipeline",
+              "description": "Orchestrating a writing process where AI generates outlines, drafts, and revisions while you control the final output.",
+              "learning_points": [
+                "Generate outline from bullet points using Copilot",
+                "Expand outline to full note with contextual details",
+                "Iterative refinement via user feedback loops",
+                "Insert citations and cross‑references automatically"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 587,
+              "section_id": 165,
+              "title": "Dynamic Knowledge Graph with AI-Generated Links",
+              "description": "Leveraging AI to propose new links, categorize notes, and visualize relationships in Obsidian’s graph view.",
+              "learning_points": [
+                "AI‑driven link suggestions for related concepts",
+                "Automatic tagging and grouping of notes",
+                "Real‑time graph view updates on new AI content",
+                "Exporting graph data for external visualization tools"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 588,
+              "section_id": 165,
+              "title": "Automation with Obsidian Shell Commands and Scripts",
+              "description": "Combining Obsidian’s built‑in automation (Templater, QuickAdd) with external scripts to trigger AI workflows on vault events.",
+              "learning_points": [
+                "Creating shell commands for repetitive AI tasks",
+                "Using Templater to generate AI prompts dynamically",
+                "Triggering AI agents on file creation via QuickAdd",
+                "Logging, debugging, and error handling for scripts"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 166,
+          "project_id": 40,
+          "title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+          "description": "Move beyond basic setups by developing custom plugins, optimizing performance, maintaining security, and scaling your AI vault for multi‑user or team environments.",
+          "learning_points": [
+            "Build a simple custom Obsidian plugin to tailor AI behavior",
+            "Optimize embedding generation and vector search for large vaults",
+            "Securely manage API keys and control costs",
+            "Prepare for collaborative AI workflows and data portability"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 589,
+              "section_id": 166,
+              "title": "Developing a Custom Obsidian Plugin for AI Tasks",
+              "description": "Introduction to Obsidian plugin development: scaffold, manifest, and implementing an AI command that writes notes.",
+              "learning_points": [
+                "Setting up the plugin scaffold with esbuild",
+                "Registering commands and UI components",
+                "Calling LLM APIs via fetch or SDK",
+                "Testing and debugging with live reload"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 590,
+              "section_id": 166,
+              "title": "Performance Optimization for Large Vaults",
+              "description": "Strategies for managing embedding generation, indexing, and query latency as the vault grows.",
+              "learning_points": [
+                "Incremental embedding updates on file changes",
+                "Caching vector results to avoid recomputation",
+                "Using efficient similarity algorithms (e.g., HNSW)",
+                "Monitoring indexing progress and memory usage"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 591,
+              "section_id": 166,
+              "title": "Security, API Management, and Cost Control",
+              "description": "Best practices for storing API keys, handling rate limits, and monitoring usage to keep the workflow secure and cost‑effective.",
+              "learning_points": [
+                "Storing keys in Obsidian’s secure settings or .env",
+                "Implementing request throttling and retry logic",
+                "Setting usage budgets, alerts, and logging",
+                "Auditing API calls and reviewing cost reports"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 592,
+              "section_id": 166,
+              "title": "Scaling to Team and Multi-Vault Environments",
+              "description": "Approaches for sharing AI‑enhanced vaults, synchronizing embeddings, and maintaining consistent workflows across users.",
+              "learning_points": [
+                "Git‑based vault synchronization with branching",
+                "Centralized vector store (e.g., Pinecone) for shared embeddings",
+                "Standardized plugin configurations via .obsidian folder",
+                "Documentation and onboarding for team members"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        }
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_from_db": true
+    },
+    "warnings": [
+      "Loaded from DB (ai_path_projects.id=40)"
+    ]
+  },
+  "subnode_details": {
+    "579": {
+      "detail_id": 321,
+      "subnode_id": 579,
+      "title": "Installing and Configuring Core AI Plugins",
+      "description": "Step‑by‑step guide to installing key AI plugins (Copilot, Smart Connections, AI Assistant) and linking them to LLM providers.",
+      "key_points": [
+        "Adding plugins via Community Plugins browser",
+        "Configuring API keys for OpenAI/Claude",
+        "Adjusting plugin settings for privacy and safety",
+        "Verifying connectivity with a test query"
+      ],
+      "detailed_content": "# Installing and Configuring Core AI Plugins in Obsidian\n\n## Concept Explanation: Why AI Plugins Transform Your PKM\n\nObsidian's true power emerges when you augment its core note-taking capabilities with AI-powered plugins. These plugins transform your vault from a static collection of markdown files into an intelligent reasoning partner that can:\n\n- **Synthesize information** across thousands of notes\n- **Generate insights** by connecting disparate ideas\n- **Automate documentation** through intelligent summarization\n- **Enhance search** with semantic understanding rather than keyword matching\n\nThe integration of Large Language Models (LLMs) into your Personal Knowledge Management (PKM) system creates a \"second brain\" that doesn't just store information—it actively helps you make meaning from it.\n\n---\n\n## Core Mechanics: How Plugin Installation and Configuration Works\n\n### Step 1: Enabling Community Plugins\n\nBefore installing any community plugin, you must enable the Community Plugins feature:\n\n1. Open **Settings** (gear icon or `Ctrl+,` / `Cmd+,`)\n2. Navigate to **Community Plugins** (left sidebar)\n3. Toggle off **Safe Mode** (Obsidian will warn you about potential risks—this is expected)\n4. Click **Turn on Community Plugins**\n\n**Why Safe Mode exists**: Community plugins can execute arbitrary code within your vault. Always verify plugin publishers and read reviews before installation.\n\n### Step 2: Installing Plugins via the Community Browser\n\nThe Community Plugins browser provides a searchable marketplace:\n\n1. Click **Browse** in the Community Plugins settings pane\n2. Search for your target plugin (e.g., \"Copilot,\" \"Smart Connections,\" \"AI Assistant\")\n3. Review the plugin's:\n   - **Version** and last update date\n   - **Download count** (higher generally means more tested)\n   - **Star rating** from the community\n   - **Required permissions** (critical for privacy assessment)\n4. Click **Install**, then **Enable** once installed\n\n**Key plugins for AI-driven PKM**:\n- **Copilot**: Conversational AI within Obsidian, excellent for drafting and brainstorming\n- **Smart Connections**: Embeds-based retrieval that finds semantically related notes\n- **AI Assistant**: Open-source plugin supporting multiple LLM providers with extensive customization\n\n### Step 3: Configuring API Keys for LLM Providers\n\nAI plugins require access to LLM APIs. The two dominant providers are:\n\n#### OpenAI (GPT-4, GPT-3.5-turbo)\n\n1. Navigate to [platform.openai.com](https://platform.openai.com)\n2. Create an account or sign in\n3. Go to **API Keys** → **Create new secret key**\n4. Copy the key (starts with `sk-`)\n5. In Obsidian, open the plugin's settings and paste the key\n\n#### Anthropic (Claude)\n\n1. Visit [console.anthropic.com](https://console.anthropic.com)\n2. Sign up for access (often requires waiting list approval)\n3. Navigate to **API Keys** → **Create Key**\n4. Copy and securely store the key\n5. Configure in your Obsidian plugin settings\n\n**Critical Security Note**: Never commit API keys to git repositories. Use environment variables or vault-specific configuration files excluded from version control.\n\n### Step 4: Adjusting Privacy and Safety Settings\n\nEach AI plugin offers configurable privacy controls:\n\n| Setting | Purpose | Recommended Value |\n|---------|---------|-------------------|\n| **Data Transmission** | Controls whether your notes are sent to external APIs | Enable only for necessary queries |\n| **Context Window Size** | Limits how much content is sent per request | Start conservative (2,000-4,000 tokens) |\n| **Local Processing** | Attempts to process data without external transmission | Enable when available |\n| **Logging/Diagnostics** | Sends error data to plugin developers | Disable for maximum privacy |\n\n**Understanding token consumption**: Most LLM pricing is token-based. A typical paragraph of text equals 50-150 tokens. Larger context windows provide richer responses but cost more and may expose more content.\n\n### Step 5: Verifying Connectivity with Test Queries\n\nAfter configuration, verify everything works:\n\n1. **Open the plugin's command palette** (usually `Ctrl+P` / `Cmd+P`)\n2. **Run the plugin's test command** (often named \"Test Connection\" or similar)\n3. **Send a simple test query**: \"What is 2+2?\" or \"Summarize the concept of photosynthesis in one sentence.\"\n4. **Verify response**: A successful connection returns an AI response within 5-30 seconds\n\n---\n\n## Understanding Plugin Architecture\n\nAI plugins in Obsidian follow a layered architecture:\n\n\n┌─────────────────────────────────────────┐\n│         Obsidian User Interface         │\n│   (Commands, Sidebar Panes, Modals)     │\n├─────────────────────────────────────────┤\n│          Plugin Core Logic              │\n│   (Event Handling, State Management)    │\n├─────────────────────────────────────────┤\n│         LLM Provider Adapter            │\n│   (API Abstraction Layer)               │\n├─────────────────────────────────────────┤\n│     External LLM Services               │\n│   (OpenAI, Anthropic, Local Models)    │\n└─────────────────────────────────────────┘\n\n\nThis architecture means:\n- Plugins can work with multiple LLM providers through adapter layers\n- Configuration changes in plugin settings modify the adapter behavior\n- Your notes never touch the plugin code directly—only the LLM API receives them\n\n---\n\n## Advanced Configuration: Custom API Endpoints\n\nFor power users or organizations with specific requirements:\n\n### Using Alternative API Providers\n\nMany plugins support custom endpoints, enabling use with:\n- **Azure OpenAI**: Corporate deployments with enhanced compliance\n- **Local LLM servers** (Ollama, LM Studio): Zero data transmission\n- **Self-hosted models**: Full control over model selection\n\nConfiguration typically involves:\n- **Base URL**: The API endpoint (e.g., `https://api.openai.com/v1`)\n- **Model identifier**: The specific model to use (e.g., `gpt-4`, `claude-3-sonnet-20240229`)\n- **API version**: For providers requiring version specification\n\n---\n\n## Privacy Considerations: Making Informed Choices\n\nWhen you send content to external LLM APIs, consider:\n\n1. **Data persistence**: Most providers log API inputs for model improvement (check opt-out options)\n2. **Jurisdictional compliance**: Data may be processed in different geographic regions\n3. **Content classification**: Some providers scan inputs for policy violations\n4. **Vault sensitivity**: Financial records, personal journals, and proprietary information require extra scrutiny\n\n**The privacy spectrum**:\n- **Full cloud**: Maximum capability, minimum privacy\n- **Local models**: Maximum privacy, capability depends on your hardware\n- **Hybrid**: Sensitive content processed locally, general queries sent to cloud\n\n---\n\n## Troubleshooting Common Configuration Issues\n\n| Issue | Likely Cause | Solution |\n|-------|--------------|----------|\n| \"Invalid API Key\" error | Key expired, incorrectly copied, or wrong provider | Regenerate key, verify prefix matches provider |\n| Timeout on queries | Network issues or rate limiting | Check firewall, wait and retry, reduce context size |\n| Empty responses | Model not loaded or quota exceeded | Check account status, verify model availability |\n| Unexpected behavior | Conflicting plugins or outdated version | Disable other plugins, update to latest version |\n\n---\n\n## Practical Advice: Building Your AI-Enhanced Workflow\n\n1. **Start with one plugin**: Master Copilot or AI Assistant before adding more\n2. **Document your setup**: Keep a vault note with plugin versions and configuration notes\n3. **Monitor usage**: Track API costs through provider dashboards\n4. **Create templates**: Develop consistent prompting patterns for recurring tasks\n5. **Iterate on privacy**: Begin restrictive, expand permissions as you understand the tradeoffs\n\n---\n\n## Maintenance and Updates\n\nAI plugins require ongoing attention:\n\n- **Update regularly**: Plugin updates often include LLM provider compatibility fixes\n- **Monitor API costs**: Set budget alerts in provider dashboards\n- **Review permissions**: Plugin updates may request new permissions\n- **Backup configurations**: Export plugin settings before major updates\n\n\n## Code Examples\n\n### Example 1\n\n```python\n// Obsidian Vault Configuration File (/.obsidian/community-plugins.json)\n// This file tracks which community plugins are enabled\n// Location: YourVault/.obsidian/community-plugins.json\n\n{\n  \"communityPlugins\": {\n    \"enabled\": [\n      \"obsidian-copilot\",      // AI conversational assistant\n      \"obsidian-smart-connections\",  // Semantic search and retrieval\n      \"obsidianai-assistant\"   // General-purpose AI integration\n    ],\n    \"lastUpdateCheck\": \"2024-01-15T10:30:00Z\"\n  }\n}\n```\n\n### Example 2\n\n```python\n// Environment Variables Setup for API Keys (for advanced users)\n// Create a .env file in your vault root (ADD TO .gitignore!)\n// This method keeps sensitive keys out of your vault configuration\n\n// .env file contents:\nOPENAI_API_KEY=sk-your-openai-key-here\nANTHROPIC_API_KEY=sk-ant-your-anthropic-key-here\n\n// Then in your plugin settings, reference the environment variable:\n// { \"provider\": \"openai\", \"apiKey\": \"${OPENAI_API_KEY}\" }\n\n// Bash script to verify environment variables are set:\necho \"Checking API key configuration...\"\nif [ -z \"$OPENAI_API_KEY\" ]; then\n    echo \"ERROR: OPENAI_API_KEY not set\"\n    exit 1\nelse\n    echo \"✓ OPENAI_API_KEY is configured\"\nfi\n\n// PowerShell equivalent for Windows users:\nif ($null -eq $env:OPENAI_API_KEY) {\n    Write-Host \"ERROR: OPENAI_API_KEY not set\" -ForegroundColor Red\n    exit 1\n} else {\n    Write-Host \"✓ OPENAI_API_KEY is configured\" -ForegroundColor Green\n}\n```\n\n### Example 3\n\n```python\n// Sample Plugin Settings JSON (Smart Connections example)\n// Typical location: YourVault/.obsidian/plugins/smart-connections/settings.json\n\n{\n  \"version\": \"2.5.3\",\n  \"apiProvider\": \"openai\",\n  \"apiKey\": \"sk-...\",  // Typically loaded from secure storage\n  \"embeddingModel\": \"text-embedding-ada-002\",\n  \"maxTokens\": 8191,\n  \"privacySettings\": {\n    \"sendToAPI\": true,\n    \"includeVaultPath\": false,\n    \"excludeFolders\": [\"Daily Notes\", \".trash\"],\n    \"fileExtensions\": [\".md\"]\n  },\n  \"embeddingSettings\": {\n    \"batchSize\": 100,\n    \"reIndexOnStartup\": false,\n    \"indexFrequency\": \"manual\"\n  }\n}\n```\n\n### Example 4\n\n```python\n// Test Script: Verify LLM Connectivity via cURL\n// Run this in terminal to test API access directly\n\n// Test OpenAI API connection:\ncurl https://api.openai.com/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer $OPENAI_API_KEY\" \\\n  -d '{\n    \"model\": \"gpt-3.5-turbo\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"Respond with exactly: SUCCESS\"\n      }\n    ],\n    \"max_tokens\": 10\n  }'\n\n// If successful, you should receive a JSON response with \"SUCCESS\" in the content field\n// This confirms your API key is valid and the service is accessible\n```\n\n\n\n## Common Mistakes\n\n- Committing API keys to version control repositories, exposing them publicly on GitHub and incurring unauthorized usage charges\n- Enabling all plugins simultaneously without understanding their individual privacy implications, sending vault content to multiple third-party services\n- Using maximum context window sizes when smaller windows suffice, dramatically increasing both cost and privacy exposure\n- Skipping the connectivity test after configuration, leading to hours of confusion when prompts don't work as expected\n- Ignoring plugin update notifications and continuing to use outdated versions with known bugs or incompatibilities\n- Not reading the permissions requested by plugins during installation, unknowingly granting excessive access to vault files\n- Configuring the wrong API endpoint (e.g., using production endpoints during testing), causing authentication failures\n- Assuming API keys work indefinitely without checking provider dashboards for quota exhaustion or account issues\n\n\n## Best Practices\n\n- Store API keys in environment variables or a dedicated secrets manager rather than directly in plugin settings, enabling easy rotation and preventing accidental exposure\n- Create a dedicated Obsidian vault for AI experiments before integrating plugins into your primary knowledge base, isolating potential issues\n- Implement a tiered privacy approach: send routine queries to cloud APIs while keeping sensitive notes for local model processing or manual review\n- Document your plugin configuration in a vault note including version numbers, settings, and any custom prompts, creating a reproducible setup reference\n- Set budget alerts and spending limits in provider dashboards (OpenAI, Anthropic) to prevent unexpected charges from runaway queries or infinite loops\n- Regularly audit installed plugins by reviewing the Community Plugins list and removing those you no longer actively use, reducing attack surface\n- Test connectivity with simple queries before attempting complex workflows, ensuring the basic pipeline works before debugging advanced scenarios\n- Keep a change log of plugin updates and configuration modifications, enabling rollback if updates introduce regressions or breaking changes\n",
+      "code_examples": [
+        "// Obsidian Vault Configuration File (/.obsidian/community-plugins.json)\n// This file tracks which community plugins are enabled\n// Location: YourVault/.obsidian/community-plugins.json\n\n{\n  \"communityPlugins\": {\n    \"enabled\": [\n      \"obsidian-copilot\",      // AI conversational assistant\n      \"obsidian-smart-connections\",  // Semantic search and retrieval\n      \"obsidianai-assistant\"   // General-purpose AI integration\n    ],\n    \"lastUpdateCheck\": \"2024-01-15T10:30:00Z\"\n  }\n}",
+        "// Environment Variables Setup for API Keys (for advanced users)\n// Create a .env file in your vault root (ADD TO .gitignore!)\n// This method keeps sensitive keys out of your vault configuration\n\n// .env file contents:\nOPENAI_API_KEY=sk-your-openai-key-here\nANTHROPIC_API_KEY=sk-ant-your-anthropic-key-here\n\n// Then in your plugin settings, reference the environment variable:\n// { \"provider\": \"openai\", \"apiKey\": \"${OPENAI_API_KEY}\" }\n\n// Bash script to verify environment variables are set:\necho \"Checking API key configuration...\"\nif [ -z \"$OPENAI_API_KEY\" ]; then\n    echo \"ERROR: OPENAI_API_KEY not set\"\n    exit 1\nelse\n    echo \"✓ OPENAI_API_KEY is configured\"\nfi\n\n// PowerShell equivalent for Windows users:\nif ($null -eq $env:OPENAI_API_KEY) {\n    Write-Host \"ERROR: OPENAI_API_KEY not set\" -ForegroundColor Red\n    exit 1\n} else {\n    Write-Host \"✓ OPENAI_API_KEY is configured\" -ForegroundColor Green\n}",
+        "// Sample Plugin Settings JSON (Smart Connections example)\n// Typical location: YourVault/.obsidian/plugins/smart-connections/settings.json\n\n{\n  \"version\": \"2.5.3\",\n  \"apiProvider\": \"openai\",\n  \"apiKey\": \"sk-...\",  // Typically loaded from secure storage\n  \"embeddingModel\": \"text-embedding-ada-002\",\n  \"maxTokens\": 8191,\n  \"privacySettings\": {\n    \"sendToAPI\": true,\n    \"includeVaultPath\": false,\n    \"excludeFolders\": [\"Daily Notes\", \".trash\"],\n    \"fileExtensions\": [\".md\"]\n  },\n  \"embeddingSettings\": {\n    \"batchSize\": 100,\n    \"reIndexOnStartup\": false,\n    \"indexFrequency\": \"manual\"\n  }\n}",
+        "// Test Script: Verify LLM Connectivity via cURL\n// Run this in terminal to test API access directly\n\n// Test OpenAI API connection:\ncurl https://api.openai.com/v1/chat/completions \\\n  -H \"Content-Type: application/json\" \\\n  -H \"Authorization: Bearer $OPENAI_API_KEY\" \\\n  -d '{\n    \"model\": \"gpt-3.5-turbo\",\n    \"messages\": [\n      {\n        \"role\": \"user\",\n        \"content\": \"Respond with exactly: SUCCESS\"\n      }\n    ],\n    \"max_tokens\": 10\n  }'\n\n// If successful, you should receive a JSON response with \"SUCCESS\" in the content field\n// This confirms your API key is valid and the service is accessible"
+      ]
+    },
+    "578": {
+      "detail_id": 322,
+      "subnode_id": 578,
+      "title": "Vault Organization for AI Workflows",
+      "description": "Best practices for structuring folders, naming conventions, and using templates to make notes semantically clear for AI processing.",
+      "key_points": [
+        "Folder hierarchy by projects or topics",
+        "Consistent naming and date conventions",
+        "Using Templater for dynamic note creation",
+        "Leveraging Dataview for metadata indexing"
+      ],
+      "detailed_content": "",
+      "code_examples": []
+    },
+    "577": {
+      "detail_id": 323,
+      "subnode_id": 577,
+      "title": "Obsidian Core Concepts and Vault Architecture",
+      "description": "Overview of how Obsidian stores notes as Markdown files, the role of YAML frontmatter, internal linking, tags, and the file system.",
+      "key_points": [
+        "Vault vs folder distinction",
+        "Markdown and frontmatter essentials",
+        "Internal linking [[]] and transclusion",
+        "Tags and metadata conventions"
+      ],
+      "detailed_content": "## Understanding Obsidian's Core Architecture\n\n### Why Vault Organization Matters\n\nObsidian operates on a fundamentally different paradigm compared to traditional note-taking applications. Rather than storing your notes in a proprietary database, Obsidian treats your entire knowledge base as a collection of plain text files on your file system. This design philosophy is what makes Obsidian incredibly powerful for AI-driven knowledge management, as plain text is universally readable, searchable, and processable by external tools and AI systems.\n\nThe vault is the top-level container for all your notes, attachments, and configuration. Understanding the distinction between a vault and a simple folder is crucial because it affects how your notes are organized, how links resolve, and how plugins interact with your data.\n\n### Vault vs Folder: The Critical Distinction\n\nA **vault** in Obsidian is not merely a folder—it is a complete workspace with its own configuration, settings, plugin states, and workspace state. When you open a folder as a vault, Obsidian creates a hidden `.obsidian` directory containing all the configuration and state information for that specific vault.\n\nThis distinction becomes significant when you consider that you can have multiple vaults on the same file system, each with completely different configurations, plugin sets, and themes. Each vault maintains its own `.obsidian` folder with settings specific to that workspace.\n\nWhen you share or sync a vault, the `.obsidian` folder travels with it, meaning your collaborator will experience exactly the same configuration you designed. This makes vault sharing powerful but also means you cannot simply drop notes into a vault folder from another application without potentially disrupting link resolution and plugin behavior.\n\n### Markdown Files: The Foundation of Obsidian\n\nEvery note in Obsidian is stored as a Markdown file with the `.md` extension. Markdown was chosen because it offers the best balance between human readability and machine processing capability. Unlike rich text formats that require specialized software to parse, a Markdown file can be opened and understood by any text editor.\n\nObsidian uses the CommonMark specification as its base but adds several extensions for internal functionality. The Markdown you write is standard Markdown in most respects, but Obsidian adds special syntax for internal links, transclusion, and specific rendering behaviors.\n\n### YAML Frontmatter: Metadata That Powers Organization\n\nAt the very top of every note, before the main content, you can include YAML frontmatter enclosed between triple dashes. This frontmatter section serves as metadata that Obsidian reads and processes differently from the body content.\n\nYAML frontmatter is essential for several reasons: it enables you to categorize and describe your notes without cluttering the main content, it provides structured data that plugins and queries can access, and it creates the foundation for Obsidian's powerful search and filtering capabilities.\n\nThe frontmatter persists at the top of your file and remains invisible during normal reading but can be accessed through the properties panel or by opening the raw file. When you share notes with others or export them, the frontmatter travels with the content.\n\n### Internal Linking: Creating Your Knowledge Graph\n\nInternal links are the heart of Obsidian's interconnected knowledge system. By using double brackets `[[]]`, you create connections between notes that Obsidian resolves into clickable links in reading view.\n\nWhen you type `[[`, Obsidian's editor provides autocomplete suggestions from your existing notes, making linking intuitive and ensuring consistency across your vault. The link destination is simply the filename without extension—`[[Project Notes]]` links to `Project Notes.md`.\n\nThese links build what Obsidian calls the local graph, showing you how your notes connect and revealing clusters of related ideas. The backlinks panel shows you every note that links to your current note, creating a powerful way to discover unexpected connections.\n\n### Transclusion: Embedding Content Across Notes\n\nTransclusion extends linking by actually embedding the content of one note within another. Using the `![[Note Name]]` syntax, you can pull in entire sections or entire notes into your current document. This is powerful for creating templates, dashboards, and maintaining consistency across multiple documents.\n\nWhen the source note is updated, all transclusions of that content update automatically. This enables you to write information once and reference it in multiple contexts without duplication.\n\n### Tags: Lightweight Categorization\n\nTags provide a lightweight way to categorize and find notes without creating explicit links. Unlike folders which impose a hierarchy, tags exist in a flat namespace and can be nested using the `/` character to create organizational hierarchies like `#project/active`.\n\nTags are faster to type than links and useful for broad categorization. They appear in the tag pane and can be queried using Obsidian's search syntax. However, tags are less precise than links for representing relationships, as they indicate membership in a category rather than a specific connection.\n\n### The File System and You\n\nObsidian respects your file system structure while adding its own layer of organization through links and tags. You can organize files into folders, and Obsidian will preserve this structure while adding its graph-based connections across folders.\n\nUnderstanding this dual organization—filesystem hierarchy and knowledge graph connections—is key to using Obsidian effectively. Folders are useful for broad organizational categories, while links express the true relationships between your ideas.\n\n### How Configuration Persists\n\nThe `.obsidian` folder contains JSON configuration files, plugin settings, and workspace state. This folder is created when you first open a folder as a vault and is updated continuously as you work. It contains your preferences, enabled plugins, hotkeys, and more.\n\nIf you accidentally delete the `.obsidian` folder, Obsidian will recreate it with default settings, meaning your actual notes remain safe. However, you will lose all your custom configuration, so it's good practice to occasionally back up this folder along with your notes.\n\n### Search and Query Capabilities\n\nObsidian's search goes beyond simple text matching. The built-in search can filter by tags, links, file properties, and more. By understanding how frontmatter, tags, and links work together, you can create sophisticated queries that surface exactly the information you need.\n\nThe search syntax supports operators like `tag:#project`, `file:`, and `path:` enabling precise filtering. Combined with Dataview plugin, you can create complex queries that read your note metadata and generate dynamic views of your knowledge base.\n\n## Code Examples\n\n### Example 1\n\n```python\n// Example 1: YAML Frontmatter with Common Properties\n---\ntitle: Project Planning Document\ncreated: 2024-01-15\nmodified: 2024-02-20\ntags:\n  - project\n  - planning\n  - active\naliases:\n  - \"Project Plan\"\n  - \"Planning Doc\"\nstatus: \"in progress\"\npriority: high\nproject_manager: \"Jane Smith\"\nestimate_hours: 40\n---\n\n# Project Planning Document\n\nThis document contains the planning details for our project...\n// Note: The frontmatter above establishes metadata that plugins like Dataview can query.\n// \"aliases\" create alternative ways to link to this note using [[Project Plan]] syntax.\n```\n\n### Example 2\n\n```python\n// Example 2: Internal Linking Patterns\n---\n// Basic link to a note in the same folder\n[[Meeting Notes]]\n\n// Link to a note in a different folder using relative path\n[[Subfolder/Project Details]]\n\n// Link with display text different from filename\n[[Meeting Notes|Go to today's meeting]]\n\n// Embed entire note content (transclusion)\n![[Meeting Notes]]\n\n// Embed specific heading from another note\n![[Meeting Notes#Section Name]]\n\n// Create a link to a non-existent note (will prompt creation)\n[[New Note To Create]]\n\n// Note: Obsidian will create the note if it doesn't exist when you click the link.\n// This is useful for capturing thoughts that connect to future notes.\n```\n\n### Example 3\n\n```python\n// Example 3: Tag Hierarchies and Usage\n---\n// Single-level tag in frontmatter\ntags: [project, important]\n\n// Hierarchical tags (creates parent-child relationship)\ntags:\n  - project/active\n  - project/completed\n  - area/research\n\n// Inline tags in content (same folder structure)\n#project #research #Q1-2024\n\n// Nested tag usage\n#project/active #research/machine-learning\n\n// Note: Hierarchical tags like #project/active include #project as a parent tag.\n// This means searching for #project will also return notes tagged #project/active.\n// Tags in frontmatter are more structured than inline tags and work better with queries.\n```\n\n### Example 4\n\n```python\n// Example 4: Obsidian Search Query Syntax\n---\n// Search for text across all notes\npath: folder/subfolder query text\n\n// Search within specific tag\ntag:#project\n\n// Combine tag with text search\ntag:#project AND \"planning\"\n\n// File name search\nfile:\"*.md\" AND \"report\"\n\n// Recently modified files (last 7 days)\nmodified:after(today - 7d)\n\n// Search by property value\nstatus:in-progress\n\n// Note: Search queries can be saved as queries that update dynamically.\n// Access the query builder through the search menu's \"More options\" button.\n```\n\n### Example 5\n\n```python\n// Example 5: Creating a Note with Complete Frontmatter\n---\n// This example shows a comprehensive note structure\n---\ntitle: \"Understanding Neural Networks\"\ndate: 2024-02-15\ntags:\n  - ai\n  - machine-learning\n  - tutorial\nauthor: \"Your Name\"\ncourse: \"ML-101\"\ncompleted: false\nrating: 8\nsummary: \"A comprehensive introduction to neural network fundamentals\"\ndue_date: null\nrelated_notes:\n  - \"[[Machine Learning Basics]]\"\n  - \"[[Deep Learning Overview]]\"\n---\n\n# Understanding Neural Networks\n\n## Introduction\nNeural networks are computing systems inspired by biological neural networks...\n\n## Key Concepts\n- Neurons and layers\n- Activation functions\n- Backpropagation\n\n## Notes\nCompleted reading on [[Machine Learning Basics]] before this chapter.\n\n// Note: The \"related_notes\" field uses wiki-link syntax for explicit connections.\n// This frontmatter can be queried with Dataview for generating dashboards.\n```\n\n\n\n## Common Mistakes\n\n- Using folders as the primary organization method instead of leveraging links and tags, which leads to rigid hierarchies that don't reflect how knowledge actually connects across topics.\n- Forgetting that frontmatter must be at the very top of the file with proper YAML syntax—leading whitespace, missing colons, or content before the frontmatter will prevent metadata from being recognized.\n- Creating link references to notes without considering future renaming—Obsidian handles renames through its rename functionality, but breaking a link by renaming in the file system can lose connections.\n- Using special characters or very long filenames that cause issues with link resolution across different operating systems—stick to alphanumeric characters, spaces, and basic punctuation.\n- Treating tags as a primary navigation method when deep nesting creates confusion—tags work best for loose categorization rather than strict hierarchical organization.\n- Not understanding the difference between [[Link]] syntax (linking) and ![[Link]] syntax (transclusion)—using the wrong syntax means content doesn't embed as expected.\n- Accidentally placing frontmatter in the middle of a document or using incorrect delimiters—the triple dashes must appear exactly as `---` at the document start.\n- Creating circular transclusion dependencies that cause infinite loops when viewing notes—be careful when embedding notes that embed other notes.\n- Using relative paths incorrectly in links when moving notes between folders—relative links can break while absolute-style wiki links remain stable.\n- Ignoring the .obsidian folder during backups—losing this folder means losing all your custom settings, plugin configurations, and workspace state.\n\n\n## Best Practices\n\n- Design your vault structure around connections rather than categories—use folders only for broad separation and let links express the true relationships between ideas.\n- Establish consistent frontmatter schemas early and document them as templates—consistency enables powerful queries and makes your data more valuable for AI processing.\n- Use aliases in frontmatter to allow linking by common names without worrying about exact filenames—aliases give you flexibility to rename notes while maintaining link integrity.\n- Prefer wiki-style links [[]] over folder paths for most internal references—they remain valid when files move within the vault and are more readable.\n- Organize your tags in hierarchical structures but keep the hierarchy shallow (2-3 levels maximum)—deep hierarchies become difficult to maintain and remember.\n- Make frontmatter properties meaningful and consistently typed—using a \"status\" field with values like \"active/completed/archived\" is more useful than freeform text.\n- Regularly audit your vault structure and link graph to identify orphaned notes or broken connections—use the graph view to visualize your knowledge architecture.\n- Create index notes that serve as entry points for major topics, linking to related notes and providing navigation hubs for different areas of your knowledge base.\n- Use transclusion judiciously for content that genuinely needs to appear in multiple contexts—avoid transclusion for unique content to prevent unexpected dependencies.\n- Back up your vault including the .obsidian folder, and consider keeping your frontmatter schema documented outside the vault for reference when setting up new vaults.\n",
+      "code_examples": [
+        "// Example 1: YAML Frontmatter with Common Properties\n---\ntitle: Project Planning Document\ncreated: 2024-01-15\nmodified: 2024-02-20\ntags:\n  - project\n  - planning\n  - active\naliases:\n  - \"Project Plan\"\n  - \"Planning Doc\"\nstatus: \"in progress\"\npriority: high\nproject_manager: \"Jane Smith\"\nestimate_hours: 40\n---\n\n# Project Planning Document\n\nThis document contains the planning details for our project...\n// Note: The frontmatter above establishes metadata that plugins like Dataview can query.\n// \"aliases\" create alternative ways to link to this note using [[Project Plan]] syntax.",
+        "// Example 2: Internal Linking Patterns\n---\n// Basic link to a note in the same folder\n[[Meeting Notes]]\n\n// Link to a note in a different folder using relative path\n[[Subfolder/Project Details]]\n\n// Link with display text different from filename\n[[Meeting Notes|Go to today's meeting]]\n\n// Embed entire note content (transclusion)\n![[Meeting Notes]]\n\n// Embed specific heading from another note\n![[Meeting Notes#Section Name]]\n\n// Create a link to a non-existent note (will prompt creation)\n[[New Note To Create]]\n\n// Note: Obsidian will create the note if it doesn't exist when you click the link.\n// This is useful for capturing thoughts that connect to future notes.",
+        "// Example 3: Tag Hierarchies and Usage\n---\n// Single-level tag in frontmatter\ntags: [project, important]\n\n// Hierarchical tags (creates parent-child relationship)\ntags:\n  - project/active\n  - project/completed\n  - area/research\n\n// Inline tags in content (same folder structure)\n#project #research #Q1-2024\n\n// Nested tag usage\n#project/active #research/machine-learning\n\n// Note: Hierarchical tags like #project/active include #project as a parent tag.\n// This means searching for #project will also return notes tagged #project/active.\n// Tags in frontmatter are more structured than inline tags and work better with queries.",
+        "// Example 4: Obsidian Search Query Syntax\n---\n// Search for text across all notes\npath: folder/subfolder query text\n\n// Search within specific tag\ntag:#project\n\n// Combine tag with text search\ntag:#project AND \"planning\"\n\n// File name search\nfile:\"*.md\" AND \"report\"\n\n// Recently modified files (last 7 days)\nmodified:after(today - 7d)\n\n// Search by property value\nstatus:in-progress\n\n// Note: Search queries can be saved as queries that update dynamically.\n// Access the query builder through the search menu's \"More options\" button.",
+        "// Example 5: Creating a Note with Complete Frontmatter\n---\n// This example shows a comprehensive note structure\n---\ntitle: \"Understanding Neural Networks\"\ndate: 2024-02-15\ntags:\n  - ai\n  - machine-learning\n  - tutorial\nauthor: \"Your Name\"\ncourse: \"ML-101\"\ncompleted: false\nrating: 8\nsummary: \"A comprehensive introduction to neural network fundamentals\"\ndue_date: null\nrelated_notes:\n  - \"[[Machine Learning Basics]]\"\n  - \"[[Deep Learning Overview]]\"\n---\n\n# Understanding Neural Networks\n\n## Introduction\nNeural networks are computing systems inspired by biological neural networks...\n\n## Key Concepts\n- Neurons and layers\n- Activation functions\n- Backpropagation\n\n## Notes\nCompleted reading on [[Machine Learning Basics]] before this chapter.\n\n// Note: The \"related_notes\" field uses wiki-link syntax for explicit connections.\n// This frontmatter can be queried with Dataview for generating dashboards."
+      ]
+    }
+  },
+  "errors": [
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 1: Foundations of Obsidian for AI-Driven Knowledge Management",
+      "subnode_id": 580,
+      "subnode_title": "Initial AI Interaction: Prompting and Conversation Setup",
+      "error": "Server disconnected without sending a response."
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 2: Core AI Plugin Features and Capabilities",
+      "subnode_id": 582,
+      "subnode_title": "Semantic Search via Smart Connections",
+      "error": "Server disconnected without sending a response."
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 2: Core AI Plugin Features and Capabilities",
+      "subnode_id": 581,
+      "subnode_title": "Real-Time Completion and Summarization with Copilot",
+      "error": "Server disconnected without sending a response."
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 2: Core AI Plugin Features and Capabilities",
+      "subnode_id": 583,
+      "subnode_title": "Programmable AI Workflows with AI Agents",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 3: Building Integrated AI Workflows",
+      "subnode_id": 585,
+      "subnode_title": "Capturing and Preprocessing External Sources",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 3: Building Integrated AI Workflows",
+      "subnode_id": 586,
+      "subnode_title": "AI-Assisted Writing Pipeline",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 2: Core AI Plugin Features and Capabilities",
+      "subnode_id": 584,
+      "subnode_title": "Prompt Libraries and Custom Instructions",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+      "subnode_id": 589,
+      "subnode_title": "Developing a Custom Obsidian Plugin for AI Tasks",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 3: Building Integrated AI Workflows",
+      "subnode_id": 588,
+      "subnode_title": "Automation with Obsidian Shell Commands and Scripts",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 3: Building Integrated AI Workflows",
+      "subnode_id": 587,
+      "subnode_title": "Dynamic Knowledge Graph with AI-Generated Links",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+      "subnode_id": 591,
+      "subnode_title": "Security, API Management, and Cost Control",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+      "subnode_id": 590,
+      "subnode_title": "Performance Optimization for Large Vaults",
+      "error": "[Errno 61] Connection refused"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Chapter 4: Advanced Customization, Scaling, and Best Practices",
+      "subnode_id": 592,
+      "subnode_title": "Scaling to Team and Multi-Vault Environments",
+      "error": "[Errno 61] Connection refused"
+    }
+  ],
+  "finished_at": null,
+  "english_title": "Obsidian AI Workflow: Integrating Plugins for Intelligent PKM"
+}

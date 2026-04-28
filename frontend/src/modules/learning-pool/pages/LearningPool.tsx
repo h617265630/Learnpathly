@@ -211,7 +211,7 @@ export default function LearningPool() {
 
   useEffect(() => {
     setLoadingAiProjects(true);
-    listAiPathProjects(8, 0)
+    listAiPathProjects(50, 0)
       .then((res) => {
         const next = (res || []).map((p) => ({
           id: Number((p as any).id),
@@ -381,7 +381,7 @@ export default function LearningPool() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {aiProjects.slice(0, 8).map((p) => (
+              {aiProjects.map((p) => (
                 <LearnPathCard key={p.id} project={p} />
               ))}
             </div>

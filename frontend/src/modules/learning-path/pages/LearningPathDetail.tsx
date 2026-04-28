@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   Link,
   useNavigate,
@@ -15,6 +15,14 @@ import {
   getLearningPathUserStatus,
   type PublicLearningPathDetail,
 } from "@/services/learningPath";
+import {
+  getAiPathProject,
+  getAiPathProjectByLearningPathId,
+  listAiPathProjects,
+  type AiPathGenerateResponse,
+  type AiPathResourceLink,
+  type AiPathSubNode,
+} from "@/services/aiPath";
 import { Button } from "@/components/ui/Button";
 import { ResourceCard, type UiResource } from "@/components/ResourceCard";
 import {
@@ -34,9 +42,72 @@ type Module = {
   duration: string;
   level: "Beginner" | "Intermediate" | "Advanced";
   orderIndex: number;
+  stage?: string | null;
+  purpose?: string | null;
+  estimatedTime?: number | null;
   resourceData: any; // embedded resource_data from backend
   manualWeight?: number | null; // for card UI weight
 };
+
+type OutlineSection = {
+  title: string;
+  description: string;
+  modules: Module[];
+};
+
+function aiPathResourceToUiResource(
+  resource: AiPathResourceLink,
+  index: number
+): UiResource {
+  const url = String(resource.url || "").trim();
+  const host = (() => {
+    try {
+      return new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      return "resource";
+    }
+  })();
+  const type = String(resource.resource_type || "").trim() || "resource";
+  const thumb =
+    String(resource.image || "").trim() ||
+    `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=256`;
+  return {
+    id: index + 1,
+    title: String(resource.title || url),
+    summary: String(resource.summary || resource.description || url),
+    categoryLabel: type,
+    categoryColor: "#3b82f6",
+    platform: host.includes("github.com") ? "github" : host,
+    platformLabel: host,
+    typeLabel: type,
+    thumbnail: thumb,
+    resource_type: type,
+    url,
+  };
+}
+
+function collectAiTopicResources(project: AiPathGenerateResponse | null): AiPathResourceLink[] {
+  if (!project) return [];
+  const seen = new Set<string>();
+  const out: AiPathResourceLink[] = [];
+  for (const node of project.data.nodes || []) {
+    for (const r of node.resources || []) {
+      const url = String(r.url || "").trim();
+      if (!url || seen.has(url)) continue;
+      seen.add(url);
+      out.push({ ...r, url });
+    }
+    for (const sub of node.sub_nodes || []) {
+      for (const r of sub.resources || []) {
+        const url = String(r.url || "").trim();
+        if (!url || seen.has(url)) continue;
+        seen.add(url);
+        out.push({ ...r, url });
+      }
+    }
+  }
+  return out;
+}
 function moduleToUiResource(m: Module): UiResource {
   const r = m.resourceData;
   return {
@@ -132,6 +203,71 @@ function formatPlatform(platform?: string | null): string {
   return map[platform.toLowerCase()] || platform;
 }
 
+function estimateTotalMinutes(modules: Module[]): number {
+  return modules.reduce((sum, item) => {
+    const explicit = Number(item.estimatedTime || 0);
+    if (explicit > 0) return sum + explicit;
+    if (item.type === "video") return sum + 25;
+    if (item.type === "document") return sum + 35;
+    if (item.type === "article") return sum + 20;
+    return sum + 15;
+  }, 0);
+}
+
+function formatMinutes(minutes: number): string {
+  if (!minutes) return "Flexible";
+  if (minutes < 60) return `${minutes} min`;
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return rest ? `${hours}h ${rest}m` : `${hours}h`;
+}
+
+function readableType(type: ModuleType): string {
+  const map: Record<string, string> = {
+    video: "Video",
+    document: "Document",
+    article: "Article",
+    clip: "Clip",
+    link: "Link",
+    unknown: "Resource",
+  };
+  return map[type] || "Resource";
+}
+
+function buildOutlineSections(modules: Module[], pathTitle?: string): OutlineSection[] {
+  if (!modules.length) return [];
+  const withStage = modules.filter((item) => String(item.stage || "").trim());
+
+  if (withStage.length) {
+    const order: string[] = [];
+    const grouped = new Map<string, Module[]>();
+    for (const item of modules) {
+      const stage = String(item.stage || "Core learning flow").trim();
+      if (!grouped.has(stage)) {
+        grouped.set(stage, []);
+        order.push(stage);
+      }
+      grouped.get(stage)?.push(item);
+    }
+    return order.map((stage) => {
+      const items = grouped.get(stage) || [];
+      return {
+        title: stage,
+        description: `${items.length} related ${items.length === 1 ? "resource" : "resources"} in this stage.`,
+        modules: items,
+      };
+    });
+  }
+
+  return [
+    {
+      title: pathTitle ? `${pathTitle} outline` : "Topic outline",
+      description: "Follow these resources in order to move from orientation to hands-on practice.",
+      modules,
+    },
+  ];
+}
+
 // ─── Component ─────────────────────────────────────────────────────────────
 
 export default function LearningPathDetail() {
@@ -196,10 +332,13 @@ export default function LearningPathDetail() {
           duration: "",
           level: "Beginner" as const,
           orderIndex: Number(it.order_index) || 0,
+          stage: it.stage ?? null,
+          purpose: it.purpose ?? null,
+          estimatedTime: it.estimated_time ?? null,
           resourceData: r,
           manualWeight: (it as any).manual_weight ?? null,
         };
-      });
+      }).sort((a, b) => a.orderIndex - b.orderIndex);
 
       setModules(mapped);
 
@@ -225,6 +364,22 @@ export default function LearningPathDetail() {
   useEffect(() => {
     void loadDetail();
   }, [loadDetail]);
+
+  const outlineSections = useMemo(
+    () => buildOutlineSections(modules, path?.title),
+    [modules, path?.title]
+  );
+  const totalEstimatedMinutes = useMemo(
+    () => estimateTotalMinutes(modules),
+    [modules]
+  );
+  const resourceTypeCounts = useMemo(() => {
+    return modules.reduce<Record<string, number>>((acc, item) => {
+      const label = readableType(item.type);
+      acc[label] = (acc[label] || 0) + 1;
+      return acc;
+    }, {});
+  }, [modules]);
 
   function openResource(m: Module) {
     if (!m.resourceId) return;
@@ -534,32 +689,164 @@ export default function LearningPathDetail() {
             </div>
           )}
 
-          {/* Items */}
+          {/* Topic outline */}
+          <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+            <div className="rounded-md border border-stone-200 bg-white p-5 md:p-6">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-600">
+                    Topic Outline
+                  </p>
+                  <h2 className="mt-2 text-2xl font-black tracking-tight text-stone-950">
+                    {path.title}
+                  </h2>
+                </div>
+                <span className="inline-flex w-fit rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">
+                  {outlineSections.length} {outlineSections.length === 1 ? "stage" : "stages"}
+                </span>
+              </div>
+
+              {outlineSections.length ? (
+                <div className="mt-6 space-y-6">
+                  {outlineSections.map((section, sectionIdx) => (
+                    <article
+                      key={`${section.title}-${sectionIdx}`}
+                      className="rounded-md border border-stone-100 bg-stone-50 p-4"
+                    >
+                      <div className="flex items-start gap-4">
+                        <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-sky-500 px-2 text-xs font-black text-white">
+                          {sectionIdx + 1}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-base font-black text-stone-950">
+                            {section.title}
+                          </h3>
+                          <p className="mt-1 text-sm leading-6 text-stone-500">
+                            {section.description}
+                          </p>
+
+                          <ol className="mt-4 space-y-3">
+                            {section.modules.map((item) => (
+                              <li
+                                key={`outline-${item.id}`}
+                                className="rounded-md border border-stone-200 bg-white px-4 py-3"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => openResource(item)}
+                                  className="block w-full text-left"
+                                >
+                                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+                                    <div className="min-w-0">
+                                      <p className="text-sm font-bold leading-6 text-stone-900">
+                                        {item.orderIndex || section.modules.indexOf(item) + 1}. {item.title}
+                                      </p>
+                                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-stone-500">
+                                        {item.purpose || item.summary || "Use this resource to move through this part of the topic."}
+                                      </p>
+                                    </div>
+                                    <div className="flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">
+                                      <span>{readableType(item.type)}</span>
+                                      <span>·</span>
+                                      <span>{formatMinutes(estimateTotalMinutes([item]))}</span>
+                                    </div>
+                                  </div>
+                                </button>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-6 rounded-md border border-dashed border-stone-200 bg-stone-50 px-5 py-10 text-center">
+                  <p className="text-sm font-semibold text-stone-600">
+                    No outline items yet.
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <aside className="space-y-4">
+              <div className="rounded-md border border-stone-200 bg-white p-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-400">
+                  Path Summary
+                </p>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="rounded-md bg-stone-50 px-4 py-4">
+                    <p className="text-2xl font-black text-stone-950">
+                      {modules.length}
+                    </p>
+                    <p className="mt-1 text-xs font-semibold text-stone-500">
+                      resources
+                    </p>
+                  </div>
+                  <div className="rounded-md bg-sky-50 px-4 py-4">
+                    <p className="text-2xl font-black text-sky-700">
+                      {formatMinutes(totalEstimatedMinutes)}
+                    </p>
+                    <p className="mt-1 text-xs font-semibold text-sky-700">
+                      estimated
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-md border border-stone-200 bg-white p-5">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-400">
+                  Resource Mix
+                </p>
+                <div className="mt-4 space-y-3">
+                  {Object.entries(resourceTypeCounts).map(([type, count]) => (
+                    <div
+                      key={type}
+                      className="flex items-center justify-between rounded-md bg-stone-50 px-3 py-2 text-sm"
+                    >
+                      <span className="font-semibold text-stone-700">{type}</span>
+                      <span className="text-stone-400">{count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </aside>
+          </section>
+
+          {/* Resources */}
           <section className="space-y-4">
             <div className="flex items-end justify-between gap-4">
               <div>
                 <h2 className="text-sm font-medium tracking-[0.14em] uppercase text-foreground">
-                  Path Content
+                  Related Resources
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  {modules.length} modules
+                  {modules.length} resources connected to this topic
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {modules.map((m) => (
-                <ResourceCard
-                  key={m.id}
-                  resource={moduleToUiResource(m)}
-                  onOpen={() => openResource(m)}
-                  onAdd={() => {}}
-                  saving={false}
-                  saved={false}
-                  weight={fromManualWeight(m.manualWeight)}
-                />
-              ))}
-            </div>
+            {modules.length ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {modules.map((m) => (
+                  <ResourceCard
+                    key={m.id}
+                    resource={moduleToUiResource(m)}
+                    onOpen={() => openResource(m)}
+                    onAdd={() => {}}
+                    saving={false}
+                    saved={false}
+                    weight={fromManualWeight(m.manualWeight)}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="rounded-md border border-dashed border-stone-200 bg-white px-6 py-12 text-center">
+                <p className="text-sm font-semibold text-stone-600">
+                  No related resources have been added to this path yet.
+                </p>
+              </div>
+            )}
           </section>
         </>
       )}

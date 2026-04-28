@@ -33,6 +33,7 @@ class AiPathProject(Base):
 
     outline_overview = Column(Text, nullable=True)
     total_duration_hours = Column(Float, nullable=True)
+    cover_image_url = Column(String(2048), nullable=True)
 
     # Raw payloads to make debugging / re-rendering easy.
     raw_outline_json = Column(JSON, nullable=True)
@@ -63,4 +64,3 @@ class AiPathProject(Base):
         Index("ix_ai_path_projects_topic_level", "topic", "level"),
         Index("ix_ai_path_projects_status", "status"),
     )
-

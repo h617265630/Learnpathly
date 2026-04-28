@@ -19,6 +19,7 @@ export interface AiPathSubNodeDetail {
   detail_level: string;
   detailed_content: string;
   code_examples?: string[];
+  structured_content?: Record<string, unknown>;
   raw_json?: Record<string, unknown>;
 }
 
@@ -65,6 +66,7 @@ export interface AiPathProjectListItem {
   id: number;
   topic: string;
   outline_overview?: string;
+  cover_image_url?: string | null;
   created_at?: string;
 }
 
@@ -89,6 +91,12 @@ export function generateAiPath(query: string, preferences?: AiPathPreferences) {
 export function getAiPathProject(projectId: number) {
   return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
     `/ai-path/projects/${projectId}`
+  );
+}
+
+export function getAiPathProjectByLearningPathId(learningPathId: number) {
+  return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
+    `/ai-path/projects/by-learning-path/${learningPathId}`
   );
 }
 
@@ -165,6 +173,7 @@ export interface SubNodeDetailResponse {
   key_points: string[];
   detailed_content: string;
   code_examples: string[];
+  structured_content?: Record<string, unknown>;
 }
 
 export function getSubNodeDetail(payload: SubNodeDetailRequest) {

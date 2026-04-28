@@ -29,6 +29,7 @@ class AiPathSubNodeDetail(Base):
 
     detailed_content = Column(Text, nullable=True)
     code_examples = Column(JSON, nullable=True)  # list[str]
+    structured_content = Column(JSON, nullable=True)
     raw_json = Column(JSON, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -40,4 +41,3 @@ class AiPathSubNodeDetail(Base):
         UniqueConstraint("subnode_id", "detail_level", name="uq_ai_path_subnode_details_level"),
         Index("ix_ai_path_subnode_details_lookup", "subnode_id", "detail_level"),
     )
-

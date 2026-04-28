@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, X } from "lucide-react";
+import { Search, SearchX, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { ResourceCard, type UiResource } from "@/components/ResourceCard";
@@ -240,7 +240,7 @@ export default function ResourceLibrary() {
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-stone-900 leading-[0.92]">
                 Resource
                 <br />
-                <span className="text-sky-600">Library.</span>
+                <span className="text-sky-500">Library.</span>
               </h1>
             </div>
             <p className="hidden lg:block text-sm leading-relaxed text-stone-500 max-w-xs">
@@ -319,8 +319,8 @@ export default function ResourceLibrary() {
                 onClick={() => setActiveType(t.value)}
                 className={`h-9 sm:h-9 px-2.5 sm:px-3 rounded-sm border text-[10px] sm:text-xs font-semibold uppercase tracking-wider transition-all ${
                   activeType === t.value
-                    ? "border-stone-900 bg-stone-900 text-white"
-                    : "border-stone-200 bg-white text-stone-500 hover:border-stone-400"
+                    ? "border-sky-500 bg-sky-500 text-white"
+                    : "border-stone-200 bg-white text-stone-500 hover:border-sky-300 hover:text-sky-600"
                 }`}
               >
                 {t.label}
@@ -345,7 +345,9 @@ export default function ResourceLibrary() {
         {/* Empty state */}
         {!loading && filteredResources.length === 0 && (
           <div className="py-20 text-center">
-            <div className="text-5xl mb-4">📭</div>
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-sky-100 bg-sky-50 text-sky-500">
+              <SearchX className="h-7 w-7" strokeWidth={1.8} />
+            </div>
             <h3 className="text-base font-semibold text-stone-700 mb-1">
               No resources found
             </h3>

@@ -1,0 +1,7 @@
+{
+  "topic": "Notion AI 知识管理",
+  "status": "failed",
+  "error": "[Errno 61] Connection refused",
+  "failed_at": "2026-04-27T17:56:41.265680+00:00",
+  "api_base": "http://127.0.0.1:8000"
+}

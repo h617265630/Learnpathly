@@ -120,11 +120,26 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right: Featured visual */}
-          <div className="relative bg-stone-900 text-stone-50 flex items-center">
-            <div className="absolute top-0 left-0 w-24 h-24 border-t border-l border-stone-700" />
-            <div className="absolute bottom-0 right-0 w-24 h-24 border-b border-r border-stone-700" />
-            <div className="p-8 lg:p-12">
+          {/* Right: Featured visual with video background */}
+          <div className="relative text-stone-50 flex items-center overflow-hidden">
+            {/* Video background */}
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source
+                src="https://assets.mixkit.co/videos/4133/4133-720.mp4"
+                type="video/mp4"
+              />
+            </video>
+            {/* Dark overlay for text readability */}
+            <div className="absolute inset-0 bg-stone-900/60" />
+            <div className="absolute top-0 left-0 w-24 h-24 border-t border-l border-stone-700/50" />
+            <div className="absolute bottom-0 right-0 w-24 h-24 border-b border-r border-stone-700/50" />
+            <div className="relative z-10 p-8 lg:p-12">
               <span className="text-xs font-medium tracking-[0.3em] uppercase text-stone-400">
                 Featured Path
               </span>

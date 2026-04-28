@@ -6,10 +6,13 @@ Handles async pipeline invocation and output transformation.
 from __future__ import annotations
 
 import asyncio
+import os
 import re
 import sys
 from pathlib import Path
 from typing import Any
+
+import httpx
 
 # Load ai_path/.env so API keys are available before importing ai_path modules
 from dotenv import load_dotenv
@@ -37,6 +40,8 @@ _RE_OVERVIEW_META = re.compile(
     r"(guides|helps|walks|takes|teaches|shows)\s+"
     r".{0,160}?\s+(through|to)\s+"
 )
+
+_IMAGE_EXT_RE = re.compile(r"\.(png|jpe?g|webp)(\?|$)", re.IGNORECASE)
 
 
 def _normalize_overview_text(text: str) -> str:
@@ -111,6 +116,120 @@ def _normalise_resource(resource: Any) -> dict[str, Any]:
     }
 
 
+def _topic_placeholder_image(topic: str) -> str:
+    label = re.sub(r"\s+", " ", topic or "AI Path").strip()[:48] or "AI Path"
+    from urllib.parse import quote
+
+    return (
+        "https://placehold.co/900x506/0ea5e9/ffffff/png"
+        f"?text={quote(label)}"
+    )
+
+
+def _looks_like_image_url(url: str) -> bool:
+    value = str(url or "").strip()
+    if not value.startswith(("http://", "https://")):
+        return False
+    if value.lower().endswith(".svg"):
+        return False
+    return bool(_IMAGE_EXT_RE.search(value)) or any(
+        marker in value.lower()
+        for marker in [
+            "opengraph.githubassets.com",
+            "images.unsplash.com",
+            "img.youtube.com",
+            "miro.medium.com",
+            "cdn.hashnode.com",
+            "social",
+            "og",
+        ]
+    )
+
+
+async def _search_tavily_images(topic: str) -> list[str]:
+    api_key = os.getenv("TAVILY_API_KEY", "")
+    if not api_key:
+        return []
+
+    payload = {
+        "api_key": api_key,
+        "query": f"{topic} official website logo product screenshot github",
+        "search_depth": "basic",
+        "include_images": True,
+        "max_results": 5,
+    }
+
+    try:
+        timeout = float(os.getenv("HTTP_TIMEOUT_SECONDS", "10"))
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            response = await client.post(
+                "https://api.tavily.com/search",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+            )
+            response.raise_for_status()
+            data = response.json()
+    except Exception:
+        return []
+
+    images: list[str] = []
+    for item in data.get("images") or []:
+        if isinstance(item, str):
+            images.append(item)
+        elif isinstance(item, dict):
+            images.append(str(item.get("url") or item.get("image_url") or ""))
+
+    for result in data.get("results") or []:
+        if isinstance(result, dict):
+            images.append(str(result.get("image") or result.get("thumbnail") or ""))
+
+    return [url for url in images if _looks_like_image_url(url)]
+
+
+async def generate_topic_card_image(topic: str) -> tuple[str, list[str]]:
+    """
+    Step 0: find a deterministic, topic-related display image for AI Path cards.
+    Prefer real social/OG images from GitHub or Tavily. Fall back to a
+    non-random text image so cards never use unrelated random photos.
+    """
+    clean_topic = re.sub(r"\s+", " ", topic or "").strip()
+    warnings: list[str] = []
+    if not clean_topic:
+        return _topic_placeholder_image("AI Path"), ["Step 0 used fallback cover image"]
+
+    # GitHub repo social images are often the best card cover for dev tools.
+    try:
+        from ai_path.ai_resource.github import search_github, search_tavily_resources
+
+        github_results = await asyncio.to_thread(search_github, clean_topic, 3)
+        for item in github_results:
+            thumb = str(item.get("thumbnail") or "").strip()
+            if _looks_like_image_url(thumb):
+                warnings.append("Step 0 found topic cover image from GitHub")
+                return thumb, warnings
+
+        tavily_resources = await asyncio.to_thread(
+            search_tavily_resources,
+            f"{clean_topic} official website",
+            5,
+        )
+        for item in tavily_resources:
+            thumb = str(item.get("thumbnail") or item.get("image") or "").strip()
+            if _looks_like_image_url(thumb):
+                warnings.append("Step 0 found topic cover image from resource search")
+                return thumb, warnings
+    except Exception:
+        pass
+
+    tavily_images = await _search_tavily_images(clean_topic)
+    if tavily_images:
+        warnings.append("Step 0 found topic cover image from Tavily image search")
+        return tavily_images[0], warnings
+
+    warnings.append("Step 0 used fallback cover image")
+    return _topic_placeholder_image(clean_topic), warnings
+
+
 def _normalise_sub_node(sub_node: Any) -> dict[str, Any]:
     data = _dump_model(sub_node)
     if not isinstance(data, dict):
@@ -168,6 +287,10 @@ async def generate_ai_path_outline(
 
     warnings: list[str] = []
 
+    # ── Step 0: Find a topic-related card cover image ─────────────────────────
+    cover_image_url, cover_warnings = await generate_topic_card_image(query)
+    warnings.extend(cover_warnings)
+
     # ── Step 1: Generate outline with sub_nodes (merged Step 1 + Step 2) ────────
     step1_result = await run_step1(
         topic=query,
@@ -212,6 +335,7 @@ async def generate_ai_path_outline(
         "title": normalized_title,
         "summary": overview,
         "description": overview,
+        "cover_image_url": cover_image_url,
         "nodes": nodes,
         "recommendations": [
             f"{len(nodes)} chapters",

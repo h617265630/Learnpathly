@@ -8,6 +8,7 @@ import os
 import re
 import sys
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -150,6 +151,7 @@ def generate_missing_subnode_details(
     sleep_s: float,
     retries: int,
     retry_sleep_s: float,
+    detail_concurrency: int,
 ) -> None:
     project = get_json(client, f"{api_base}/ai-path/projects/{project_id}")
     result["project_before_details"] = project
@@ -162,7 +164,9 @@ def generate_missing_subnode_details(
     if not isinstance(nodes, list):
         raise RuntimeError(f"unexpected project nodes shape for project_id={project_id}: {type(nodes)}")
 
-    # Step 2.5: Generate detail for each subnode (persists to DB)
+    pending_details: list[dict[str, Any]] = []
+
+    # Step 2.5: collect missing details first, then generate concurrently.
     for node in nodes:
         if not isinstance(node, dict):
             continue
@@ -241,29 +245,57 @@ def generate_missing_subnode_details(
                 "level": level,
                 "detail_level": detail_level,
             }
+            pending_details.append(
+                {
+                    "payload": detail_payload,
+                    "section_title": section_title,
+                    "subnode_id": subnode_id,
+                    "subnode_title": subnode_title,
+                }
+            )
 
-            try:
-                detail = post_json_with_retry(
-                    client,
-                    f"{api_base}/ai-path/subnode-detail",
-                    detail_payload,
-                    retries=retries,
-                    retry_sleep_s=retry_sleep_s,
-                )
-                result["subnode_details"][str(subnode_id)] = detail
-                write_json(out_path, result)
-            except Exception as exc:
+    if not pending_details:
+        return
+
+    concurrency = max(1, int(detail_concurrency or 1))
+    print(
+        f"  generating {len(pending_details)} missing subnode details "
+        f"(concurrency={concurrency})",
+        flush=True,
+    )
+
+    def _run_one(job: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any] | None, str | None]:
+        try:
+            detail = post_json_with_retry(
+                client,
+                f"{api_base}/ai-path/subnode-detail",
+                job["payload"],
+                retries=retries,
+                retry_sleep_s=retry_sleep_s,
+            )
+            return job, detail, None
+        except Exception as exc:
+            return job, None, str(exc)
+
+    with ThreadPoolExecutor(max_workers=concurrency) as executor:
+        futures = [executor.submit(_run_one, job) for job in pending_details]
+        for future in as_completed(futures):
+            job, detail, error = future.result()
+            subnode_id = job["subnode_id"]
+            if error:
                 result["errors"].append(
                     {
                         "step": "subnode-detail",
-                        "section_title": section_title,
+                        "section_title": job["section_title"],
                         "subnode_id": subnode_id,
-                        "subnode_title": subnode_title,
-                        "error": str(exc),
+                        "subnode_title": job["subnode_title"],
+                        "error": error,
                     }
                 )
-                write_json(out_path, result)
+            elif detail is not None:
+                result["subnode_details"][str(subnode_id)] = detail
 
+            write_json(out_path, result)
             if sleep_s > 0:
                 time.sleep(sleep_s)
 
@@ -281,6 +313,7 @@ def run_topic(
     resume: bool,
     retries: int,
     retry_sleep_s: float,
+    detail_concurrency: int,
 ) -> dict[str, Any]:
     if skip_if_exists and out_path.exists() and not resume:
         return {
@@ -344,6 +377,7 @@ def run_topic(
         sleep_s=sleep_s,
         retries=retries,
         retry_sleep_s=retry_sleep_s,
+        detail_concurrency=detail_concurrency,
     )
 
     # Reload project to capture persisted details
@@ -373,7 +407,8 @@ def main(argv: list[str]) -> int:
     ap.add_argument("--skip-existing", action="store_true")
     ap.add_argument("--resume", action="store_true", help="resume generation from existing output files if present")
     ap.add_argument("--sleep-s", type=float, default=0.0, help="sleep between subnode detail calls (seconds)")
-    ap.add_argument("--timeout-s", type=float, default=900.0, help="per-request read timeout seconds")
+    ap.add_argument("--timeout-s", type=float, default=180.0, help="per-request read timeout seconds")
+    ap.add_argument("--detail-concurrency", type=int, default=3, help="parallel subnode detail requests per topic")
     ap.add_argument("--retries", type=int, default=2, help="retries for outline/detail calls on timeout/5xx")
     ap.add_argument("--retry-sleep-s", type=float, default=2.0, help="base sleep seconds between retries (exponential backoff)")
     args = ap.parse_args(argv)
@@ -392,7 +427,10 @@ def main(argv: list[str]) -> int:
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     timeout = httpx.Timeout(connect=10.0, read=args.timeout_s, write=10.0, pool=10.0)
-    limits = httpx.Limits(max_connections=5, max_keepalive_connections=5)
+    limits = httpx.Limits(
+        max_connections=max(5, int(args.detail_concurrency) + 2),
+        max_keepalive_connections=max(5, int(args.detail_concurrency) + 2),
+    )
 
     print(f"API base: {args.api_base}", flush=True)
     print(f"Topics file: {args.topics_file}", flush=True)
@@ -433,6 +471,7 @@ def main(argv: list[str]) -> int:
                     resume=bool(args.resume),
                     retries=int(args.retries),
                     retry_sleep_s=float(args.retry_sleep_s),
+                    detail_concurrency=int(args.detail_concurrency),
                 )
             except Exception as exc:
                 failures += 1

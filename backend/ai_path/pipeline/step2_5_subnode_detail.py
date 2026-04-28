@@ -15,8 +15,10 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import re
 from pathlib import Path
+from typing import Any
 
 from ai_path.models.schemas import SubNode
 from ai_path.utils.llm import get_llm, parse_json_response
@@ -42,6 +44,89 @@ def _looks_english_text(text: str) -> bool:
 
 def _wants_english(topic: str, subnode_title: str) -> bool:
     return _looks_english_text(topic) or _looks_english_text(subnode_title)
+
+
+def _infer_code_language(code: str) -> str:
+    lowered = (code or "").lower()
+    if any(token in code for token in ("public class ", "System.out.", "import java.", "private ", "extends ")):
+        return "java"
+    if any(token in code for token in ("interface ", ": string", ": number", "React.", "tsx")):
+        return "typescript"
+    if any(token in code for token in ("function ", "const ", "let ", "=>", "module.exports", "require(")):
+        return "javascript"
+    if any(token in code for token in ("def ", "import pandas", "print(", "if __name__")):
+        return "python"
+    if any(token in lowered for token in ("select ", " from ", " where ", "insert into", "create table")):
+        return "sql"
+    if any(token in code for token in ("#!/bin/bash", "npm ", "git ", "curl ")):
+        return "bash"
+    return "text"
+
+
+def _normalize_structured_content(
+    parsed: dict[str, Any],
+    *,
+    title: str,
+    description: str,
+    key_points: list[str],
+    code_examples: list[Any],
+) -> dict[str, Any]:
+    practice = parsed.get("practice")
+    if not isinstance(practice, dict):
+        practice = {
+            "title": f"Practice {title}",
+            "description": parsed.get("practical_exercise")
+            or f"Create a small artifact that demonstrates {title}.",
+            "expected_output": "A short note, command log, screenshot, or working code snippet.",
+        }
+
+    normalized_examples: list[dict[str, str]] = []
+    for i, item in enumerate(code_examples, 1):
+        if isinstance(item, dict):
+            code = str(item.get("code") or "").strip()
+            if not code:
+                continue
+            language = str(item.get("language") or _infer_code_language(code))
+            normalized_examples.append(
+                {
+                    "language": language,
+                    "filename": str(item.get("filename") or f"example-{i}"),
+                    "description": str(item.get("description") or f"Example {i}"),
+                    "code": code,
+                }
+            )
+        else:
+            code = str(item or "").strip()
+            if not code:
+                continue
+            normalized_examples.append(
+                {
+                    "language": _infer_code_language(code),
+                    "filename": f"example-{i}",
+                    "description": f"Example {i}",
+                    "code": code,
+                }
+            )
+
+    return {
+        "title": str(parsed.get("title") or title),
+        "summary": str(parsed.get("summary") or description),
+        "concept": str(parsed.get("concept") or parsed.get("detailed_content") or description),
+        "steps": parsed.get("steps") if isinstance(parsed.get("steps"), list) else key_points,
+        "code_examples": normalized_examples,
+        "common_mistakes": parsed.get("common_mistakes")
+        if isinstance(parsed.get("common_mistakes"), list)
+        else [],
+        "best_practices": parsed.get("best_practices")
+        if isinstance(parsed.get("best_practices"), list)
+        else [],
+        "practice": practice,
+        "summary_points": parsed.get("summary_points")
+        if isinstance(parsed.get("summary_points"), list)
+        else key_points[:3],
+        "visuals": parsed.get("visuals") if isinstance(parsed.get("visuals"), list) else [],
+        "resources": parsed.get("resources") if isinstance(parsed.get("resources"), list) else [],
+    }
 
 
 def _get_cache_key(topic: str, section_title: str, subnode_title: str, detail_level: str = "detailed") -> str:
@@ -147,34 +232,73 @@ Generate detailed content including:
 
 Return JSON only (no markdown code fences):
 {{
+  "title": "{subnode_title}",
+  "summary": "One sentence describing what the learner can do after this lesson",
+  "concept": "Core concept explanation",
+  "steps": ["Step 1", "Step 2", "Step 3"],
   "detailed_content": "Detailed Markdown explanation (with headings, paragraphs, lists, etc.)",
   "code_examples": [
-    "Code example 1 (with comments)",
-    "Code example 2 (with comments)"
+    {{
+      "language": "bash|python|javascript|typescript|json|yaml|sql|text",
+      "filename": "example filename when useful",
+      "description": "What this example demonstrates",
+      "code": "Runnable code only, no markdown fences"
+    }}
   ],
   "common_mistakes": ["Common mistake 1", "Common mistake 2"],
-  "best_practices": ["Best practice 1", "Best practice 2"]
+  "best_practices": ["Best practice 1", "Best practice 2"],
+  "practice": {{
+    "title": "Small practical task",
+    "description": "What the learner should build or try",
+    "expected_output": "What artifact proves completion"
+  }},
+  "summary_points": ["Short takeaway 1", "Short takeaway 2"],
+  "visuals": [
+    {{
+      "type": "flowchart",
+      "title": "Optional simple flow",
+      "description": "What the flow explains",
+      "mermaid": "flowchart TD..."
+    }}
+  ],
+  "resources": []
 }}
 
 Requirements:
 - Write everything in English.
 - detailed_content should be detailed and easy to understand, in Markdown.
-- code_examples must be runnable and include comments.
+- code_examples must be an array of objects and every code field must be runnable/copy-pasteable code without markdown fences.
 - Tailor the content for {level} learners."""
 
     try:
         llm = get_llm(temperature=0.3)
-        response = await llm.ainvoke(prompt)
+        timeout_s = float(os.getenv("AI_PATH_DETAIL_LLM_TIMEOUT_S", "150") or 150)
+        response = await asyncio.wait_for(llm.ainvoke(prompt), timeout=timeout_s)
         parsed = parse_json_response(response.content)
 
         detailed_content = parsed.get("detailed_content", "")
-        code_examples = parsed.get("code_examples", [])
+        raw_code_examples = parsed.get("code_examples", [])
+        if not isinstance(raw_code_examples, list):
+            raw_code_examples = []
+        structured_content = _normalize_structured_content(
+            parsed,
+            title=subnode_title,
+            description=subnode_description,
+            key_points=subnode_key_points,
+            code_examples=raw_code_examples,
+        )
+        code_examples = [
+            str(item.get("code") or "").strip()
+            for item in structured_content.get("code_examples", [])
+            if isinstance(item, dict) and str(item.get("code") or "").strip()
+        ]
 
         # Enhance detailed_content with code examples
         if code_examples:
             code_section = "\n\n## Code Examples\n\n"
             for i, code in enumerate(code_examples, 1):
-                code_section += f"### Example {i}\n\n```python\n{code}\n```\n\n"
+                language = _infer_code_language(str(code))
+                code_section += f"### Example {i}\n\n```{language}\n{code}\n```\n\n"
             detailed_content += code_section
 
         # Add common mistakes and best practices
@@ -194,6 +318,7 @@ Requirements:
             key_points=subnode_key_points,
             detailed_content=detailed_content,
             code_examples=code_examples,
+            structured_content=structured_content,
         )
     except Exception:
         # Fallback: return basic content
@@ -203,6 +328,13 @@ Requirements:
             key_points=subnode_key_points,
             detailed_content=f"# {subnode_title}\n\n{subnode_description}\n\n" +
                            "\n".join([f"- {kp}" for kp in subnode_key_points]),
+            structured_content=_normalize_structured_content(
+                {},
+                title=subnode_title,
+                description=subnode_description,
+                key_points=subnode_key_points,
+                code_examples=[],
+            ),
         )
 
 

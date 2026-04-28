@@ -12,7 +12,7 @@ Flow:
 """
 
 from __future__ import annotations
-from typing import List, Optional
+from typing import Any, List, Optional
 from typing_extensions import TypedDict
 from pydantic import BaseModel, Field
 
@@ -112,6 +112,7 @@ class SubNode(BaseModel):
     # Step 2.5: Detailed content (generated on demand)
     detailed_content: str = ""  # Markdown content with detailed explanation
     code_examples: List[str] = []  # Code snippets
+    structured_content: dict[str, Any] = {}  # Structured lesson content for course-reader UI
     related_resources: List[str] = []  # URLs of related resources
 
 
