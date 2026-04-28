@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import {
-  generateAiPath,
+  generateAdminAiPath,
   type AiPathGenerateResponse,
   type AiPathNode,
   type AiPathPreferences,
@@ -64,7 +64,7 @@ export default function AiOutlineGenerator() {
     setError("");
     setResult(null);
     try {
-      const response = await generateAiPath(value, {
+      const response = await generateAdminAiPath(value, {
         level,
         learning_depth: depth,
         content_type: contentType,

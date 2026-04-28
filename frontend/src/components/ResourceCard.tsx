@@ -132,7 +132,7 @@ export function ResourceCard({
   if (resolvedSize === "sm") {
     return (
       <article
-        className={`w-full cursor-pointer overflow-hidden rounded-none ${weightClass} ${
+        className={`w-full h-56 cursor-pointer overflow-hidden rounded-none ${weightClass} ${
           isGradient ? "p-0.5" : ""
         }`}
         onClick={onOpen}
@@ -143,18 +143,18 @@ export function ResourceCard({
           }`}
         >
           {/* Header */}
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 flex items-center justify-between border-b border-black/10 relative">
-            <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-stone-600 truncate">
+          <div className="h-7 px-2 sm:px-3 flex shrink-0 items-center justify-between border-b border-black/10 relative">
+            <span className="min-w-0 flex-1 truncate text-[9px] font-bold uppercase tracking-wider text-stone-600">
               {resource.categoryLabel}
             </span>
-            <div className="flex items-center gap-0.5 sm:gap-1">
-              <span className="text-[8px] sm:text-[10px] text-stone-400">
+            <div className="ml-2 flex shrink-0 items-center gap-0.5 sm:gap-1">
+              <span className="text-[9px] text-stone-400">
                 #{String(resource.id).padStart(3, "0")}
               </span>
               {onRemove && (
                 <button
                   type="button"
-                  className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
+                  className="w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center hover:bg-red-600 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     onRemove(resource.id);
@@ -167,17 +167,17 @@ export function ResourceCard({
             </div>
           </div>
           {/* Thumbnail */}
-          <div className="relative h-12 sm:h-16 bg-stone-100 overflow-hidden z-10">
+          <div className="relative h-16 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
                 alt={resource.title}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover"
+                className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-full h-full bg-linear-to-br from-stone-100 to-stone-200 flex items-center justify-center">
+              <div className="w-full h-full rounded-[3px] bg-linear-to-br from-stone-100 to-stone-200 flex items-center justify-center">
                 <span className="text-2xl font-black text-stone-300">
                   {title.charAt(0)}
                 </span>
@@ -185,23 +185,23 @@ export function ResourceCard({
             )}
           </div>
           {/* Title */}
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 border-b border-black/10 bg-white">
-            <h3 className="text-[10px] sm:text-xs font-bold text-stone-900 truncate">
+          <div className="h-8 px-2 sm:px-3 border-b border-black/10 bg-white flex shrink-0 items-center">
+            <h3 className="min-w-0 truncate text-xs font-bold text-stone-900">
               {title}
             </h3>
           </div>
           {/* Summary */}
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 h-[4.5rem] sm:h-20 overflow-hidden bg-stone-50">
-            <p className="text-[9px] sm:text-[10px] leading-4 text-stone-400 line-clamp-4">
+          <div className="px-2 sm:px-3 py-2 flex-1 overflow-hidden bg-stone-50">
+            <p className="text-[10px] leading-4 text-stone-400 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>
           {/* Footer */}
-          <div className="px-2 sm:px-3 py-1 sm:py-1.5 border-t border-black/10 flex items-center justify-between">
-            <span className="text-[9px] sm:text-[10px] text-stone-400 truncate">
+          <div className="h-8 px-2 sm:px-3 border-t border-black/10 flex shrink-0 items-center justify-between gap-2">
+            <span className="min-w-0 truncate text-[10px] text-stone-400">
               {resource.platformLabel}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-medium text-stone-500">
+            <span className="shrink-0 truncate text-[10px] font-medium text-stone-500">
               {resource.typeLabel}
             </span>
           </div>
@@ -227,52 +227,52 @@ export function ResourceCard({
           style={{ zIndex: 1 }}
         >
           {/* Header */}
-          <div className="px-4 py-2 flex items-center justify-between border-b border-black/10">
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
+          <div className="h-9 px-4 flex shrink-0 items-center justify-between border-b border-black/10">
+            <span className="min-w-0 flex-1 truncate text-xs font-bold uppercase tracking-wider text-stone-600">
               {resource.categoryLabel}
             </span>
-            <span className="text-xs text-stone-400">
+            <span className="ml-3 shrink-0 text-xs text-stone-400">
               #{String(resource.id).padStart(3, "0")}
             </span>
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-40 bg-stone-100 overflow-hidden z-10">
+          <div className="relative h-40 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
                 alt={resource.title}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover"
+                className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-14 h-14 rounded-full bg-stone-200 flex items-center justify-center text-xl font-bold text-stone-500">
+              <div className="w-full h-full rounded-[3px] bg-stone-200 flex items-center justify-center text-xl font-bold text-stone-500">
                 {title.charAt(0)}
               </div>
             )}
           </div>
 
           {/* Title */}
-          <div className="px-4 py-2 border-b border-black/10 bg-white">
-            <h3 className="text-base font-bold text-stone-900 truncate">
+          <div className="h-11 px-4 border-b border-black/10 bg-white flex shrink-0 items-center">
+            <h3 className="min-w-0 truncate text-base font-bold text-stone-900">
               {title}
             </h3>
           </div>
 
           {/* Summary */}
-          <div className="px-4 py-3 h-[6.5rem] overflow-hidden bg-stone-50">
+          <div className="px-4 py-3 flex-1 overflow-hidden bg-stone-50">
             <p className="text-sm leading-5 text-stone-500 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>
 
           {/* Footer */}
-          <div className="px-4 py-2 border-t border-black/10 flex items-center justify-between">
-            <span className="text-sm text-stone-400">
+          <div className="h-10 px-4 border-t border-black/10 flex shrink-0 items-center justify-between gap-3">
+            <span className="min-w-0 truncate text-sm text-stone-400">
               {resource.platformLabel}
             </span>
-            <span className="text-sm font-medium text-stone-600">
+            <span className="shrink-0 truncate text-sm font-medium text-stone-600">
               {resource.typeLabel}
             </span>
           </div>
@@ -300,52 +300,52 @@ export function ResourceCard({
           style={{ zIndex: 1 }}
         >
           {/* Header: Category + ID */}
-          <div className="px-3 py-1.5 flex items-center justify-between border-b border-black/10">
-            <span className="text-xs font-bold uppercase tracking-wider text-stone-600">
+          <div className="h-8 px-3 flex shrink-0 items-center justify-between border-b border-black/10">
+            <span className="min-w-0 flex-1 truncate text-xs font-bold uppercase tracking-wider text-stone-600">
               {resource.categoryLabel}
             </span>
-            <span className="text-xs text-stone-400">
+            <span className="ml-3 shrink-0 text-xs text-stone-400">
               #{String(resource.id).padStart(3, "0")}
             </span>
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-32 bg-stone-100 overflow-hidden z-10">
+          <div className="relative h-32 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
                 alt={resource.title}
                 loading="lazy"
                 decoding="async"
-                className="w-full h-full object-cover"
+                className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-lg font-bold text-stone-500">
+              <div className="w-full h-full rounded-[3px] bg-stone-200 flex items-center justify-center text-lg font-bold text-stone-500">
                 {resource.title.charAt(0)}
               </div>
             )}
           </div>
 
           {/* Title */}
-          <div className="px-3 py-1.5 border-b border-black/10 bg-white">
-            <h3 className="text-sm font-bold text-stone-900 truncate">
+          <div className="h-9 px-3 border-b border-black/10 bg-white flex shrink-0 items-center">
+            <h3 className="min-w-0 truncate text-sm font-bold text-stone-900">
               {title}
             </h3>
           </div>
 
           {/* Summary */}
-          <div className="px-3 py-2 h-24 overflow-hidden bg-stone-50">
+          <div className="px-3 py-2 flex-1 overflow-hidden bg-stone-50">
             <p className="text-xs leading-5 text-stone-500 line-clamp-4">
               {resource.summary || "No description available."}
             </p>
           </div>
 
           {/* Footer: Platform + Type */}
-          <div className="px-3 py-1.5 border-t border-black/10 flex items-center justify-between">
-            <span className="text-xs text-stone-400">
+          <div className="h-8 px-3 border-t border-black/10 flex shrink-0 items-center justify-between gap-3">
+            <span className="min-w-0 truncate text-xs text-stone-400">
               {resource.platformLabel}
             </span>
-            <span className="text-xs font-medium text-stone-600">
+            <span className="shrink-0 truncate text-xs font-medium text-stone-600">
               {resource.typeLabel}
             </span>
           </div>

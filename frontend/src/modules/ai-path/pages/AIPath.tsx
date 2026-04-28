@@ -108,34 +108,34 @@ export default function AIPath() {
   const previewNodes = lastResult?.data.nodes || [];
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-stone-100">
-        <div className="mx-auto max-w-5xl px-6 py-12">
+      <header className="bg-white border-b border-stone-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
           <div className="max-w-2xl">
             <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-500 mb-4 block">
               AI Guided
             </span>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
               AI Path Generator
             </h1>
-            <p className="mt-4 text-base text-stone-500 leading-relaxed">
+            <p className="mt-4 text-sm sm:text-base text-stone-500 leading-relaxed">
               Enter your learning goal and let AI generate a structured learning path with stage descriptions, steps, and recommended resources.
             </p>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main form */}
-          <section className="lg:col-span-2 bg-white rounded-lg shadow-sm p-8">
-            <div className="flex items-center justify-between mb-6">
+          <section className="lg:col-span-2 bg-white rounded-md border border-stone-200 p-5 sm:p-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div>
                 <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                   Prompt
                 </p>
-                <h2 className="mt-1 text-lg font-semibold text-stone-900">
+                <h2 className="mt-1 text-base sm:text-lg font-semibold text-stone-900">
                   Describe what you want to learn
                 </h2>
               </div>
@@ -153,7 +153,7 @@ export default function AIPath() {
               rows={6}
               maxLength={2000}
               placeholder="Example: I want to learn React full-stack development systematically, launch a production-ready project in 3 months..."
-              className="w-full border border-stone-200 rounded-lg bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50 transition-all"
+              className="w-full border border-stone-200 rounded-md bg-stone-50 px-4 py-4 text-sm leading-relaxed text-stone-900 outline-none placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50 transition-all"
             />
 
             <div className="mt-4 flex flex-wrap gap-2">
@@ -276,7 +276,7 @@ export default function AIPath() {
           {/* Sidebar */}
           <aside className="space-y-6">
             {/* How it works */}
-            <section className="bg-white rounded-lg shadow-sm p-6">
+            <section className="bg-white rounded-md border border-stone-200 p-5">
               <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                 How it works
               </p>
@@ -285,7 +285,7 @@ export default function AIPath() {
                   const Icon = step.icon;
                   return (
                     <div key={step.title} className="flex gap-3">
-                      <div className="w-8 h-8 shrink-0 flex items-center justify-center bg-stone-100 rounded-lg">
+                      <div className="w-8 h-8 shrink-0 flex items-center justify-center bg-stone-100 rounded-md">
                         <Icon className="w-4 h-4 text-stone-600" />
                       </div>
                       <div>
@@ -304,7 +304,7 @@ export default function AIPath() {
 
             {/* Last result */}
             {lastResult && (
-              <section className="bg-white rounded-lg shadow-sm p-6">
+              <section className="bg-white rounded-md border border-stone-200 p-5">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">

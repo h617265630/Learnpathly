@@ -1,5 +1,6 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { getCurrentUser } from "@/services/user";
 import { useAuthStore } from "@/stores/auth";
 import type { SeoMeta } from "@/stores/auth";
 
@@ -42,14 +43,54 @@ export function DocumentTitle({ seo }: { seo?: SeoMeta }) {
 }
 
 export function AdminGuard({ children }: { children: React.ReactNode }) {
-  const { isAuthed, user } = useAuthStore();
-  const isAdmin = (user as { is_superuser?: boolean })?.is_superuser === true;
+  const { isAuthed, user, setUser, logout } = useAuthStore();
+  const [status, setStatus] = useState<"checking" | "allowed" | "denied">(
+    "checking"
+  );
+
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!isAuthed) {
+      setStatus("denied");
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setStatus("checking");
+    getCurrentUser()
+      .then((profile) => {
+        if (cancelled) return;
+        setUser(profile);
+        setStatus(profile.is_superuser === true ? "allowed" : "denied");
+      })
+      .catch(() => {
+        if (cancelled) return;
+        logout();
+        setStatus("denied");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthed, logout, setUser]);
 
   if (!isAuthed) {
     return <Navigate to="/login" replace />;
   }
 
-  if (!isAdmin) {
+  if (status === "checking") {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-stone-400">Checking admin access...</div>
+      </div>
+    );
+  }
+
+  const isAdmin = (user as { is_superuser?: boolean })?.is_superuser === true;
+
+  if (status !== "allowed" || !isAdmin) {
     return <Navigate to="/home" replace />;
   }
 

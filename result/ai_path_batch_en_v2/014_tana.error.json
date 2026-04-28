@@ -1,7 +1,7 @@
 {
   "topic": "Tana 知识图谱工作流",
   "status": "failed",
-  "error": "[Errno 61] Connection refused",
-  "failed_at": "2026-04-27T17:56:41.266717+00:00",
+  "error": "timed out",
+  "failed_at": "2026-04-28T13:07:14.115246+00:00",
   "api_base": "http://127.0.0.1:8000"
 }

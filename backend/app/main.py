@@ -46,6 +46,7 @@ import app.models.category
 import app.models.progress
 import app.models.path_item_note
 import app.models.resource_summary_cache
+import app.models.learning_path_resource_summary
 import app.models.user_image
 import app.models.user_file
 import app.models.subscription

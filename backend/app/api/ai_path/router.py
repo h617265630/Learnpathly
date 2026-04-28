@@ -4,6 +4,8 @@ import asyncio
 import sys
 from pathlib import Path
 import re
+from typing import Any
+from urllib.parse import urlparse
 
 # Ensure ai_path is importable
 _AI_PATH_ROOT = Path(__file__).resolve().parents[4]
@@ -23,6 +25,7 @@ from app.models.ai_path_section import AiPathSection
 from app.models.ai_path_subnode import AiPathSubNode
 from app.models.ai_path_subnode_detail import AiPathSubNodeDetail
 from app.models.ai_path_subnode_detail_cache import AiPathSubNodeDetailCache
+from app.models.resource import Resource
 import hashlib
 
 
@@ -514,6 +517,14 @@ async def generate_ai_path_outline_endpoint(
     Much faster. Returns stages grouped by learning_stage with resources.
     User can then call /section-tutorial for each stage to get detailed content.
     """
+    return await _generate_ai_path_outline_response(payload, db)
+
+
+async def _generate_ai_path_outline_response(
+    payload: AiPathGenerateRequest,
+    db,
+) -> AiPathGenerateResponse:
+    """Generate an outline and persist it, shared by public and admin routes."""
     query = payload.query.strip()
     if not query:
         raise HTTPException(status_code=400, detail="query is required")
@@ -1153,6 +1164,38 @@ class CachedResultsResponse(BaseModel):
     cached_count: int
 
 
+class ResourceIntroSummaryRequest(BaseModel):
+    query: str | None = Field(default=None, description="Optional custom search query")
+    max_results: int = Field(default=5, ge=1, le=6, description="Number of web results to search")
+    language: str = Field(default="en", description="Summary language, e.g. en or zh")
+    save_to_resource: bool = Field(default=False, description="Persist the generated summary back to resources.summary/raw_meta")
+
+
+class ResourceIntroSearchResult(BaseModel):
+    title: str = ""
+    url: str = ""
+    content: str = ""
+    source_score: float | None = None
+
+
+class ResourceIntroSummaryResponse(BaseModel):
+    resource_id: int
+    resource_title: str
+    resource_url: str
+    search_query: str
+    summary: str
+    what_it_is: str = ""
+    key_points: list[str] = Field(default_factory=list)
+    use_cases: list[str] = Field(default_factory=list)
+    how_to_use: list[str] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    best_for: list[str] = Field(default_factory=list)
+    intro_markdown: str = ""
+    search_results: list[ResourceIntroSearchResult] = Field(default_factory=list)
+    source_count: int = 0
+    warnings: list[str] = Field(default_factory=list)
+
+
 def _transform_github_resource(r: dict) -> dict:
     """Transform a search_github result dict to the frontend AiResourceItem schema."""
     return {
@@ -1204,6 +1247,284 @@ async def search_resources(
         raise HTTPException(
             status_code=500, detail=f"Resource search failed: {exc}"
         ) from exc
+
+
+def _resource_type_value(resource: Resource) -> str:
+    value = getattr(resource, "resource_type", "")
+    if hasattr(value, "value"):
+        return str(value.value)
+    return str(value or "")
+
+
+def _resource_intro_search_query(resource: Resource, override: str | None = None) -> str:
+    custom_query = (override or "").strip()
+    if custom_query:
+        return custom_query
+
+    title = str(resource.title or "").strip()
+    platform = str(resource.platform or "").strip()
+    source_url = str(resource.source_url or "").strip()
+    host = urlparse(source_url).netloc.replace("www.", "") if source_url else ""
+    tags = resource.tags if isinstance(resource.tags, list) else []
+    tag_text = " ".join(str(tag) for tag in tags[:5])
+
+    query_parts = [title, platform, host, tag_text, "overview introduction features use cases documentation"]
+    if "github.com" in source_url.lower():
+        query_parts.append("README examples getting started")
+    if _resource_type_value(resource) == "video":
+        query_parts.append("transcript summary key ideas")
+
+    return " ".join(part for part in query_parts if part).strip()
+
+
+def _compact_intro_search_result(raw: dict) -> ResourceIntroSearchResult | None:
+    if not isinstance(raw, dict):
+        return None
+    url = str(raw.get("url") or "").strip()
+    title = str(raw.get("title") or "").strip() or url
+    content = str(raw.get("description") or raw.get("content") or raw.get("snippet") or "").strip()
+    score = raw.get("source_score", raw.get("score"))
+    try:
+        source_score = float(score) if score is not None else None
+    except (TypeError, ValueError):
+        source_score = None
+    if not url and not title and not content:
+        return None
+    return ResourceIntroSearchResult(
+        title=title,
+        url=url,
+        content=content[:1200],
+        source_score=source_score,
+    )
+
+
+def _resource_metadata_text(resource: Resource) -> str:
+    raw_meta = resource.raw_meta if isinstance(resource.raw_meta, dict) else {}
+    tags = resource.tags if isinstance(resource.tags, list) else []
+    return "\n".join([
+        f"Title: {resource.title or ''}",
+        f"URL: {resource.source_url or ''}",
+        f"Type: {_resource_type_value(resource)}",
+        f"Platform: {resource.platform or ''}",
+        f"Difficulty: {resource.difficulty or ''}",
+        f"Tags: {', '.join(str(tag) for tag in tags[:12])}",
+        f"Existing summary: {resource.summary or ''}",
+        f"Raw metadata: {str(raw_meta)[:1200]}",
+    ])
+
+
+def _intro_sources_text(search_results: list[ResourceIntroSearchResult]) -> str:
+    lines: list[str] = []
+    for idx, item in enumerate(search_results[:8], start=1):
+        lines.append(
+            f"Source {idx}\n"
+            f"Title: {item.title}\n"
+            f"URL: {item.url}\n"
+            f"Content: {item.content[:900]}"
+        )
+    return "\n\n".join(lines) or "No external search results were found."
+
+
+def _list_from_value(value: Any, *, limit: int = 6) -> list[str]:
+    if isinstance(value, list):
+        items = value
+    elif isinstance(value, str) and value.strip():
+        items = [value]
+    else:
+        items = []
+    cleaned: list[str] = []
+    for item in items:
+        text = str(item).strip()
+        if text:
+            cleaned.append(text[:300])
+        if len(cleaned) >= limit:
+            break
+    return cleaned
+
+
+def _build_resource_intro_markdown(data: dict[str, Any]) -> str:
+    lines = []
+    summary = str(data.get("summary") or "").strip()
+    what_it_is = str(data.get("what_it_is") or "").strip()
+    if summary:
+        lines.append(summary)
+    if what_it_is:
+        lines.append(f"\n### What it is\n{what_it_is}")
+
+    sections = [
+        ("Key points", _list_from_value(data.get("key_points"))),
+        ("Use cases", _list_from_value(data.get("use_cases"))),
+        ("How to use it", _list_from_value(data.get("how_to_use"))),
+        ("Best for", _list_from_value(data.get("best_for"))),
+        ("Limitations", _list_from_value(data.get("limitations"))),
+    ]
+    for title, items in sections:
+        if items:
+            lines.append(f"\n### {title}")
+            lines.extend(f"- {item}" for item in items)
+    return "\n".join(lines).strip()
+
+
+def _fallback_resource_intro_summary(
+    resource: Resource,
+    search_results: list[ResourceIntroSearchResult],
+    *,
+    language: str,
+) -> dict[str, Any]:
+    snippets = [item.content for item in search_results if item.content]
+    first_snippet = snippets[0] if snippets else ""
+    summary = (resource.summary or first_snippet or f"{resource.title} is a learning resource for the selected topic.").strip()
+    if language.lower().startswith("zh"):
+        what_it_is = f"{resource.title} 是一个 {_resource_type_value(resource) or 'resource'} 类型资源，可用于了解相关概念、使用方式和实践场景。"
+    else:
+        what_it_is = f"{resource.title} is a {_resource_type_value(resource) or 'resource'} that can help learners understand the topic, usage patterns, and practical context."
+
+    points = []
+    if resource.platform:
+        points.append(f"Published or hosted on {resource.platform}.")
+    if resource.source_url:
+        points.append(f"Original source: {resource.source_url}")
+    for item in search_results[:3]:
+        if item.title:
+            points.append(f"Related reference found: {item.title}")
+
+    return {
+        "summary": summary[:900],
+        "what_it_is": what_it_is,
+        "key_points": points[:5],
+        "use_cases": [],
+        "how_to_use": [],
+        "limitations": ["AI summary fallback was used, so verify details against the original resource."],
+        "best_for": [],
+    }
+
+
+async def _summarize_resource_intro_with_ai(
+    *,
+    resource: Resource,
+    search_results: list[ResourceIntroSearchResult],
+    language: str,
+) -> dict[str, Any]:
+    from ai_path.utils.llm import get_llm
+    from langchain_core.prompts import ChatPromptTemplate
+
+    output_language = "Chinese" if language.lower().startswith("zh") else "English"
+    prompt = ChatPromptTemplate.from_messages([
+        (
+            "system",
+            "You summarize learning resources for Learnpathly. "
+            "Use the resource metadata and web search snippets, avoid unsupported claims, "
+            f"and write in {output_language}. Return only valid JSON.",
+        ),
+        (
+            "human",
+            "Resource metadata:\n{metadata}\n\n"
+            "Search results:\n{sources}\n\n"
+            "Create a concise resource introduction summary. "
+            "Return JSON with these keys: summary, what_it_is, key_points, use_cases, "
+            "how_to_use, limitations, best_for. "
+            "summary and what_it_is are strings. The other keys are arrays of short strings.",
+        ),
+    ])
+    chain = prompt | get_llm(temperature=0.2) | JsonOutputParser()
+    result = await chain.ainvoke({
+        "metadata": _resource_metadata_text(resource),
+        "sources": _intro_sources_text(search_results),
+    })
+    if not isinstance(result, dict):
+        raise ValueError("LLM did not return a JSON object")
+    return result
+
+
+@router.post("/resources/{resource_id}/intro-summary", response_model=ResourceIntroSummaryResponse)
+async def summarize_resource_intro(
+    resource_id: int,
+    payload: ResourceIntroSummaryRequest,
+    db=Depends(get_db_dep),
+):
+    """
+    Search introductory/contextual content for one saved resource, then summarize it.
+    This is resource-centric and separate from the topic-level /search-resources endpoint.
+    """
+    resource = db.query(Resource).filter(Resource.id == resource_id).first()
+    if not resource:
+        raise HTTPException(status_code=404, detail="Resource not found")
+
+    warnings: list[str] = []
+    search_query = _resource_intro_search_query(resource, payload.query)
+    search_results: list[ResourceIntroSearchResult] = []
+
+    try:
+        raw_results = await _run_tavily_search(search_query, None)
+        compacted = [_compact_intro_search_result(item) for item in raw_results[: payload.max_results]]
+        search_results = [item for item in compacted if item is not None]
+    except Exception as exc:
+        warnings.append(f"Search skipped: {exc}")
+
+    if not search_results:
+        warnings.append("No Tavily search results were found; summary used resource metadata only.")
+
+    try:
+        summary_data = await _summarize_resource_intro_with_ai(
+            resource=resource,
+            search_results=search_results,
+            language=payload.language,
+        )
+    except Exception as exc:
+        warnings.append(f"AI summary fallback used: {exc}")
+        summary_data = _fallback_resource_intro_summary(
+            resource,
+            search_results,
+            language=payload.language,
+        )
+
+    normalized = {
+        "summary": str(summary_data.get("summary") or "").strip(),
+        "what_it_is": str(summary_data.get("what_it_is") or "").strip(),
+        "key_points": _list_from_value(summary_data.get("key_points")),
+        "use_cases": _list_from_value(summary_data.get("use_cases")),
+        "how_to_use": _list_from_value(summary_data.get("how_to_use")),
+        "limitations": _list_from_value(summary_data.get("limitations")),
+        "best_for": _list_from_value(summary_data.get("best_for")),
+    }
+    intro_markdown = _build_resource_intro_markdown(normalized)
+
+    if payload.save_to_resource:
+        try:
+            resource.summary = normalized["summary"] or resource.summary
+            raw_meta = dict(resource.raw_meta) if isinstance(resource.raw_meta, dict) else {}
+            raw_meta["ai_intro_summary"] = {
+                **normalized,
+                "intro_markdown": intro_markdown,
+                "search_query": search_query,
+                "source_urls": [item.url for item in search_results if item.url],
+            }
+            resource.raw_meta = raw_meta
+            db.commit()
+        except Exception as exc:
+            try:
+                db.rollback()
+            except Exception:
+                pass
+            warnings.append(f"Save skipped: {exc}")
+
+    return ResourceIntroSummaryResponse(
+        resource_id=resource.id,
+        resource_title=resource.title or "",
+        resource_url=resource.source_url or "",
+        search_query=search_query,
+        summary=normalized["summary"],
+        what_it_is=normalized["what_it_is"],
+        key_points=normalized["key_points"],
+        use_cases=normalized["use_cases"],
+        how_to_use=normalized["how_to_use"],
+        limitations=normalized["limitations"],
+        best_for=normalized["best_for"],
+        intro_markdown=intro_markdown,
+        search_results=search_results,
+        source_count=len(search_results),
+        warnings=warnings,
+    )
 
 
 async def _run_parallel(*tasks):

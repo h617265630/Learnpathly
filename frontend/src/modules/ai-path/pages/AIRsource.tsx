@@ -42,12 +42,15 @@ function resourceHost(url: string) {
 
 // ── AiResourceItem → UiResource 转换 ────────────────────────────────────────
 
+const FALLBACK_THUMB =
+  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&h=400&fit=crop";
+
 function aiItemToUiResource(item: AiResourceItem, _idx: number): UiResource {
   const id = Math.abs(
     item.url.split("").reduce((a, c) => (a << 5) - a + c.charCodeAt(0), 0)
   );
 
-  // thumbnail: 优先 item.image，其次 GitHub opengraph
+  // thumbnail: 优先 item.image，其次 GitHub opengraph，最后 fallback
   let thumbnail = item.image || "";
   if (!thumbnail && item.url.includes("github.com")) {
     try {
@@ -56,6 +59,15 @@ function aiItemToUiResource(item: AiResourceItem, _idx: number): UiResource {
         thumbnail = `https://opengraph.githubassets.com/1/${parts[0]}/${parts[1]}`;
       }
     } catch {}
+  }
+  // Fallback to favicon or placeholder
+  if (!thumbnail) {
+    try {
+      const host = new URL(item.url).hostname;
+      thumbnail = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=256`;
+    } catch {
+      thumbnail = FALLBACK_THUMB;
+    }
   }
 
   return {
@@ -260,33 +272,33 @@ export default function AIRsource() {
   const totalResults = githubResults.length + webResults.length;
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white border-b border-stone-100">
-        <div className="mx-auto max-w-5xl px-6 py-12">
+      <header className="bg-white border-b border-stone-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
           <div className="max-w-2xl">
             <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-sky-500 mb-4 block">
               AI Guided
             </span>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
               AI Resource Search
             </h1>
-            <p className="mt-4 text-base text-stone-500 leading-relaxed">
+            <p className="mt-4 text-sm sm:text-base text-stone-500 leading-relaxed">
               Enter any learning topic and AI will search the web for the most relevant tutorials, articles, videos and docs — summarised and ready to explore.
             </p>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-10">
         {/* Search input */}
-        <section className="bg-white rounded-lg shadow-sm p-8">
-          <div className="flex items-center justify-between mb-6">
+        <section className="bg-white rounded-md border border-stone-200 p-5 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-stone-400">
                 Search
               </p>
-              <h2 className="mt-1 text-lg font-semibold text-stone-900">
+              <h2 className="mt-1 text-base sm:text-lg font-semibold text-stone-900">
                 What do you want to learn about?
               </h2>
             </div>
@@ -305,13 +317,13 @@ export default function AIRsource() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="e.g. Kubernetes, React performance, SQL optimization"
-              className="flex-1 border border-stone-200 rounded-lg bg-stone-50 px-5 py-3 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50"
+              className="flex-1 border border-stone-200 rounded-md bg-stone-50 px-4 py-2.5 text-sm text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-sky-400 focus:bg-white focus:ring-2 focus:ring-sky-50"
             />
             <Button
               type="button"
               onClick={handleSearch}
               disabled={loading || !query.trim()}
-              className="bg-sky-500 text-white px-6 py-3 text-sm font-semibold rounded-lg hover:bg-sky-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+              className="bg-sky-500 text-white px-5 py-2.5 text-sm font-semibold rounded-md hover:bg-sky-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
             >
               {loading ? "Searching..." : "Search"}
             </Button>
@@ -324,7 +336,7 @@ export default function AIRsource() {
                 key={p}
                 type="button"
                 onClick={() => setQuery(p)}
-                className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-sky-300 hover:text-sky-600"
+                className="rounded-md border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-500 transition-all hover:border-sky-300 hover:text-sky-600"
               >
                 {p}
               </button>

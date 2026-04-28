@@ -1,7 +1,7 @@
 {
   "topic": "Zotero + AI 文献管理",
   "status": "failed",
-  "error": "[Errno 61] Connection refused",
-  "failed_at": "2026-04-27T17:56:41.282043+00:00",
+  "error": "timed out",
+  "failed_at": "2026-04-28T13:17:10.169119+00:00",
   "api_base": "http://127.0.0.1:8000"
 }

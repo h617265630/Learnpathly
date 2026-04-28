@@ -92,6 +92,17 @@ export function generateAiPath(query: string, preferences?: AiPathPreferences) {
   );
 }
 
+export function generateAdminAiPath(query: string, preferences?: AiPathPreferences) {
+  return request.post<AiPathGenerateResponse, AiPathGenerateResponse>(
+    "/admin/ai-path/generate-outline",
+    { query, ...preferences },
+    {
+      // Admin batch/content generation can take a few minutes depending on the provider.
+      timeout: 300000,
+    }
+  );
+}
+
 export function getAiPathProject(projectId: number) {
   return request.get<AiPathGenerateResponse, AiPathGenerateResponse>(
     `/ai-path/projects/${projectId}`

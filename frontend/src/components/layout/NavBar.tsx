@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, User, Plus, FileText } from "lucide-react";
+import { ChevronDown, User, Plus, FileText, ShieldCheck } from "lucide-react";
 import { useAuthStore } from "../../stores/auth";
 
 const MAIN_NAV_LINKS = [
@@ -36,6 +36,7 @@ export function NavBar() {
   const location = useLocation();
   const pathname = location.pathname;
   const { user, isAuthed, logout } = useAuthStore();
+  const isAdmin = user?.is_superuser === true;
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
@@ -172,7 +173,12 @@ export function NavBar() {
 
                   {userMenuOpen && (
                     <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-stone-200 rounded-lg shadow-lg py-1 z-50">
-                      {USER_DROPDOWN_LINKS.map((link) => (
+                      {[
+                        ...USER_DROPDOWN_LINKS,
+                        ...(isAdmin
+                          ? [{ to: "/admin/dashboard", label: "Admin", icon: ShieldCheck }]
+                          : []),
+                      ].map((link) => (
                         <Link
                           key={link.to}
                           to={link.to}

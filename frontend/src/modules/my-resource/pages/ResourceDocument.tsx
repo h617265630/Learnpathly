@@ -400,11 +400,11 @@ export default function ResourceDocument() {
             {!canPreviewDoc && (
               <>
                 {resource.thumbnail ? (
-                  <div className="w-full overflow-hidden border-b border-stone-100 bg-white p-2">
+                  <div className="flex w-full justify-center overflow-hidden border-b border-stone-100 bg-white p-2">
                     <img
                       src={resource.thumbnail}
                       alt={resource.title}
-                      className="h-full max-h-[420px] min-h-56 w-full rounded-md bg-stone-50 object-contain"
+                      className="max-h-72 w-full max-w-3xl rounded-md bg-stone-50 object-contain object-center"
                       loading="lazy"
                       decoding="async"
                     />

@@ -85,6 +85,7 @@ export function getPublicLearningPathDetail(
 }
 
 export type LearningPathAiResourceSummaryItem = {
+  path_item_id?: number | null;
   resource_id: number;
   url: string;
   title: string;
@@ -93,6 +94,8 @@ export type LearningPathAiResourceSummaryItem = {
   resource_type: string;
   platform: string;
   thumbnail?: string | null;
+  learning_stage?: string | null;
+  estimated_minutes?: number | null;
 };
 
 export type LearningPathAiResourceSummariesResponse = {
@@ -101,11 +104,30 @@ export type LearningPathAiResourceSummariesResponse = {
   items: LearningPathAiResourceSummaryItem[];
 };
 
+export type LearningPathAiResourceRegenerateResponse =
+  LearningPathAiResourceSummariesResponse & {
+    regenerated_count: number;
+  };
+
 export function getPublicLearningPathAiResourceSummaries(
   id: number,
   payload?: { limit?: number; force_refresh?: boolean }
 ): Promise<LearningPathAiResourceSummariesResponse> {
   return request.post(`/learning-paths/public/${id}/ai-resource-summaries`, payload || {});
+}
+
+export function regeneratePublicLearningPathAiResourceSummaries(
+  id: number,
+  payload?: {
+    limit?: number;
+    resource_ids?: number[];
+    update_resource_summary?: boolean;
+  }
+): Promise<LearningPathAiResourceRegenerateResponse> {
+  return request.post(
+    `/learning-paths/public/${id}/resource-summaries/regenerate`,
+    payload || {}
+  );
 }
 
 export function createLearningPath(payload: {

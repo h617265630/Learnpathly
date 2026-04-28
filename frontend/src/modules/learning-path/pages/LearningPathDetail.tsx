@@ -48,13 +48,7 @@ type Module = {
   purpose?: string | null;
   estimatedTime?: number | null;
   resourceData: any; // embedded resource_data from backend
-  manualWeight?: number | null; // for card UI weight
-};
-
-type OutlineSection = {
-  title: string;
-  description: string;
-  modules: Module[];
+  manualWeight?: number | null;
 };
 
 function aiPathResourceToUiResource(
@@ -126,41 +120,6 @@ function moduleToUiResource(m: Module): UiResource {
   };
 }
 
-function fromManualWeight(w: number | null | undefined): string {
-  const reverseMap: Record<number, string> = {
-    1: "tier-gold",
-    2: "tier-diamond",
-    3: "tier-prismatic",
-    4: "tier-obsidian",
-    5: "gradient-emerald",
-    6: "gradient-sapphire",
-    7: "gradient-ruby",
-    8: "gradient-amethyst",
-    9: "gradient-gold",
-    10: "neu",
-    11: "holo",
-    12: "sketch",
-    13: "newspaper",
-    14: "neon-cyan",
-    15: "neon-pink",
-    16: "neon-green",
-    17: "neon-purple",
-    18: "neon-gold",
-    19: "metallic-steel",
-    20: "metallic-copper",
-    21: "metallic-titanium",
-    22: "metallic-rose-gold",
-    23: "metallic-gunmetal",
-    24: "papercut-coral",
-    25: "papercut-sky",
-    26: "papercut-mint",
-    27: "papercut-lavender",
-    28: "papercut-peach",
-    100: "default",
-  };
-  return reverseMap[Number(w)] ?? "default";
-}
-
 function moduleThumb(m: Module): string {
   const r = m.resourceData;
   const url = String(r?.thumbnail || "").trim();
@@ -205,17 +164,6 @@ function formatPlatform(platform?: string | null): string {
   return map[platform.toLowerCase()] || platform;
 }
 
-function estimateTotalMinutes(modules: Module[]): number {
-  return modules.reduce((sum, item) => {
-    const explicit = Number(item.estimatedTime || 0);
-    if (explicit > 0) return sum + explicit;
-    if (item.type === "video") return sum + 25;
-    if (item.type === "document") return sum + 35;
-    if (item.type === "article") return sum + 20;
-    return sum + 15;
-  }, 0);
-}
-
 function formatMinutes(minutes: number): string {
   if (!minutes) return "Flexible";
   if (minutes < 60) return `${minutes} min`;
@@ -234,40 +182,6 @@ function readableType(type: ModuleType): string {
     unknown: "Resource",
   };
   return map[type] || "Resource";
-}
-
-function buildOutlineSections(modules: Module[], pathTitle?: string): OutlineSection[] {
-  if (!modules.length) return [];
-  const withStage = modules.filter((item) => String(item.stage || "").trim());
-
-  if (withStage.length) {
-    const order: string[] = [];
-    const grouped = new Map<string, Module[]>();
-    for (const item of modules) {
-      const stage = String(item.stage || "Core learning flow").trim();
-      if (!grouped.has(stage)) {
-        grouped.set(stage, []);
-        order.push(stage);
-      }
-      grouped.get(stage)?.push(item);
-    }
-    return order.map((stage) => {
-      const items = grouped.get(stage) || [];
-      return {
-        title: stage,
-        description: `${items.length} related ${items.length === 1 ? "resource" : "resources"} in this stage.`,
-        modules: items,
-      };
-    });
-  }
-
-  return [
-    {
-      title: pathTitle ? `${pathTitle} outline` : "Topic outline",
-      description: "Follow these resources in order to move from orientation to hands-on practice.",
-      modules,
-    },
-  ];
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────
@@ -449,22 +363,6 @@ export default function LearningPathDetail() {
       cancelled = true;
     };
   }, [id, path, modules.length, fromMyPaths]);
-
-  const outlineSections = useMemo(
-    () => buildOutlineSections(modules, path?.title),
-    [modules, path?.title]
-  );
-  const totalEstimatedMinutes = useMemo(
-    () => estimateTotalMinutes(modules),
-    [modules]
-  );
-  const resourceTypeCounts = useMemo(() => {
-    return modules.reduce<Record<string, number>>((acc, item) => {
-      const label = readableType(item.type);
-      acc[label] = (acc[label] || 0) + 1;
-      return acc;
-    }, {});
-  }, [modules]);
 
   const aiTopicResources = useMemo(
     () => collectAiTopicResources(aiProject),
@@ -874,56 +772,81 @@ export default function LearningPathDetail() {
                 </div>
               </div>
 
-              <div className="mt-6 rounded-md border border-stone-200 bg-white p-4">
+              <div className="mt-6 rounded-md border border-stone-200 bg-white p-4 md:p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500">
-                    Resource Path Content Preview
-                  </p>
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-600">
+                      Resource Path Content Preview
+                    </p>
+                    <h3 className="mt-1 text-lg font-black tracking-tight text-stone-950">
+                      How each resource supports this path
+                    </h3>
+                  </div>
                   {aiResourceSummariesLoading ? (
                     <span className="text-xs text-stone-400">Generating…</span>
                   ) : null}
                 </div>
 
                 {aiResourceSummaries.length ? (
-                  <div className="mt-4 space-y-3">
+                  <div className="mt-5 grid gap-4">
                     {aiResourceSummaries.slice(0, modules.length).map((item) => (
                       <a
                         key={item.url}
                         href={item.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="block rounded-md border border-stone-100 bg-stone-50 px-4 py-4 hover:bg-white transition-colors"
+                        className="block rounded-md border border-stone-200 bg-white p-4 transition-colors hover:border-sky-200 hover:bg-sky-50/30"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="h-10 w-10 shrink-0 rounded-md border border-stone-200 bg-white p-1 overflow-hidden">
+                        <div className="grid gap-4 md:grid-cols-[112px_minmax(0,1fr)]">
+                          <div className="h-24 w-full overflow-hidden rounded-md border border-stone-200 bg-stone-50 p-1 md:h-20">
                             {item.thumbnail ? (
                               <img
                                 src={item.thumbnail}
                                 alt={item.title}
-                                className="h-full w-full rounded-sm object-cover"
+                                className="h-full w-full rounded-[3px] object-cover object-center"
                                 loading="lazy"
                                 decoding="async"
                               />
-                            ) : null}
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center rounded-[3px] bg-sky-50 text-2xl font-black text-sky-200">
+                                {item.title.charAt(0)}
+                              </div>
+                            )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="text-sm font-bold text-stone-900 line-clamp-2">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700">
+                                {item.resource_type || "resource"}
+                              </span>
+                              {item.learning_stage ? (
+                                <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold text-stone-500">
+                                  {item.learning_stage}
+                                </span>
+                              ) : null}
+                              {item.estimated_minutes ? (
+                                <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[10px] font-semibold text-stone-500">
+                                  {formatMinutes(item.estimated_minutes)}
+                                </span>
+                              ) : null}
+                            </div>
+                            <p className="mt-2 text-base font-black leading-6 text-stone-950">
                               {item.title}
                             </p>
-                            <p className="mt-1 text-xs leading-6 text-stone-600">
+                            <p className="mt-2 text-sm leading-7 text-stone-600">
                               {item.summary}
                             </p>
                             {item.key_points?.length ? (
-                              <div className="mt-2 flex flex-wrap gap-2">
+                              <ul className="mt-3 grid gap-2 sm:grid-cols-2">
                                 {item.key_points.slice(0, 4).map((kp) => (
-                                  <span
+                                  <li
                                     key={kp}
-                                    className="rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold text-stone-600 border border-stone-200"
+                                    className="flex items-start gap-2 text-xs leading-5 text-stone-600"
                                   >
-                                    {kp}
-                                  </span>
+                                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500" />
+                                    <span>{kp}</span>
+                                  </li>
                                 ))}
-                              </div>
+                              </ul>
                             ) : null}
                           </div>
                         </div>
@@ -942,166 +865,58 @@ export default function LearningPathDetail() {
           ) : null}
 
           {/* Banner */}
-          <div className="relative h-96 rounded-md border border-stone-200 bg-stone-100 p-1">
-            <div className="relative h-full w-full overflow-hidden rounded-[5px]">
-              <img
-                src={bannerSrc || FALLBACK_THUMB}
-                alt={path.title}
-                loading="lazy"
-                decoding="async"
-                onError={() => {
-                  if (bannerSrc !== fallbackBannerSrc) setBannerSrc(fallbackBannerSrc);
-                }}
-                className="h-full w-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
-
-              <div className="absolute left-6 right-6 bottom-6">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-                  Learning Path
-                  {aiProject?.project_id ? (
-                    <>
-                      <span className="text-white/60">·</span>
-                      AI Outline #{String(aiProject.project_id).padStart(3, "0")}
-                    </>
-                  ) : null}
-                </div>
-                <h2 className="mt-3 text-2xl md:text-3xl font-black tracking-tight text-white leading-[1.05] drop-shadow-sm line-clamp-2">
-                  {path.title}
-                </h2>
-              </div>
-
-              {path.type && (
-                <span className="absolute right-3 top-3 px-2 py-1 rounded-full border border-stone-200 bg-white/90 text-[10px] font-semibold tracking-[0.14em] uppercase text-stone-700">
-                  {path.type}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Topic outline */}
-          <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <div className="rounded-md border border-stone-200 bg-white p-5 md:p-6">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div className="overflow-hidden rounded-md border border-stone-200 bg-white p-3 shadow-sm">
+            <div className="grid gap-5 rounded-[5px] bg-sky-50/60 p-4 md:grid-cols-[minmax(0,1fr)_minmax(420px,560px)] md:items-center md:p-5">
+              <div className="flex min-w-0 flex-col justify-between py-1">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-600">
-                    Topic Outline
-                  </p>
-                  <h2 className="mt-2 text-2xl font-black tracking-tight text-stone-950">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-sky-700 ring-1 ring-sky-100">
+                      Learning Path
+                    </span>
+                    {aiProject?.project_id ? (
+                      <span className="rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500 ring-1 ring-stone-100">
+                        AI Outline #{String(aiProject.project_id).padStart(3, "0")}
+                      </span>
+                    ) : null}
+                    {path.type ? (
+                      <span className="rounded-full bg-white px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-500 ring-1 ring-stone-100">
+                        {path.type}
+                      </span>
+                    ) : null}
+                  </div>
+                  <h2 className="mt-5 max-w-3xl text-3xl font-black leading-tight tracking-tight text-stone-950 md:text-4xl">
                     {path.title}
                   </h2>
-                </div>
-                <span className="inline-flex w-fit rounded-full bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700">
-                  {outlineSections.length} {outlineSections.length === 1 ? "stage" : "stages"}
-                </span>
-              </div>
-
-              {outlineSections.length ? (
-                <div className="mt-6 space-y-6">
-                  {outlineSections.map((section, sectionIdx) => (
-                    <article
-                      key={`${section.title}-${sectionIdx}`}
-                      className="rounded-md border border-stone-100 bg-stone-50 p-4"
-                    >
-                      <div className="flex items-start gap-4">
-                        <span className="inline-flex h-8 min-w-8 items-center justify-center rounded-full bg-sky-500 px-2 text-xs font-black text-white">
-                          {sectionIdx + 1}
-                        </span>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="text-base font-black text-stone-950">
-                            {section.title}
-                          </h3>
-                          <p className="mt-1 text-sm leading-6 text-stone-500">
-                            {section.description}
-                          </p>
-
-                          <ol className="mt-4 space-y-3">
-                            {section.modules.map((item) => (
-                              <li
-                                key={`outline-${item.id}`}
-                                className="rounded-md border border-stone-200 bg-white px-4 py-3"
-                              >
-                                <button
-                                  type="button"
-                                  onClick={() => openResource(item)}
-                                  className="block w-full text-left"
-                                >
-                                  <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                                    <div className="min-w-0">
-                                      <p className="text-sm font-bold leading-6 text-stone-900">
-                                        {item.orderIndex || section.modules.indexOf(item) + 1}. {item.title}
-                                      </p>
-                                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-stone-500">
-                                        {item.purpose || item.summary || "Use this resource to move through this part of the topic."}
-                                      </p>
-                                    </div>
-                                    <div className="flex shrink-0 items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-stone-400">
-                                      <span>{readableType(item.type)}</span>
-                                      <span>·</span>
-                                      <span>{formatMinutes(estimateTotalMinutes([item]))}</span>
-                                    </div>
-                                  </div>
-                                </button>
-                              </li>
-                            ))}
-                          </ol>
-                        </div>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              ) : (
-                <div className="mt-6 rounded-md border border-dashed border-stone-200 bg-stone-50 px-5 py-10 text-center">
-                  <p className="text-sm font-semibold text-stone-600">
-                    No outline items yet.
+                  <p className="mt-3 max-w-2xl text-sm leading-7 text-stone-600">
+                    {path.description || "A curated learning path with structured references and practical resources."}
                   </p>
                 </div>
-              )}
+                <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold text-stone-500">
+                  <span className="rounded-full bg-white px-3 py-1.5 ring-1 ring-stone-100">
+                    {modules.length} resources
+                  </span>
+                  {path.category_name ? (
+                    <span className="rounded-full bg-white px-3 py-1.5 ring-1 ring-stone-100">
+                      {path.category_name}
+                    </span>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className="w-full overflow-hidden rounded-md border border-white/80 bg-white p-1 shadow-sm">
+                <img
+                  src={bannerSrc || FALLBACK_THUMB}
+                  alt={path.title}
+                  loading="lazy"
+                  decoding="async"
+                  onError={() => {
+                    if (bannerSrc !== fallbackBannerSrc) setBannerSrc(fallbackBannerSrc);
+                  }}
+                  className="aspect-[1200/630] h-auto w-full rounded-[3px] object-contain object-center"
+                />
+              </div>
             </div>
-
-            <aside className="space-y-4">
-              <div className="rounded-md border border-stone-200 bg-white p-5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-400">
-                  Path Summary
-                </p>
-                <div className="mt-4 grid grid-cols-2 gap-3">
-                  <div className="rounded-md bg-stone-50 px-4 py-4">
-                    <p className="text-2xl font-black text-stone-950">
-                      {modules.length}
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-stone-500">
-                      resources
-                    </p>
-                  </div>
-                  <div className="rounded-md bg-sky-50 px-4 py-4">
-                    <p className="text-2xl font-black text-sky-700">
-                      {formatMinutes(totalEstimatedMinutes)}
-                    </p>
-                    <p className="mt-1 text-xs font-semibold text-sky-700">
-                      estimated
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-md border border-stone-200 bg-white p-5">
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-400">
-                  Resource Mix
-                </p>
-                <div className="mt-4 space-y-3">
-                  {Object.entries(resourceTypeCounts).map(([type, count]) => (
-                    <div
-                      key={type}
-                      className="flex items-center justify-between rounded-md bg-stone-50 px-3 py-2 text-sm"
-                    >
-                      <span className="font-semibold text-stone-700">{type}</span>
-                      <span className="text-stone-400">{count}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </aside>
-          </section>
+          </div>
 
           {/* Resources */}
           <section className="space-y-4">
@@ -1121,7 +936,7 @@ export default function LearningPathDetail() {
                 {modules.map((m) => (
                   <div
                     key={m.id}
-                    className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-4 p-4 rounded-md border border-stone-200 bg-white hover:border-stone-300 transition-colors"
+                    className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-4 p-4 rounded-md border border-stone-200 bg-white hover:border-stone-300 transition-colors"
                   >
                     {/* Left: ResourceCard */}
                     <ResourceCard
@@ -1130,11 +945,10 @@ export default function LearningPathDetail() {
                       onAdd={() => {}}
                       saving={false}
                       saved={false}
-                      weight={fromManualWeight(m.manualWeight)}
                     />
 
                     {/* Right: Detail */}
-                    <div className="flex flex-col justify-center">
+                    <div className="flex flex-col justify-start pt-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="inline-flex items-center rounded-full bg-sky-50 px-2.5 py-1 text-xs font-semibold text-sky-700">
                           {readableType(m.type)}

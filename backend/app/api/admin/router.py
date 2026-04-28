@@ -1,8 +1,15 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from typing import Optional, List
 
-from app.core.deps import get_db_dep, get_current_user, PermissionChecker
+from app.api.ai_path.router import (
+    AiPathGenerateRequest,
+    AiPathGenerateResponse,
+    _generate_ai_path_outline_response,
+)
+from app.core.deps import get_db_dep, get_current_user
 from app.models.rbac.user import User
 from app.models.category import Category
 from app.api.admin.schemas import (
@@ -16,6 +23,7 @@ from app.curd.admin_curd import AdminCURD
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/admin", tags=["Admin"])
+logger = logging.getLogger(__name__)
 
 
 def require_superuser(current_user: User = Depends(get_current_user)):
@@ -24,6 +32,17 @@ def require_superuser(current_user: User = Depends(get_current_user)):
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required"
         )
     return current_user
+
+
+def audit_admin_action(current_user: User, action: str, **metadata):
+    """Log sensitive admin operations until a DB-backed audit table is added."""
+    logger.info(
+        "admin_action user_id=%s username=%s action=%s metadata=%s",
+        current_user.id,
+        current_user.username,
+        action,
+        metadata,
+    )
 
 
 @router.get("/stats", response_model=AdminStatsResponse)
@@ -43,7 +62,7 @@ async def get_admin_users(
     is_active: Optional[bool] = None,
     is_superuser: Optional[bool] = None,
     db: Session = Depends(get_db_dep),
-    current_user: User = Depends(PermissionChecker(["user.read"])),
+    current_user: User = Depends(require_superuser),
 ):
     """Get paginated user list with filters"""
     users, total = AdminCURD.get_users(
@@ -61,12 +80,18 @@ async def get_admin_users(
 async def toggle_user_status(
     user_id: int,
     db: Session = Depends(get_db_dep),
-    current_user: User = Depends(PermissionChecker(["user.update"])),
+    current_user: User = Depends(require_superuser),
 ):
     """Toggle user active status"""
     user = AdminCURD.toggle_user_status(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    audit_admin_action(
+        current_user,
+        "toggle_user_status",
+        target_user_id=user_id,
+        is_active=bool(user.is_active),
+    )
     return {"message": "User status updated", "is_active": user.is_active}
 
 
@@ -84,6 +109,12 @@ async def toggle_superuser_status(
     user = AdminCURD.toggle_superuser_status(db, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    audit_admin_action(
+        current_user,
+        "toggle_superuser_status",
+        target_user_id=user_id,
+        is_superuser=bool(user.is_superuser),
+    )
     return {
         "message": "User superuser status updated",
         "is_superuser": user.is_superuser,
@@ -112,6 +143,7 @@ async def delete_learning_path(
     success = AdminCURD.delete_learning_path(db, path_id)
     if not success:
         raise HTTPException(status_code=404, detail="Learning path not found")
+    audit_admin_action(current_user, "delete_learning_path", path_id=path_id)
     return {"message": "Learning path deleted"}
 
 
@@ -137,6 +169,7 @@ async def delete_resource(
     success = AdminCURD.delete_resource(db, resource_id)
     if not success:
         raise HTTPException(status_code=404, detail="Resource not found")
+    audit_admin_action(current_user, "delete_resource", resource_id=resource_id)
     return {"message": "Resource deleted"}
 
 
@@ -148,6 +181,23 @@ async def get_admin_analytics(
 ):
     """Get analytics data for charts"""
     return AdminCURD.get_analytics(db, days=days)
+
+
+@router.post("/ai-path/generate-outline", response_model=AiPathGenerateResponse)
+async def generate_admin_ai_path_outline(
+    payload: AiPathGenerateRequest,
+    db: Session = Depends(get_db_dep),
+    current_user: User = Depends(require_superuser),
+):
+    """Generate and save an AI outline from the admin console - superuser only."""
+    response = await _generate_ai_path_outline_response(payload, db)
+    audit_admin_action(
+        current_user,
+        "generate_ai_path_outline",
+        project_id=response.project_id,
+        query=payload.query[:200],
+    )
+    return response
 
 
 # ── Category Management ─────────────────────────────────────────────────────────
@@ -216,6 +266,7 @@ async def create_system_category(
     db.add(category)
     db.commit()
     db.refresh(category)
+    audit_admin_action(current_user, "create_category", category_id=category.id, code=code)
     return category
 
 
@@ -241,4 +292,5 @@ async def delete_system_category(
 
     db.delete(category)
     db.commit()
+    audit_admin_action(current_user, "delete_category", category_id=category_id)
     return {"message": "Category deleted"}
