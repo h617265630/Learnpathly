@@ -289,7 +289,7 @@ export default function AIPath() {
                         <Icon className="w-4 h-4 text-stone-600" />
                       </div>
                       <div>
-                        <h3 className="text-sm font-semibold text-stone-900">
+                        <h3 className="text-sm font-semibold text-amber-600">
                           {step.title}
                         </h3>
                         <p className="mt-0.5 text-xs leading-relaxed text-stone-500">

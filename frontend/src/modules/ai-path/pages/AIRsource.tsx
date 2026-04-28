@@ -394,7 +394,7 @@ export default function AIRsource() {
                   <h4 className="text-sm font-semibold text-stone-900">GitHub Repositories</h4>
                   <span className="text-xs text-stone-400">{githubResults.length} results</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {githubResults.map((item, idx) => {
                     const ui = aiItemToUiResource(item, idx);
                     return (
@@ -429,7 +429,7 @@ export default function AIRsource() {
                 <div className="mb-4 flex items-center gap-2">
                   <span className="text-xs text-stone-400">{webResults.length} results</span>
                 </div>
-                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {webResults.map((item, idx) => {
                     const ui = aiItemToUiResource(item, idx);
                     return (
