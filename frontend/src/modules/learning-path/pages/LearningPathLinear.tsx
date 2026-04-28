@@ -378,12 +378,6 @@ export default function LearningPathLinear() {
   // ── Navigation ───────────────────────────────────────────────────────────
 
   function goToResource(item: PathItem) {
-    const name =
-      item.type === "video"
-        ? "resource-video"
-        : item.type === "document"
-          ? "resource-document"
-          : "resource-article";
     navigate({
       pathname: `/resources/${item.type}/${item.resourceId}`,
       search: `?path_item_id=${item.id}&learning_path_id=${learningPathId || ""}`,

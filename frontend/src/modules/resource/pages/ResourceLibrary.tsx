@@ -182,12 +182,6 @@ export default function ResourceLibrary() {
   function seeDetail(resource: UiResource) {
     closeActiveResource();
     const t = resource.typeLabel;
-    const name =
-      t === "video"
-        ? "resource-video"
-        : t === "document"
-        ? "resource-document"
-        : "resource-article";
     navigate(`/resources/${t}/${resource.id}`);
   }
 

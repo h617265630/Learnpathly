@@ -59,14 +59,14 @@ export function ResourceDetailModal({
       return;
     }
     const t = (resource.resource_type || resource.typeLabel || "").toLowerCase();
-    const name =
+    const typePath =
       t.includes("video")
-        ? "resource-video"
+        ? "video"
         : t.includes("doc") || t.includes("pdf")
-        ? "resource-document"
-        : "resource-article";
+        ? "document"
+        : "article";
     onClose();
-    navigate(`/resources/${name}/${resource.id}`);
+    navigate(`/resources/${typePath}/${resource.id}`);
   };
 
   const thumbnail = resource.thumbnail || FALLBACK_THUMB;

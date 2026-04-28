@@ -342,18 +342,6 @@ const load = useCallback(async () => {
   }
 
   function viewResource(resource: UiResource) {
-    const name =
-      resource.type === "video"
-        ? "my-resource-video"
-        : resource.type === "document"
-        ? "my-resource-document"
-        : "my-resource-article";
-    navigate(
-      `/${name.replace("my-", "my-resources/").replace("resource-", "")}`
-        .replace("my-resources/video", "my-resources/video")
-        .replace("my-resources/document", "my-resources/document")
-        .replace("my-resources/article", "my-resources/article")
-    );
     navigate(`/my-resources/${resource.type}/${resource.id}`);
   }
 
