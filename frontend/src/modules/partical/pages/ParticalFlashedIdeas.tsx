@@ -125,7 +125,7 @@ export default function ParticalFlashedIdeas() {
       <div>
         <h3 className="text-lg font-semibold text-stone-900">Flashed Ideas</h3>
         <p className="mt-2 text-sm text-stone-500">
-          记录你的素材：手动获取的 URL / 分享链接、笔记、文档链接、文字片段
+          Record your materials: manually fetched URLs / share links, notes, document links, text fragments
         </p>
       </div>
 
@@ -133,9 +133,9 @@ export default function ParticalFlashedIdeas() {
       <section className="rounded-md border border-stone-200 bg-white p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h2 className="text-lg font-semibold text-stone-900">新增记录</h2>
+            <h2 className="text-lg font-semibold text-stone-900">New Record</h2>
             <p className="text-sm text-stone-500 mt-1">
-              支持：链接 / 文档链接 / 笔记 / 文字片段
+              Supports: links / document links / notes / text fragments
             </p>
           </div>
           <Button
@@ -144,14 +144,14 @@ export default function ParticalFlashedIdeas() {
             disabled={!canSave}
             onClick={saveItem}
           >
-            保存
+            Save
           </Button>
         </div>
 
         <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-stone-900 mb-2">
-              类型
+              Type
             </label>
             <select
               value={draft.kind}
@@ -160,22 +160,22 @@ export default function ParticalFlashedIdeas() {
               }
               className="w-full px-3 py-2 border border-stone-200 rounded-md bg-white text-stone-900 focus:outline-none focus:ring-2 focus:ring-amber-100"
             >
-              <option value="link">分享链接 / URL</option>
-              <option value="document">文档链接</option>
-              <option value="note">笔记</option>
-              <option value="snippet">文字片段</option>
+              <option value="link">Share link / URL</option>
+              <option value="document">Document link</option>
+              <option value="note">Note</option>
+              <option value="snippet">Text fragment</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-stone-900 mb-2">
-              标题 *
+              Title *
             </label>
             <input
               type="text"
               value={draft.title}
               onChange={(e) => setDraft({ ...draft, title: e.target.value })}
-              placeholder="给它起个名字，方便以后搜索"
+              placeholder="Give it a name for easy search later"
               className="w-full px-3 py-2 border border-stone-200 rounded-md bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
           </div>
@@ -183,7 +183,7 @@ export default function ParticalFlashedIdeas() {
           {draft.kind === "link" || draft.kind === "document" ? (
             <div className="lg:col-span-2">
               <label className="block text-sm font-semibold text-stone-900 mb-2">
-                链接 *
+                Link *
               </label>
               <input
                 type="url"
@@ -196,7 +196,7 @@ export default function ParticalFlashedIdeas() {
           ) : (
             <div className="lg:col-span-2">
               <label className="block text-sm font-semibold text-stone-900 mb-2">
-                内容 *
+                Content *
               </label>
               <textarea
                 value={draft.content}
@@ -204,7 +204,7 @@ export default function ParticalFlashedIdeas() {
                   setDraft({ ...draft, content: e.target.value })
                 }
                 rows={5}
-                placeholder="把笔记或文字片段贴在这里"
+                placeholder="Paste your note or text fragment here"
                 className="w-full px-3 py-2 border border-stone-200 rounded-md bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-100"
               />
             </div>
@@ -212,13 +212,13 @@ export default function ParticalFlashedIdeas() {
 
           <div className="lg:col-span-2">
             <label className="block text-sm font-semibold text-stone-900 mb-2">
-              备注（可选）
+              Note (optional)
             </label>
             <textarea
               value={draft.note}
               onChange={(e) => setDraft({ ...draft, note: e.target.value })}
               rows={2}
-              placeholder="为什么收藏 / 下一步怎么用"
+              placeholder="Why saved / next steps"
               className="w-full px-3 py-2 border border-stone-200 rounded-md bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
           </div>
@@ -228,14 +228,14 @@ export default function ParticalFlashedIdeas() {
       {/* Documents */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-stone-900">文档</h2>
+          <h2 className="text-lg font-semibold text-stone-900">Documents</h2>
           <span className="text-sm text-stone-500">
             {documents.length} items
           </span>
         </div>
         {documents.length === 0 ? (
           <div className="rounded-md border border-stone-200 bg-stone-50 p-6 text-sm text-stone-500">
-            暂无文档链接
+            No document links yet
           </div>
         ) : (
           <div className="space-y-3">
@@ -282,7 +282,7 @@ export default function ParticalFlashedIdeas() {
                     asChild
                   >
                     <a href={d.url} target="_blank" rel="noreferrer">
-                      打开
+                      Open
                     </a>
                   </Button>
                   <Button
@@ -292,7 +292,7 @@ export default function ParticalFlashedIdeas() {
                     className="rounded-md"
                     onClick={() => removeItem(d.id)}
                   >
-                    删除
+                    Delete
                   </Button>
                 </div>
               </article>
@@ -304,14 +304,14 @@ export default function ParticalFlashedIdeas() {
       {/* Text snippets */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-stone-900">文字片段</h2>
+          <h2 className="text-lg font-semibold text-stone-900">Text fragment</h2>
           <span className="text-sm text-stone-500">
             {snippets.length} items
           </span>
         </div>
         {snippets.length === 0 ? (
           <div className="rounded-md border border-stone-200 bg-stone-50 p-6 text-sm text-stone-500">
-            暂无文字片段
+            No text fragments yet
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -358,7 +358,7 @@ export default function ParticalFlashedIdeas() {
                     className="rounded-md"
                     onClick={() => removeItem(t.id)}
                   >
-                    删除
+                    Delete
                   </Button>
                 </div>
               </article>
@@ -370,12 +370,12 @@ export default function ParticalFlashedIdeas() {
       {/* Notes */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-stone-900">笔记</h2>
+          <h2 className="text-lg font-semibold text-stone-900">Note</h2>
           <span className="text-sm text-stone-500">{notes.length} items</span>
         </div>
         {notes.length === 0 ? (
           <div className="rounded-md border border-stone-200 bg-stone-50 p-6 text-sm text-stone-500">
-            暂无笔记
+            No notes yet
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -419,7 +419,7 @@ export default function ParticalFlashedIdeas() {
                     className="rounded-md"
                     onClick={() => removeItem(n.id)}
                   >
-                    删除
+                    Delete
                   </Button>
                 </div>
               </article>
@@ -431,12 +431,12 @@ export default function ParticalFlashedIdeas() {
       {/* Shared links */}
       <section className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-stone-900">分享链接</h2>
+          <h2 className="text-lg font-semibold text-stone-900">Share Links</h2>
           <span className="text-sm text-stone-500">{links.length} items</span>
         </div>
         {links.length === 0 ? (
           <div className="rounded-md border border-stone-200 bg-stone-50 p-6 text-sm text-stone-500">
-            暂无分享链接
+            No share links yet
           </div>
         ) : (
           <div className="space-y-3">
@@ -483,7 +483,7 @@ export default function ParticalFlashedIdeas() {
                     asChild
                   >
                     <a href={l.url} target="_blank" rel="noreferrer">
-                      打开
+                      Open
                     </a>
                   </Button>
                   <Button
@@ -493,7 +493,7 @@ export default function ParticalFlashedIdeas() {
                     className="rounded-md"
                     onClick={() => removeItem(l.id)}
                   >
-                    删除
+                    Delete
                   </Button>
                 </div>
               </article>

@@ -108,8 +108,7 @@ export default function ResourceLibrary() {
       const platform = r.platform.toLowerCase();
       if (
         platform === "xiaohongshu" ||
-        platform === "xhs" ||
-        platform.includes("小红书")
+        platform === "xhs"
       )
         return false;
       if (platform === "reddit") return false;

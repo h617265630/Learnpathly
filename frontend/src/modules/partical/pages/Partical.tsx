@@ -11,8 +11,8 @@ export default function Partical() {
     ? "Flashed Ideas"
     : "Image";
   const tabSubtitle = isActive("/partical/flashed-ideas", location.pathname)
-    ? "记录灵感片段，快速归档。"
-    : "收集图片素材，沉淀灵感来源。";
+    ? "Record inspiration fragments, quick archive."
+    : "Collect image materials, build inspiration sources.";
 
   return (
     <div className="mx-auto max-w-7xl space-y-10 px-4 py-8 -mt-4 md:-mt-6">
@@ -52,7 +52,7 @@ export default function Partical() {
             <div className="rounded-none border border-stone-200 bg-white p-4 shadow-sm">
               <div className="space-y-1">
                 <p className="text-sm font-semibold text-stone-900">Partical</p>
-                <p className="text-xs text-stone-500">素材收集与灵感记录</p>
+                <p className="text-xs text-stone-500">Material collection & inspiration</p>
               </div>
 
               <div className="mt-4 space-y-2">

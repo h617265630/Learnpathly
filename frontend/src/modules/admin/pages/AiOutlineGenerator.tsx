@@ -28,7 +28,7 @@ const examplePrompts = [
 
 function getErrorMessage(error: unknown) {
   const err = error as { response?: { data?: { detail?: string } }; message?: string };
-  return String(err.response?.data?.detail || err.message || "生成失败，请稍后重试");
+  return String(err.response?.data?.detail || err.message || "Generation failed, please try again later");
 }
 
 function countSubNodes(nodes: AiPathNode[]) {
@@ -86,10 +86,10 @@ export default function AiOutlineGenerator() {
             AI Content Factory
           </p>
           <h1 className="mt-2 text-2xl font-bold text-stone-900">
-            创建学习大纲+知识点
+            AI Outline Generator
           </h1>
           <p className="mt-1 text-sm text-stone-500">
-            调用 AI 生成 outline 和每个节点的 sub_nodes，并保存到数据库。
+            Generate outline and sub_nodes for each node with AI, then save to database.
           </p>
         </div>
 
@@ -98,7 +98,7 @@ export default function AiOutlineGenerator() {
             to={`/ai-path-detail?project_id=${projectId}`}
             className="inline-flex h-9 items-center justify-center gap-2 rounded-md border border-stone-200 bg-white px-4 text-sm font-semibold text-stone-700 transition-colors hover:bg-stone-50"
           >
-            查看前台详情
+            View Details
             <ExternalLink className="h-4 w-4" />
           </Link>
         ) : null}
@@ -106,9 +106,9 @@ export default function AiOutlineGenerator() {
 
       <section className="rounded-md border border-stone-200 bg-white">
         <div className="border-b border-stone-100 px-5 py-4">
-          <h2 className="text-base font-semibold text-stone-900">生成配置</h2>
+          <h2 className="text-base font-semibold text-stone-900">Generation Config</h2>
           <p className="mt-1 text-xs text-stone-500">
-            这里生成的是 AI Path 项目草稿，保存到 ai_path_projects、ai_path_sections、ai_path_subnodes。
+            This generates AI Path project drafts, saved to ai_path_projects, ai_path_sections, ai_path_subnodes.
           </p>
         </div>
 
@@ -123,7 +123,7 @@ export default function AiOutlineGenerator() {
               rows={5}
               maxLength={2000}
               className="mt-2 w-full rounded-md border border-stone-200 bg-stone-50 px-3 py-3 text-sm leading-6 text-stone-900 outline-none transition-colors placeholder:text-stone-400 focus:border-amber-400 focus:bg-white focus:ring-2 focus:ring-amber-50"
-              placeholder="输入你希望批量生成的学习路径主题..."
+              placeholder="Enter the learning path topic you want to generate..."
             />
             <div className="mt-3 flex flex-wrap gap-2">
               {examplePrompts.map((prompt) => (
@@ -205,7 +205,7 @@ export default function AiOutlineGenerator() {
 
           <div className="flex flex-col gap-3 border-t border-stone-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-6 text-stone-500">
-              点击后会调用后端 AI 接口并写入数据库。生成时间通常为 30-90 秒。
+              This will call the backend AI API and write to database. Generation usually takes 30-90 seconds.
             </p>
             <Button
               type="button"
@@ -216,12 +216,12 @@ export default function AiOutlineGenerator() {
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  正在生成
+                  Generating
                 </>
               ) : (
                 <>
                   <Sparkles className="h-4 w-4" />
-                  生成并保存
+                  Generate & Save
                 </>
               )}
             </Button>
@@ -233,10 +233,10 @@ export default function AiOutlineGenerator() {
                 <Loader2 className="mt-0.5 h-5 w-5 shrink-0 animate-spin text-amber-600" />
                 <div>
                   <p className="text-sm font-semibold text-stone-900">
-                    正在生成 outline 和 sub_nodes
+                    Generating outline and sub_nodes
                   </p>
                   <p className="mt-1 text-xs leading-6 text-stone-600">
-                    后端会先搜索资料，再让 AI 组织学习大纲，最后写入数据库。
+                    The backend will search for resources first, then let AI organize the learning outline, and finally write to database.
                   </p>
                 </div>
               </div>
@@ -248,7 +248,7 @@ export default function AiOutlineGenerator() {
               <div className="flex items-start gap-3">
                 <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
                 <div>
-                  <p className="text-sm font-semibold text-red-900">生成失败</p>
+                  <p className="text-sm font-semibold text-red-900">Generation failed</p>
                   <p className="mt-1 text-xs leading-6 text-red-700">{error}</p>
                 </div>
               </div>
@@ -265,7 +265,7 @@ export default function AiOutlineGenerator() {
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                   <h2 className="text-base font-semibold text-stone-900">
-                    已生成并保存
+                    Generated & Saved
                   </h2>
                 </div>
                 <p className="mt-1 text-xs text-stone-500">

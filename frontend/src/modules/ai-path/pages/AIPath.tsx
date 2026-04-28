@@ -239,10 +239,10 @@ export default function AIPath() {
                   <Loader2 className="mt-0.5 h-5 w-5 shrink-0 animate-spin text-sky-500" />
                   <div>
                     <p className="text-sm font-semibold text-sky-900">
-                      正在调用 AI 生成大纲并保存到数据库
+                      Calling AI to generate outline and save to database
                     </p>
                     <p className="mt-1 text-xs leading-6 text-sky-700">
-                      会先搜索资料，再生成章节和知识点。通常需要 30-90 秒，完成后会自动跳转到详情页。
+                      Will search for resources first, then generate chapters and knowledge points. Usually takes 30-90 seconds, will redirect to detail page when done.
                     </p>
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default function AIPath() {
                   <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
                   <div>
                     <p className="text-sm font-semibold text-red-900">
-                      生成失败
+                      Generation failed
                     </p>
                     <p className="mt-1 text-xs leading-6 text-red-700">{error}</p>
                   </div>
@@ -267,7 +267,7 @@ export default function AIPath() {
               <div className="mt-5 rounded-md border border-emerald-100 bg-emerald-50 px-4 py-3">
                 <div className="flex items-center gap-2 text-sm font-medium text-emerald-800">
                   <CheckCircle2 className="h-4 w-4" />
-                  最近一次生成已保存，可继续查看详情。
+                  Last generation saved, you can view details.
                 </div>
               </div>
             ) : null}

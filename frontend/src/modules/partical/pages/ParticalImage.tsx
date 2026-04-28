@@ -47,7 +47,7 @@ export default function ParticalImage() {
         </div>
       ) : error ? (
         <div className="rounded-md border border-stone-200 bg-stone-50 p-6">
-          <p className="text-sm font-semibold text-stone-900">加载失败</p>
+          <p className="text-sm font-semibold text-stone-900">Load failed</p>
           <p className="mt-1 text-sm text-stone-500">{error}</p>
           <Button
             type="button"
@@ -61,9 +61,9 @@ export default function ParticalImage() {
         </div>
       ) : images.length === 0 ? (
         <div className="rounded-md border border-stone-200 bg-stone-50 p-6">
-          <p className="text-sm font-semibold text-stone-900">暂无图片</p>
+          <p className="text-sm font-semibold text-stone-900">No images yet</p>
           <p className="mt-1 text-sm text-stone-500">
-            你在 Creator 里上传的图片会显示在这里。
+            Images you upload in Creator will appear here.
           </p>
         </div>
       ) : (
@@ -86,9 +86,9 @@ export default function ParticalImage() {
                 <div className="p-3">
                   <p
                     className="text-sm font-semibold text-stone-900 truncate"
-                    title={img.title || "无标题"}
+                    title={img.title || "Untitled"}
                   >
-                    {img.title || "无标题"}
+                    {img.title || "Untitled"}
                   </p>
                   <p className="mt-1 text-xs text-stone-500">
                     {formatTime(img.created_at)}

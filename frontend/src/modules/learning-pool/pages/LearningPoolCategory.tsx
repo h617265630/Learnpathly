@@ -76,7 +76,7 @@ function mapDbToPool(p: PublicLearningPath): PoolPath {
   return {
     id: base.id,
     title,
-    description: description || "（无介绍）",
+    description: description || "(No description)",
     category: cat,
     typeLabel,
     level: "Beginner",

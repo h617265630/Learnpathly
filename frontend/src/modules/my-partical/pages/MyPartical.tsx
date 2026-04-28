@@ -16,7 +16,7 @@ export default function MyPartical() {
               <p className="text-sm font-semibold text-stone-900">
                 My Partical
               </p>
-              <p className="text-xs text-stone-500">我的素材与灵感</p>
+              <p className="text-xs text-stone-500">My materials & inspiration</p>
             </div>
 
             <div className="mt-4 space-y-2">

@@ -69,10 +69,10 @@ export default function Tool() {
 
   const subtitle =
     activeTab === "resource" || activeTab === "myresource"
-      ? `共 ${resources.length} 条`
+      ? `Total ${resources.length} items`
       : activeTab === "category"
-      ? `共 ${categories.length} 条`
-      : `共 ${learningPaths.length} 条`;
+      ? `Total ${categories.length} items`
+      : `Total ${learningPaths.length} items`;
 
   const breadcrumbItems = [{ label: "Tools", to: "/tools" }, { label: title }];
 
@@ -182,7 +182,7 @@ export default function Tool() {
         await loadMyLearningPaths();
       }
     } catch (e: any) {
-      setError(String(e?.message || "加载失败"));
+      setError(String(e?.message || "Load failed"));
     } finally {
       setLoading(false);
     }
@@ -243,7 +243,7 @@ export default function Tool() {
       setShowDeleteConfirm(false);
       setDeleteTarget(null);
     } catch (e: any) {
-      setDeleteError(String(e?.message || "删除失败"));
+      setDeleteError(String(e?.message || "Delete failed"));
     } finally {
       setDeletingId(null);
       setDeleting((prev) => ({ ...prev, [resourceId]: false }));
@@ -281,7 +281,7 @@ export default function Tool() {
             <div className="border border-stone-200 bg-white p-4">
               <p className="text-sm font-semibold text-foreground">Tools</p>
               <p className="text-xs text-muted-foreground mt-1">
-                查看数据库数据
+                View database data
               </p>
 
               <div className="mt-4 space-y-2">

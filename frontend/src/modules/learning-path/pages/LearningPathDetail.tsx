@@ -196,7 +196,7 @@ function formatPlatform(platform?: string | null): string {
     jike: "Jike",
     github: "GitHub",
     douyin: "Douyin",
-    xiaohongshu: "小红书",
+    xiaohongshu: "Xiaohongshu",
     wechat: "WeChat",
     weibo: "Weibo",
     podcast: "Podcast",
