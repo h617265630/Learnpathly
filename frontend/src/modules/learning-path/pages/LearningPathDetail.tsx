@@ -13,6 +13,8 @@ import {
   attachPublicLearningPathToMe,
   forkLearningPath,
   getLearningPathUserStatus,
+  getPublicLearningPathAiResourceSummaries,
+  type LearningPathAiResourceSummaryItem,
   type PublicLearningPathDetail,
 } from "@/services/learningPath";
 import {
@@ -274,6 +276,7 @@ export default function LearningPathDetail() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
   const fromMyPaths = searchParams.get("from") === "my-paths";
+  const aiProjectIdParam = searchParams.get("ai_project_id");
 
   const { isAuthed } = useAuth();
   const navigate = useNavigate();
@@ -282,6 +285,10 @@ export default function LearningPathDetail() {
   const [modules, setModules] = useState<Module[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [aiProject, setAiProject] = useState<AiPathGenerateResponse | null>(null);
+  const [bannerSrc, setBannerSrc] = useState("");
+  const [aiResourceSummaries, setAiResourceSummaries] = useState<LearningPathAiResourceSummaryItem[]>([]);
+  const [aiResourceSummariesLoading, setAiResourceSummariesLoading] = useState(false);
 
   const [usingThisPath, setUsingThisPath] = useState(false);
   const [showUseModal, setShowUseModal] = useState(false);
@@ -365,6 +372,84 @@ export default function LearningPathDetail() {
     void loadDetail();
   }, [loadDetail]);
 
+  useEffect(() => {
+    const nid = Number(id);
+    if (!Number.isFinite(nid) || nid <= 0) return;
+    if (!path?.title) return;
+
+    let cancelled = false;
+
+    const resolve = async () => {
+      // 1) explicit override
+      if (aiProjectIdParam && /^[0-9]+$/.test(aiProjectIdParam)) {
+        try {
+          const proj = await getAiPathProject(Number(aiProjectIdParam));
+          if (!cancelled) setAiProject(proj);
+          return;
+        } catch {
+          // fall through
+        }
+      }
+
+      // 2) direct link via published_learning_path_id (server fallback may still 404)
+      try {
+        const proj = await getAiPathProjectByLearningPathId(nid);
+        if (!cancelled) setAiProject(proj);
+        return;
+      } catch {
+        // fall through
+      }
+
+      // 3) fuzzy match by title against latest ai projects
+      try {
+        const projects = await listAiPathProjects(50, 0);
+        const title = String(path.title || "").trim().toLowerCase();
+        const matched =
+          projects.find((p) => String(p.topic || "").trim().toLowerCase() === title) ||
+          projects.find((p) => String(p.topic || "").trim().toLowerCase().includes(title)) ||
+          projects.find((p) => title.includes(String(p.topic || "").trim().toLowerCase()));
+        if (!matched) return;
+        const proj = await getAiPathProject(matched.id);
+        if (!cancelled) setAiProject(proj);
+      } catch {
+        // ignore
+      }
+    };
+
+    void resolve();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, path?.title, aiProjectIdParam]);
+
+  useEffect(() => {
+    const nid = Number(id);
+    if (!Number.isFinite(nid) || nid <= 0) return;
+    if (!path) return;
+    if (fromMyPaths) return; // public endpoint only for now
+    if (!modules.length) return;
+
+    let cancelled = false;
+    setAiResourceSummariesLoading(true);
+    getPublicLearningPathAiResourceSummaries(nid, { limit: modules.length })
+      .then((res) => {
+        if (cancelled) return;
+        setAiResourceSummaries(res.items || []);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setAiResourceSummaries([]);
+      })
+      .finally(() => {
+        if (cancelled) return;
+        setAiResourceSummariesLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [id, path, modules.length, fromMyPaths]);
+
   const outlineSections = useMemo(
     () => buildOutlineSections(modules, path?.title),
     [modules, path?.title]
@@ -380,6 +465,33 @@ export default function LearningPathDetail() {
       return acc;
     }, {});
   }, [modules]);
+
+  const aiTopicResources = useMemo(
+    () => collectAiTopicResources(aiProject),
+    [aiProject]
+  );
+
+  const computedBannerSrc = useMemo(() => {
+    const aiCover = String(aiProject?.data?.cover_image_url || "").trim();
+    if (aiCover) return aiCover;
+
+    const lpCover = String(path?.cover_image_url || "").trim();
+    if (lpCover) return lpCover;
+
+    const firstThumb = modules[0] ? moduleThumb(modules[0]) : "";
+    if (firstThumb) return firstThumb;
+
+    return FALLBACK_THUMB;
+  }, [aiProject?.data?.cover_image_url, path?.cover_image_url, modules]);
+
+  const fallbackBannerSrc = useMemo(() => {
+    const firstThumb = modules[0] ? moduleThumb(modules[0]) : "";
+    return firstThumb || FALLBACK_THUMB;
+  }, [modules]);
+
+  useEffect(() => {
+    setBannerSrc(computedBannerSrc);
+  }, [computedBannerSrc]);
 
   function openResource(m: Module) {
     if (!m.resourceId) return;
@@ -673,21 +785,199 @@ export default function LearningPathDetail() {
             </div>
           </section>
 
-          {/* Cover */}
-          {path.cover_image_url && (
-            <div className="relative h-96 bg-stone-100 overflow-hidden rounded-md">
+          {/* AI outline (when available) */}
+          {aiProject?.project_id ? (
+            <section className="rounded-md border border-sky-100 bg-sky-50/60 p-5 md:p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-sky-700">
+                    AI Outline + Subnodes
+                  </p>
+                  <h2 className="mt-2 text-xl font-black tracking-tight text-stone-950">
+                    {aiProject.data.title}
+                  </h2>
+                  <p className="mt-2 text-sm leading-7 text-stone-600">
+                    {aiProject.data.summary}
+                  </p>
+                </div>
+                <Link
+                  to={`/ai-path-detail?project_id=${aiProject.project_id}`}
+                  className="inline-flex h-10 items-center justify-center rounded-full bg-sky-500 px-5 text-sm font-semibold text-white transition-colors hover:bg-sky-600"
+                >
+                  Open AI Reader
+                </Link>
+              </div>
+
+              <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+                <div className="rounded-md border border-stone-200 bg-white p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500">
+                    Chapters
+                  </p>
+                  <div className="mt-4 space-y-4">
+                    {(aiProject.data.nodes || []).slice(0, 6).map((node, idx) => (
+                      <div
+                        key={`${node.title}-${idx}`}
+                        className="rounded-md border border-stone-100 bg-stone-50 p-4"
+                      >
+                        <p className="text-sm font-black text-stone-950">
+                          {idx + 1}. {node.title}
+                        </p>
+                        {node.description ? (
+                          <p className="mt-1 text-xs leading-6 text-stone-500">
+                            {node.description}
+                          </p>
+                        ) : null}
+                        {(node.sub_nodes || []).length ? (
+                          <ul className="mt-3 space-y-2">
+                            {(node.sub_nodes || []).slice(0, 6).map((sub: AiPathSubNode, sidx: number) => (
+                              <li
+                                key={`${sub.title}-${sidx}`}
+                                className="flex items-start gap-2 text-sm leading-6 text-stone-700"
+                              >
+                                <span className="mt-2 inline-flex h-1.5 w-1.5 rounded-full bg-sky-500" />
+                                <span className="line-clamp-2">{sub.title}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="rounded-md border border-stone-200 bg-white p-4">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500">
+                    Resources
+                  </p>
+                  {aiTopicResources.length ? (
+                    <div className="mt-4 grid grid-cols-2 gap-3">
+                      {aiTopicResources.slice(0, 6).map((r, ridx) => {
+                        const ui = aiPathResourceToUiResource(r, ridx);
+                        return (
+                          <ResourceCard
+                            key={`${r.url}-${ridx}`}
+                            resource={ui}
+                            onOpen={() => ui.url && window.open(ui.url, "_blank", "noopener,noreferrer")}
+                            onAdd={() => {}}
+                            saving={false}
+                            saved={false}
+                            size="sm"
+                          />
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="mt-3 text-sm text-stone-500">
+                      No AI resources found for this topic yet.
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6 rounded-md border border-stone-200 bg-white p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-500">
+                    Resource Path Content Preview
+                  </p>
+                  {aiResourceSummariesLoading ? (
+                    <span className="text-xs text-stone-400">Generating…</span>
+                  ) : null}
+                </div>
+
+                {aiResourceSummaries.length ? (
+                  <div className="mt-4 space-y-3">
+                    {aiResourceSummaries.slice(0, modules.length).map((item) => (
+                      <a
+                        key={item.url}
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block rounded-md border border-stone-100 bg-stone-50 px-4 py-4 hover:bg-white transition-colors"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="h-10 w-10 shrink-0 rounded-md border border-stone-200 bg-white p-1 overflow-hidden">
+                            {item.thumbnail ? (
+                              <img
+                                src={item.thumbnail}
+                                alt={item.title}
+                                className="h-full w-full rounded-sm object-cover"
+                                loading="lazy"
+                                decoding="async"
+                              />
+                            ) : null}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-sm font-bold text-stone-900 line-clamp-2">
+                              {item.title}
+                            </p>
+                            <p className="mt-1 text-xs leading-6 text-stone-600">
+                              {item.summary}
+                            </p>
+                            {item.key_points?.length ? (
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                {item.key_points.slice(0, 4).map((kp) => (
+                                  <span
+                                    key={kp}
+                                    className="rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold text-stone-600 border border-stone-200"
+                                  >
+                                    {kp}
+                                  </span>
+                                ))}
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-sm text-stone-500">
+                    {aiResourceSummariesLoading
+                      ? "Generating summaries from resources…"
+                      : "No summaries yet."}
+                  </p>
+                )}
+              </div>
+            </section>
+          ) : null}
+
+          {/* Banner */}
+          <div className="relative h-96 rounded-md border border-stone-200 bg-stone-100 p-1">
+            <div className="relative h-full w-full overflow-hidden rounded-[5px]">
               <img
-                src={path.cover_image_url}
+                src={bannerSrc || FALLBACK_THUMB}
                 alt={path.title}
-                className="w-full h-full object-cover object-center"
+                loading="lazy"
+                decoding="async"
+                onError={() => {
+                  if (bannerSrc !== fallbackBannerSrc) setBannerSrc(fallbackBannerSrc);
+                }}
+                className="h-full w-full object-cover object-center"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />
+
+              <div className="absolute left-6 right-6 bottom-6">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
+                  Learning Path
+                  {aiProject?.project_id ? (
+                    <>
+                      <span className="text-white/60">·</span>
+                      AI Outline #{String(aiProject.project_id).padStart(3, "0")}
+                    </>
+                  ) : null}
+                </div>
+                <h2 className="mt-3 text-2xl md:text-3xl font-black tracking-tight text-white leading-[1.05] drop-shadow-sm line-clamp-2">
+                  {path.title}
+                </h2>
+              </div>
+
               {path.type && (
                 <span className="absolute right-3 top-3 px-2 py-1 rounded-full border border-stone-200 bg-white/90 text-[10px] font-semibold tracking-[0.14em] uppercase text-stone-700">
                   {path.type}
                 </span>
               )}
             </div>
-          )}
+          </div>
 
           {/* Topic outline */}
           <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">

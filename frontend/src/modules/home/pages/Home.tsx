@@ -77,6 +77,9 @@ export default function Home() {
           topic: String((p as any).topic || "").trim(),
           outline_overview: String((p as any).outline_overview || "").trim(),
           created_at: (p as any).created_at,
+          total_subnodes: Number((p as any).total_subnodes || 0),
+          completed_subnodes: Number((p as any).completed_subnodes || 0),
+          is_complete: Boolean((p as any).is_complete),
         }));
         setAiProjects(next.filter((p) => Number.isFinite(p.id) && p.id > 0 && p.topic));
       })
@@ -144,7 +147,7 @@ export default function Home() {
                 Featured Path
               </span>
               <blockquote className="font-serif text-headline lg:text-display font-bold leading-tight mt-6 mb-8">
-                "Master AI tools and build real projects step by step."
+                "Explore trending topics with AI-generated outlines, knowledge points, and reference resources."
               </blockquote>
               <div className="flex items-center gap-4">
                 <span className="text-sm font-medium tracking-wide uppercase text-stone-400">
@@ -177,15 +180,13 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <SectionLabel>Trending</SectionLabel>
-              <h2 className="font-serif text-headline lg:text-display font-bold tracking-tight">
-                Most Popular
-                <br />
-                Learning Paths
+              <SectionLabel>Resource Path</SectionLabel>
+              <h2 className="font-serif text-2xl lg:text-3xl font-bold tracking-tight text-stone-900">
+                Resource Path
               </h2>
             </div>
             <Link to="/learningpool" className="hidden md:block article-link">
-              View all paths
+              View all resource paths
             </Link>
           </div>
 

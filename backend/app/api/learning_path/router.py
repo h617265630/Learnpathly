@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.core.deps import get_db_dep, get_current_user
@@ -25,6 +26,81 @@ from app.schemas.resources.resource import ResourceResponse
 
 
 router = APIRouter(prefix="/learning-paths", tags=["learning-paths"])
+
+class LearningPathResourceSummariesRequest(BaseModel):
+    limit: int = 4
+    force_refresh: bool = False
+
+
+class LearningPathResourceSummaryItem(BaseModel):
+    resource_id: int
+    url: str
+    title: str
+    summary: str
+    key_points: list[str] = []
+    resource_type: str = ""
+    platform: str = ""
+    thumbnail: str | None = None
+
+
+class LearningPathResourceSummariesResponse(BaseModel):
+    learning_path_id: int
+    topic: str
+    items: list[LearningPathResourceSummaryItem]
+
+
+def _looks_english_text(text: str) -> bool:
+    import re as _re
+    s = (text or "").strip()
+    if not s:
+        return False
+    if _re.search(r"[\u4e00-\u9fff]", s):
+        return False
+    return bool(_re.search(r"[A-Za-z]", s))
+
+
+async def _summarize_resource_for_topic(*, topic: str, title: str, summary: str) -> tuple[str, list[str]]:
+    """
+    Step4-like: produce a concise, learn-focused summary + key points for one resource.
+    Uses existing resource.summary as input to keep latency low.
+    """
+    from ai_path.utils.llm import get_llm
+    from langchain_core.output_parsers import JsonOutputParser
+    from langchain_core.prompts import ChatPromptTemplate
+
+    wants_english = _looks_english_text(topic) or _looks_english_text(title)
+    language_hint = "English" if wants_english else "Chinese"
+
+    prompt = ChatPromptTemplate.from_template(
+        """You are an expert educator. Rewrite the resource description into a learn-focused summary.
+
+Topic: {topic}
+Resource title: {title}
+Existing description/summary:
+{summary}
+
+Output language: {language_hint}
+
+Return JSON (no markdown fences):
+{{
+  "summary": "2-3 sentences, practical and direct (no meta narration)",
+  "key_points": ["3-5 bullet points, each 6-14 words"]
+}}"""
+    )
+
+    chain = prompt | get_llm(temperature=0.25) | JsonOutputParser()
+    result = await chain.ainvoke(
+        {
+            "topic": topic,
+            "title": title,
+            "summary": summary[:1200],
+            "language_hint": language_hint,
+        }
+    )
+    out_summary = str((result or {}).get("summary") or "").strip()
+    out_points = (result or {}).get("key_points") or []
+    points = [str(p).strip() for p in out_points if str(p).strip()]
+    return out_summary, points[:6]
 
 
 def _resource_type_value(obj: Resource) -> str:
@@ -140,6 +216,114 @@ def get_public_learning_path_detail(
         category_name=getattr(lp, "category_name", None),
         is_active=lp.is_active,
         path_items=items,
+    )
+
+
+@router.post(
+    "/public/{learning_path_id}/ai-resource-summaries",
+    response_model=LearningPathResourceSummariesResponse,
+)
+async def get_public_learning_path_resource_summaries(
+    learning_path_id: int,
+    payload: LearningPathResourceSummariesRequest,
+    db: Session = Depends(get_db_dep),
+):
+    """
+    Generate per-resource AI summaries for the learning path page "test" section.
+    Caches results into resource_summary_cache keyed by (url, topic).
+    """
+    lp = LearningPathCURD.get_learning_path_with_items(db, learning_path_id)
+    if (
+        not lp
+        or (not bool(getattr(lp, "is_public", False)))
+        or (not bool(getattr(lp, "is_active", True)))
+        or getattr(lp, "status", None) != "published"
+    ):
+        raise HTTPException(status_code=404, detail="LearningPath not found")
+
+    topic = str(getattr(lp, "title", "") or "").strip() or f"learning_path_{learning_path_id}"
+    limit = max(1, min(int(getattr(payload, "limit", 4) or 4), 12))
+    force = bool(getattr(payload, "force_refresh", False))
+
+    from app.curd.resource_summary_cache_curd import ResourceSummaryCacheCURD
+    import json as _json
+
+    items: list[LearningPathResourceSummaryItem] = []
+    path_items = sorted(list(getattr(lp, "path_items", []) or []), key=lambda it: getattr(it, "order_index", 0))
+    for it in path_items[:limit]:
+        res = getattr(it, "resource", None)
+        if res is None:
+            continue
+        url = str(getattr(res, "source_url", "") or "").strip()
+        if not url:
+            continue
+
+        cached = None if force else ResourceSummaryCacheCURD.get(db, url=url, topic=topic)
+        if cached and (cached.summary or "").strip():
+            kps: list[str] = []
+            try:
+                kps = _json.loads(cached.key_points or "[]")
+                if not isinstance(kps, list):
+                    kps = []
+            except Exception:
+                kps = []
+            items.append(
+                LearningPathResourceSummaryItem(
+                    resource_id=res.id,
+                    url=url,
+                    title=str(cached.title or res.title or url),
+                    summary=str(cached.summary or ""),
+                    key_points=[str(x).strip() for x in kps if str(x).strip()][:6],
+                    resource_type=_resource_type_value(res),
+                    platform=str(getattr(res, "platform", "") or ""),
+                    thumbnail=str(getattr(res, "thumbnail", None) or cached.image or None) if True else None,
+                )
+            )
+            continue
+
+        base_summary = str(getattr(res, "summary", "") or "").strip()
+        if not base_summary:
+            base_summary = str(getattr(res, "title", "") or url)
+
+        try:
+            ai_summary, key_points = await _summarize_resource_for_topic(
+                topic=topic, title=res.title, summary=base_summary
+            )
+        except Exception:
+            ai_summary, key_points = base_summary, []
+
+        ResourceSummaryCacheCURD.upsert(
+            db,
+            url=url,
+            topic=topic,
+            title=str(getattr(res, "title", None) or url),
+            summary=ai_summary or base_summary,
+            key_points=key_points,
+            difficulty=str(getattr(res, "difficulty", None) or "") or None,
+            resource_type=_resource_type_value(res),
+            learning_stage=str(getattr(it, "stage", None) or "") or None,
+            estimated_minutes=int(getattr(it, "estimated_time", 0) or 0) or None,
+            image=str(getattr(res, "thumbnail", None) or "") or None,
+        )
+        db.commit()
+
+        items.append(
+            LearningPathResourceSummaryItem(
+                resource_id=res.id,
+                url=url,
+                title=str(getattr(res, "title", "") or url),
+                summary=str(ai_summary or base_summary),
+                key_points=key_points,
+                resource_type=_resource_type_value(res),
+                platform=str(getattr(res, "platform", "") or ""),
+                thumbnail=str(getattr(res, "thumbnail", None) or None),
+            )
+        )
+
+    return LearningPathResourceSummariesResponse(
+        learning_path_id=learning_path_id,
+        topic=topic,
+        items=items,
     )
 
 

@@ -84,6 +84,30 @@ export function getPublicLearningPathDetail(
   return request.get(`/learning-paths/public/${id}`);
 }
 
+export type LearningPathAiResourceSummaryItem = {
+  resource_id: number;
+  url: string;
+  title: string;
+  summary: string;
+  key_points: string[];
+  resource_type: string;
+  platform: string;
+  thumbnail?: string | null;
+};
+
+export type LearningPathAiResourceSummariesResponse = {
+  learning_path_id: number;
+  topic: string;
+  items: LearningPathAiResourceSummaryItem[];
+};
+
+export function getPublicLearningPathAiResourceSummaries(
+  id: number,
+  payload?: { limit?: number; force_refresh?: boolean }
+): Promise<LearningPathAiResourceSummariesResponse> {
+  return request.post(`/learning-paths/public/${id}/ai-resource-summaries`, payload || {});
+}
+
 export function createLearningPath(payload: {
   title: string;
   type?: string | null;

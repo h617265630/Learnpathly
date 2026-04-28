@@ -1,1 +1,1 @@
-ALTER TABLE path_items ADD COLUMN manual_weight INTEGER;
+ALTER TABLE path_items ADD COLUMN IF NOT EXISTS manual_weight INTEGER;

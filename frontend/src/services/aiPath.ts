@@ -52,6 +52,7 @@ export interface AiPathData {
   title: string;
   summary: string;
   description?: string;
+  cover_image_url?: string | null;
   recommendations?: string[];
   nodes: AiPathNode[];
 }
@@ -68,6 +69,9 @@ export interface AiPathProjectListItem {
   outline_overview?: string;
   cover_image_url?: string | null;
   created_at?: string;
+  total_subnodes?: number;
+  completed_subnodes?: number;
+  is_complete?: boolean;
 }
 
 export interface AiPathPreferences {

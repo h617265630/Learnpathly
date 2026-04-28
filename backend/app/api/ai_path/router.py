@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from app.core.deps import get_db_dep
 from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
+from sqlalchemy import func
 
 from .service import generate_ai_path_pipeline, generate_ai_path_outline, generate_section_tutorial, search_resources_pipeline
 from app.models.ai_path_project import AiPathProject
@@ -120,6 +121,9 @@ class AiPathProjectListItem(BaseModel):
     outline_overview: str = ""
     cover_image_url: str | None = None
     created_at: str | None = None
+    total_subnodes: int = 0
+    completed_subnodes: int = 0
+    is_complete: bool = False
 
 
 class SectionTutorialRequest(BaseModel):
@@ -1028,8 +1032,40 @@ async def list_ai_path_projects(
         .limit(limit)
         .all()
     )
+    project_ids = [p.id for p in projects]
+    subnode_counts: dict[int, int] = {}
+    completed_counts: dict[int, int] = {}
+
+    if project_ids:
+        subnode_counts = {
+            int(project_id): int(count)
+            for project_id, count in (
+                db.query(AiPathSection.project_id, func.count(AiPathSubNode.id))
+                .join(AiPathSubNode, AiPathSubNode.section_id == AiPathSection.id)
+                .filter(AiPathSection.project_id.in_(project_ids))
+                .group_by(AiPathSection.project_id)
+                .all()
+            )
+        }
+
+        completed_counts = {
+            int(project_id): int(count)
+            for project_id, count in (
+                db.query(AiPathSection.project_id, func.count(func.distinct(AiPathSubNode.id)))
+                .join(AiPathSubNode, AiPathSubNode.section_id == AiPathSection.id)
+                .join(AiPathSubNodeDetail, AiPathSubNodeDetail.subnode_id == AiPathSubNode.id)
+                .filter(AiPathSection.project_id.in_(project_ids))
+                .filter(AiPathSubNodeDetail.detailed_content.isnot(None))
+                .filter(func.length(func.trim(AiPathSubNodeDetail.detailed_content)) > 0)
+                .group_by(AiPathSection.project_id)
+                .all()
+            )
+        }
+    
     items: list[AiPathProjectListItem] = []
     for p in projects:
+        total_subnodes = subnode_counts.get(p.id, 0)
+        completed_subnodes = completed_counts.get(p.id, 0)
         items.append(
             AiPathProjectListItem(
                 id=p.id,
@@ -1037,6 +1073,9 @@ async def list_ai_path_projects(
                 outline_overview=_normalize_overview_text(p.outline_overview or ""),
                 cover_image_url=p.cover_image_url,
                 created_at=p.created_at.isoformat() if getattr(p, "created_at", None) else None,
+                total_subnodes=total_subnodes,
+                completed_subnodes=completed_subnodes,
+                is_complete=total_subnodes > 0 and completed_subnodes >= total_subnodes,
             )
         )
     return items

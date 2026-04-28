@@ -742,7 +742,6 @@ function PracticeBlock({
 
 function ResourceLinkList({
   resources,
-  suggestedResources,
   title = "Linked resources",
   compact = false,
 }: {
@@ -751,7 +750,7 @@ function ResourceLinkList({
   title?: string;
   compact?: boolean;
 }) {
-  const visible = resources.length ? resources : suggestedResources;
+  const visible = resources;
   if (!visible.length) return null;
 
   return (
@@ -759,13 +758,8 @@ function ResourceLinkList({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-stone-500">
           <BookOpen className="h-3.5 w-3.5 text-sky-600" />
-          {resources.length ? title : "Suggested resource searches"}
+          {title}
         </div>
-        {!resources.length ? (
-          <span className="text-[10px] font-semibold text-stone-400">
-            not saved to database
-          </span>
-        ) : null}
       </div>
       <div
         className={`mt-4 grid gap-4 ${
@@ -793,24 +787,19 @@ function ResourceLinkList({
 
 function SidebarResourceList({
   resources,
-  suggestedResources,
 }: {
   resources: AiPathResourceLink[];
   suggestedResources: AiPathResourceLink[];
 }) {
-  const visible = resources.length ? resources : suggestedResources;
+  const visible = resources;
+  if (!visible.length) return null;
 
   return (
     <section className="rounded-md border border-stone-200 bg-white p-4">
       <div className="flex items-center justify-between gap-3">
         <p className="text-[10px] font-black uppercase tracking-[0.22em] text-stone-500">
-          {resources.length ? "Lesson resources" : "Resource searches"}
+          Lesson resources
         </p>
-        {!resources.length ? (
-          <span className="text-[10px] font-semibold text-stone-400">
-            suggested
-          </span>
-        ) : null}
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         {visible.slice(0, 4).map((resource, idx) => {
@@ -1274,29 +1263,7 @@ export default function AIPathDetail() {
           </div>
         ) : (
           <>
-            {result.warnings?.filter(w => !w.includes('Result saved to')).length ? (
-              <section className="mb-8 rounded-lg bg-gradient-to-r from-stone-50 to-stone-100 border border-stone-200 px-6 py-5 shadow-sm">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-5 bg-sky-500 rounded-full" />
-                  <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-500">
-                    Generation Info
-                  </p>
-                </div>
-                <div className="flex flex-wrap gap-3">
-                  {result.warnings.filter(w => !w.includes('Result saved to')).map((warning, idx) => (
-                    <span
-                      key={idx}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-stone-200 text-xs text-stone-600 shadow-sm"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-sky-400" />
-                      {warning}
-                    </span>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {topicResources.length || topicSuggestedResources.length ? (
+            {topicResources.length ? (
               <section className="mb-8">
                 <ResourceLinkList
                   resources={topicResources}

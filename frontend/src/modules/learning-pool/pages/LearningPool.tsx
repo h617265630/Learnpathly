@@ -218,6 +218,9 @@ export default function LearningPool() {
           topic: String((p as any).topic || "").trim(),
           outline_overview: String((p as any).outline_overview || "").trim(),
           created_at: (p as any).created_at,
+          total_subnodes: Number((p as any).total_subnodes || 0),
+          completed_subnodes: Number((p as any).completed_subnodes || 0),
+          is_complete: Boolean((p as any).is_complete),
         }));
         setAiProjects(next.filter((p) => Number.isFinite(p.id) && p.id > 0 && p.topic));
       })
