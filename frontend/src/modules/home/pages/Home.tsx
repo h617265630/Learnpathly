@@ -10,8 +10,6 @@ import { PathCard, type PoolPath } from "@/components/PathCard";
 import { PopularPathCard } from "@/components/PopularPathCard";
 import { LearnPathCard, type LearnPathProject } from "@/components/LearnPathCard";
 
-const WELCOME_MODAL_KEY = "learnpathly_welcome_modal_dismissed_v1";
-
 function mapDbToPool(p: PublicLearningPath): PoolPath {
   const lpType = String(p.type || "").trim().toLowerCase();
   let typeLabel = "Path";
@@ -54,19 +52,10 @@ export default function Home() {
   const [loadingAiProjects, setLoadingAiProjects] = useState(false);
 
   // Welcome modal state
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-
-  useEffect(() => {
-    // Check if user has dismissed the modal before
-    const dismissed = localStorage.getItem(WELCOME_MODAL_KEY);
-    if (!dismissed) {
-      setShowWelcomeModal(true);
-    }
-  }, []);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
 
   function dismissWelcomeModal() {
     setShowWelcomeModal(false);
-    localStorage.setItem(WELCOME_MODAL_KEY, "true");
   }
 
   useEffect(() => {
@@ -110,21 +99,21 @@ export default function Home() {
     <div className="min-h-screen bg-stone-50">
       {/* Welcome Modal */}
       {showWelcomeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg bg-white rounded-md border border-stone-200 shadow-2xl overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm overflow-y-auto">
+          <div className="relative w-full max-w-lg bg-white rounded-md border border-stone-200 shadow-2xl overflow-hidden my-8">
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-200">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-stone-200 bg-stone-50">
               <div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-500">
                   Welcome
                 </span>
-                <h2 className="mt-1 text-lg font-bold text-stone-900">
-                  Getting Started with LearnPathly
+                <h2 className="text-base font-bold text-stone-900">
+                  Getting Started
                 </h2>
               </div>
               <button
                 onClick={dismissWelcomeModal}
-                className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-600 hover:bg-stone-200 transition-colors"
+                className="w-8 h-8 rounded-full bg-white border border-stone-200 flex items-center justify-center text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -132,63 +121,63 @@ export default function Home() {
             </div>
 
             {/* Content */}
-            <div className="px-5 py-5 space-y-4">
-              <p className="text-sm text-stone-600 leading-relaxed">
+            <div className="px-4 py-4 space-y-3 max-h-[60vh] overflow-y-auto">
+              <p className="text-sm text-stone-600">
                 LearnPathly offers two types of learning paths:
               </p>
 
               {/* Resource Path */}
-              <div className="rounded-md border border-stone-200 bg-stone-50 p-4">
-                <h3 className="text-sm font-bold text-stone-900 mb-2">
+              <div className="rounded-md border border-stone-200 bg-stone-50 p-3">
+                <h3 className="text-sm font-bold text-stone-900 mb-1">
                   📚 Resource Path
                 </h3>
-                <p className="text-sm text-stone-600 leading-relaxed">
-                  Curated collections of resources organized into structured paths. Each resource includes detailed descriptions and summaries to help you understand what you'll learn.
+                <p className="text-xs text-stone-600">
+                  Curated collections of resources organized into structured paths with detailed descriptions.
                 </p>
               </div>
 
               {/* AI Learn Path */}
-              <div className="rounded-md border border-sky-200 bg-sky-50 p-4">
-                <h3 className="text-sm font-bold text-stone-900 mb-2">
+              <div className="rounded-md border border-sky-200 bg-sky-50 p-3">
+                <h3 className="text-sm font-bold text-stone-900 mb-1">
                   🤖 AI Learn Path
                 </h3>
-                <p className="text-sm text-stone-600 leading-relaxed">
-                  AI-generated learning paths based on your input topic. The AI creates an outline with knowledge nodes. When you want to dive deeper into a specific node, click to generate detailed explanations and resources.
+                <p className="text-xs text-stone-600">
+                  AI-generated learning paths based on your topic. Click on knowledge nodes to dive deeper.
                 </p>
               </div>
 
               {/* Recommendation */}
-              <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
-                <h3 className="text-sm font-bold text-stone-900 mb-2">
+              <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
+                <h3 className="text-sm font-bold text-stone-900 mb-1">
                   💡 Recommended
                 </h3>
-                <p className="text-sm text-stone-600 leading-relaxed">
-                  Visit the <Link to="/learningpool" className="text-sky-600 font-semibold hover:underline">Pool page</Link> to explore both path types:
+                <p className="text-xs text-stone-600 mb-2">
+                  Visit the <Link to="/learningpool" className="text-sky-600 font-semibold hover:underline">Pool page</Link> to explore:
                 </p>
-                <ul className="mt-2 text-sm text-stone-600 space-y-1">
-                  <li>• <strong>Resource Path:</strong> Check "Useful UI Skill Collection" for a complete example</li>
-                  <li>• <strong>AI Learn Path:</strong> Look for paths marked as "Completed" for fully generated content</li>
+                <ul className="text-xs text-stone-600 space-y-0.5">
+                  <li>• <strong>Resource Path:</strong> "Useful UI Skill Collection"</li>
+                  <li>• <strong>AI Learn Path:</strong> Look for "Completed" paths</li>
                 </ul>
               </div>
 
               {/* Notice */}
-              <div className="rounded-md border border-red-200 bg-red-50 p-4">
-                <h3 className="text-sm font-bold text-stone-900 mb-2">
+              <div className="rounded-md border border-red-200 bg-red-50 p-3">
+                <h3 className="text-sm font-bold text-stone-900 mb-1">
                   ⚠️ Notice
                 </h3>
-                <p className="text-sm text-stone-600 leading-relaxed">
-                  The AI features in the navigation bar (AI Path Generator, AI Resource Search) are currently experiencing performance issues. Content generation may take longer than expected. We recommend exploring existing paths in the Pool page for now.
+                <p className="text-xs text-stone-600">
+                  AI features (AI Path Generator, AI Resource Search) have performance issues. Generation may take longer. Explore existing paths in Pool page for now.
                 </p>
               </div>
             </div>
 
             {/* Footer */}
-            <div className="px-5 py-4 border-t border-stone-200 bg-stone-50 flex items-center justify-between gap-3">
+            <div className="px-4 py-3 border-t border-stone-200 bg-stone-50 flex items-center justify-end gap-2">
               <button
                 onClick={dismissWelcomeModal}
-                className="text-xs text-stone-500 hover:text-stone-700 transition-colors"
+                className="text-sm text-stone-500 hover:text-stone-700 transition-colors px-3 py-1.5"
               >
-                Don't show again
+                Close
               </button>
               <Link
                 to="/learningpool"
