@@ -281,7 +281,7 @@ export default function AIRsource() {
               AI Guided
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
-              AI Resource Search
+              AI Resource <span className="text-sky-500">Search</span>
             </h1>
             <p className="mt-4 text-sm sm:text-base text-stone-500 leading-relaxed">
               Enter any learning topic and AI will search the web for the most relevant tutorials, articles, videos and docs — summarised and ready to explore.

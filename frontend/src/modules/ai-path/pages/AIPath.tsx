@@ -117,7 +117,7 @@ export default function AIPath() {
               AI Guided
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-stone-900 leading-tight">
-              AI Path Generator
+              AI Path <span className="text-sky-500">Generator</span>
             </h1>
             <p className="mt-4 text-sm sm:text-base text-stone-500 leading-relaxed">
               Enter your learning goal and let AI generate a structured learning path with stage descriptions, steps, and recommended resources.
