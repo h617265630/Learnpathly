@@ -222,8 +222,8 @@ export default function Home() {
 	                    AI LearnPaths
 	                  </h3>
 	                </div>
-	                <Link to="/ai-path" className="hidden md:block article-link">
-	                  Generate new
+	                <Link to="/learningpool" className="hidden md:block article-link">
+	                  View all
 	                </Link>
 	              </div>
 
@@ -292,7 +292,7 @@ export default function Home() {
               <p className="text-sm text-stone-500 leading-relaxed">
                 Describe what you want to learn. AI generates a personalized path with the best resources.
               </p>
-              <Link to="/ai-path" className="inline-block mt-4 text-sm font-medium text-sky-600 hover:text-blue-700 transition-colors">
+              <Link to="/learningpool" className="inline-block mt-4 text-sm font-medium text-sky-600 hover:text-blue-700 transition-colors">
                 Try AI generator →
               </Link>
             </div>
@@ -360,7 +360,7 @@ export default function Home() {
               </div>
               <div className="mt-8">
                 <Link
-                  to="/ai-path"
+                  to="/learningpool"
                   className="inline-flex items-center gap-2 bg-sky-500 text-stone-900 px-6 py-3 text-sm font-semibold hover:bg-sky-400 transition-colors duration-200"
                 >
                   Try AI Path Generator
