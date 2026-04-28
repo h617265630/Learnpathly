@@ -167,7 +167,7 @@ export function ResourceCard({
             </div>
           </div>
           {/* Thumbnail */}
-          <div className="relative h-16 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
+          <div className="relative h-16 shrink-0 bg-white overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
@@ -177,7 +177,7 @@ export function ResourceCard({
                 className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-full h-full rounded-[3px] bg-linear-to-br from-stone-100 to-stone-200 flex items-center justify-center">
+              <div className="w-full h-full rounded-[3px] bg-stone-100 flex items-center justify-center">
                 <span className="text-2xl font-black text-stone-300">
                   {title.charAt(0)}
                 </span>
@@ -237,7 +237,7 @@ export function ResourceCard({
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-40 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
+          <div className="relative h-40 shrink-0 bg-white overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
@@ -247,7 +247,7 @@ export function ResourceCard({
                 className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-full h-full rounded-[3px] bg-stone-200 flex items-center justify-center text-xl font-bold text-stone-500">
+              <div className="w-full h-full rounded-[3px] bg-stone-100 flex items-center justify-center text-xl font-bold text-stone-500">
                 {title.charAt(0)}
               </div>
             )}
@@ -310,7 +310,7 @@ export function ResourceCard({
           </div>
 
           {/* Thumbnail */}
-          <div className="relative h-32 shrink-0 bg-stone-100 overflow-hidden z-10 p-1">
+          <div className="relative h-32 shrink-0 bg-white overflow-hidden z-10 p-1">
             {resource.thumbnail ? (
               <img
                 src={resource.thumbnail}
@@ -320,7 +320,7 @@ export function ResourceCard({
                 className="w-full h-full rounded-[3px] object-cover object-center"
               />
             ) : (
-              <div className="w-full h-full rounded-[3px] bg-stone-200 flex items-center justify-center text-lg font-bold text-stone-500">
+              <div className="w-full h-full rounded-[3px] bg-stone-100 flex items-center justify-center text-lg font-bold text-stone-500">
                 {resource.title.charAt(0)}
               </div>
             )}

@@ -1,12 +1,688 @@
 {
   "topic": "AI 辅助学习系统搭建",
-  "status": "started",
+  "status": "resumed",
   "api_base": "http://127.0.0.1:8000",
   "started_at": "2026-04-27T17:56:41.287698+00:00",
-  "project_id": null,
-  "outline_response": null,
-  "project_before_details": null,
+  "project_id": 59,
+  "outline_response": {
+    "project_id": 59,
+    "data": {
+      "title": "Building AI-Assisted Learning Systems",
+      "summary": "Design and implement an intelligent learning system by integrating AI models, educational analytics, and adaptive learning technologies to create personalized educational experiences.",
+      "description": "Design and implement an intelligent learning system by integrating AI models, educational analytics, and adaptive learning technologies to create personalized educational experiences.",
+      "cover_image_url": "https://opengraph.githubassets.com/1/vercel/next.js",
+      "nodes": [
+        {
+          "title": "AI Foundations and Learning System Architecture",
+          "description": "Establish core AI concepts and understand how machine learning and language models support educational applications. Design system architecture for an AI-assisted learning platform.",
+          "learning_points": [
+            "Understand fundamental AI/ML concepts and their educational applications",
+            "Design a modular system architecture for AI learning platforms",
+            "Set up development environment with essential AI tools and frameworks"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "AI Fundamentals for Educational Systems",
+              "description": "Core concepts of AI and machine learning relevant to educational technology applications.",
+              "learning_points": [
+                "Machine learning basics: supervised, unsupervised, and reinforcement learning",
+                "Natural language processing for educational content understanding",
+                "Large language models: architecture, capabilities, and limitations",
+                "AI evaluation metrics for learning outcomes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "System Architecture Design",
+              "description": "Planning the technical infrastructure for an AI-powered learning system.",
+              "learning_points": [
+                "Microservices architecture with container orchestration (Docker, Kubernetes)",
+                "Integration patterns: API design, model serving, and real-time inference",
+                "Data flow design: learning analytics pipeline and feedback loops",
+                "Security and privacy considerations in educational data handling"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Development Environment Setup",
+              "description": "Configuring tools and platforms for building AI learning systems.",
+              "learning_points": [
+                "Local model deployment with Ollama and similar frameworks",
+                "API integration with LLM providers (OpenAI, Anthropic, open-source models)",
+                "Development workflow: version control, testing, and CI/CD for AI applications",
+                "Setting up GPU-accelerated development environment"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Intelligent Tutoring Components Implementation",
+          "description": "Build practical AI components including AI tutors, content generators, and assessment systems. Implement real learning system features with hands-on coding exercises.",
+          "learning_points": [
+            "Implement AI-powered tutoring interfaces with conversation capabilities",
+            "Build automatic assessment and feedback mechanisms",
+            "Create adaptive content generation tailored to learner needs"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Building AI Tutoring Agents",
+              "description": "Construct conversational AI agents that serve as learning assistants.",
+              "learning_points": [
+                "Multi-turn conversation design for educational interactions",
+                "Context management and memory systems for personalized tutoring",
+                "Tool use and retrieval-augmented generation for accurate responses",
+                "Evaluating tutoring effectiveness and conversation quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Automated Assessment and Feedback Systems",
+              "description": "Implement AI-driven evaluation of learner work with intelligent feedback generation.",
+              "learning_points": [
+                "Semantic similarity and rubric-based evaluation approaches",
+                "Generating constructive feedback with actionable recommendations",
+                "Formative assessment design for continuous learning support",
+                "Handling subjective and creative assignments with AI assistance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Adaptive Content Generation",
+              "description": "Creating personalized learning materials based on learner profiles and performance.",
+              "learning_points": [
+                "Prompt engineering for educational content creation",
+                "Fine-tuning models on specific subject domains",
+                "Generating practice problems and explanations at varying difficulty levels",
+                "Ensuring content accuracy and avoiding hallucination in educational contexts"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Learning Analytics and Personalization Engine",
+          "description": "Understand learning analytics principles and build systems for tracking progress and personalizing learning paths. Implement recommendation algorithms for adaptive learning.",
+          "learning_points": [
+            "Design learning analytics pipelines for capturing learner interactions",
+            "Implement personalization algorithms based on learner behavior and performance",
+            "Build dashboards for visualizing learning progress and insights"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Learning Data Collection and Analysis",
+              "description": "Methods for capturing and analyzing learning interaction data.",
+              "learning_points": [
+                "Learning activity logging: video watches, quiz attempts, time spent",
+                "Learner modeling: knowledge state estimation and skill tracking",
+                "Cohort analysis and comparative learning pattern identification",
+                "Ethical considerations in learning data collection"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Personalization and Recommendation Systems",
+              "description": "Algorithms for customizing learning experiences to individual needs.",
+              "learning_points": [
+                "Knowledge graph-based learning path recommendations",
+                "Spaced repetition and adaptive review scheduling",
+                "Difficulty adjustment based on learner performance patterns",
+                "Content difficulty and format personalization strategies"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Progress Tracking and Analytics Dashboard",
+              "description": "Building visualization systems for monitoring learner progress.",
+              "learning_points": [
+                "Real-time progress indicators and milestone tracking",
+                "Performance analytics: strengths, weaknesses, and improvement areas",
+                "Predictive models for identifying at-risk learners",
+                "Designing effective learning analytics visualizations"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Production Deployment and System Integration",
+          "description": "Deploy the AI learning system to production environments. Integrate all components into a unified platform and ensure system reliability.",
+          "learning_points": [
+            "Deploy AI learning applications with proper infrastructure",
+            "Integrate multiple AI components into a cohesive learning platform",
+            "Implement monitoring, scaling, and maintenance procedures"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "Production Deployment Strategies",
+              "description": "Moving AI learning systems from development to production.",
+              "learning_points": [
+                "Containerized deployment with Kubernetes for scalability",
+                "Model serving infrastructure: batch and real-time inference",
+                "Load balancing and caching strategies for AI applications",
+                "Cost optimization for LLM API usage and model hosting"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Platform Integration and APIs",
+              "description": "Unifying all components into a complete learning platform.",
+              "learning_points": [
+                "Frontend-backend integration with REST and GraphQL APIs",
+                "User authentication and role-based access for educational contexts",
+                "Third-party LMS integration (Moodle, Canvas, custom platforms)",
+                "Cross-platform compatibility: web, mobile, and desktop access"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Monitoring, Optimization, and Maintenance",
+              "description": "Ensuring reliable operation and continuous improvement of deployed systems.",
+              "learning_points": [
+                "System health monitoring and alerting for AI service reliability",
+                "A/B testing frameworks for evaluating learning system improvements",
+                "User feedback loops and iterative design processes",
+                "Version management and model updates in production"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        },
+        {
+          "title": "Capstone: Complete AI Learning System Project",
+          "description": "Apply all learned concepts by designing and implementing a complete AI-assisted learning system. Include planning, development, deployment, and evaluation phases.",
+          "learning_points": [
+            "Design a complete AI-assisted learning system for a specific educational domain",
+            "Implement and deploy a functional prototype with all core components",
+            "Evaluate system effectiveness and present recommendations for improvement"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "title": "System Design and Planning",
+              "description": "Defining the scope, architecture, and implementation plan for the capstone project.",
+              "learning_points": [
+                "Problem definition: identifying target learners and educational goals",
+                "Technical stack selection based on requirements and constraints",
+                "Component design with clear interfaces and data flow",
+                "Project timeline and milestone planning"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Implementation and Deployment",
+              "description": "Building and deploying the complete AI learning system.",
+              "learning_points": [
+                "Agile development with iterative feature implementation",
+                "Integration testing across all system components",
+                "Production deployment with monitoring and logging",
+                "Documentation and user guide preparation"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            },
+            {
+              "title": "Evaluation and Presentation",
+              "description": "Assessing system performance and presenting the completed project.",
+              "learning_points": [
+                "Learning outcome measurement and effectiveness analysis",
+                "User experience evaluation through testing and feedback",
+                "Performance benchmarking and optimization recommendations",
+                "Final presentation with system demonstration and documentation"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "resources": []
+            }
+          ],
+          "order": 4,
+          "estimated_minutes": 60
+        }
+      ],
+      "recommendations": [
+        "5 chapters",
+        "~ 12.5 hours"
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_input_query": "AI 辅助学习系统搭建"
+    },
+    "warnings": [
+      "Step 0 found topic cover image from GitHub",
+      "Found 24 web results",
+      "Generated 5 sections with sub_nodes",
+      "Saved outline to DB (ai_path_projects.id=59)"
+    ]
+  },
+  "project_before_details": {
+    "project_id": 59,
+    "data": {
+      "title": "Building AI-Assisted Learning Systems",
+      "summary": "Design and implement an intelligent learning system by integrating AI models, educational analytics, and adaptive learning technologies to create personalized educational experiences.",
+      "description": "Design and implement an intelligent learning system by integrating AI models, educational analytics, and adaptive learning technologies to create personalized educational experiences.",
+      "cover_image_url": "https://opengraph.githubassets.com/1/vercel/next.js",
+      "recommendations": [
+        "5 chapters",
+        "~ 12.5 hours"
+      ],
+      "nodes": [
+        {
+          "id": 242,
+          "project_id": 59,
+          "title": "AI Foundations and Learning System Architecture",
+          "description": "Establish core AI concepts and understand how machine learning and language models support educational applications. Design system architecture for an AI-assisted learning platform.",
+          "learning_points": [
+            "Understand fundamental AI/ML concepts and their educational applications",
+            "Design a modular system architecture for AI learning platforms",
+            "Set up development environment with essential AI tools and frameworks"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 873,
+              "section_id": 242,
+              "title": "AI Fundamentals for Educational Systems",
+              "description": "Core concepts of AI and machine learning relevant to educational technology applications.",
+              "learning_points": [
+                "Machine learning basics: supervised, unsupervised, and reinforcement learning",
+                "Natural language processing for educational content understanding",
+                "Large language models: architecture, capabilities, and limitations",
+                "AI evaluation metrics for learning outcomes"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 874,
+              "section_id": 242,
+              "title": "System Architecture Design",
+              "description": "Planning the technical infrastructure for an AI-powered learning system.",
+              "learning_points": [
+                "Microservices architecture with container orchestration (Docker, Kubernetes)",
+                "Integration patterns: API design, model serving, and real-time inference",
+                "Data flow design: learning analytics pipeline and feedback loops",
+                "Security and privacy considerations in educational data handling"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 875,
+              "section_id": 242,
+              "title": "Development Environment Setup",
+              "description": "Configuring tools and platforms for building AI learning systems.",
+              "learning_points": [
+                "Local model deployment with Ollama and similar frameworks",
+                "API integration with LLM providers (OpenAI, Anthropic, open-source models)",
+                "Development workflow: version control, testing, and CI/CD for AI applications",
+                "Setting up GPU-accelerated development environment"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 0,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 243,
+          "project_id": 59,
+          "title": "Intelligent Tutoring Components Implementation",
+          "description": "Build practical AI components including AI tutors, content generators, and assessment systems. Implement real learning system features with hands-on coding exercises.",
+          "learning_points": [
+            "Implement AI-powered tutoring interfaces with conversation capabilities",
+            "Build automatic assessment and feedback mechanisms",
+            "Create adaptive content generation tailored to learner needs"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 876,
+              "section_id": 243,
+              "title": "Building AI Tutoring Agents",
+              "description": "Construct conversational AI agents that serve as learning assistants.",
+              "learning_points": [
+                "Multi-turn conversation design for educational interactions",
+                "Context management and memory systems for personalized tutoring",
+                "Tool use and retrieval-augmented generation for accurate responses",
+                "Evaluating tutoring effectiveness and conversation quality"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 877,
+              "section_id": 243,
+              "title": "Automated Assessment and Feedback Systems",
+              "description": "Implement AI-driven evaluation of learner work with intelligent feedback generation.",
+              "learning_points": [
+                "Semantic similarity and rubric-based evaluation approaches",
+                "Generating constructive feedback with actionable recommendations",
+                "Formative assessment design for continuous learning support",
+                "Handling subjective and creative assignments with AI assistance"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 878,
+              "section_id": 243,
+              "title": "Adaptive Content Generation",
+              "description": "Creating personalized learning materials based on learner profiles and performance.",
+              "learning_points": [
+                "Prompt engineering for educational content creation",
+                "Fine-tuning models on specific subject domains",
+                "Generating practice problems and explanations at varying difficulty levels",
+                "Ensuring content accuracy and avoiding hallucination in educational contexts"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 1,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 244,
+          "project_id": 59,
+          "title": "Learning Analytics and Personalization Engine",
+          "description": "Understand learning analytics principles and build systems for tracking progress and personalizing learning paths. Implement recommendation algorithms for adaptive learning.",
+          "learning_points": [
+            "Design learning analytics pipelines for capturing learner interactions",
+            "Implement personalization algorithms based on learner behavior and performance",
+            "Build dashboards for visualizing learning progress and insights"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 879,
+              "section_id": 244,
+              "title": "Learning Data Collection and Analysis",
+              "description": "Methods for capturing and analyzing learning interaction data.",
+              "learning_points": [
+                "Learning activity logging: video watches, quiz attempts, time spent",
+                "Learner modeling: knowledge state estimation and skill tracking",
+                "Cohort analysis and comparative learning pattern identification",
+                "Ethical considerations in learning data collection"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 880,
+              "section_id": 244,
+              "title": "Personalization and Recommendation Systems",
+              "description": "Algorithms for customizing learning experiences to individual needs.",
+              "learning_points": [
+                "Knowledge graph-based learning path recommendations",
+                "Spaced repetition and adaptive review scheduling",
+                "Difficulty adjustment based on learner performance patterns",
+                "Content difficulty and format personalization strategies"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 881,
+              "section_id": 244,
+              "title": "Progress Tracking and Analytics Dashboard",
+              "description": "Building visualization systems for monitoring learner progress.",
+              "learning_points": [
+                "Real-time progress indicators and milestone tracking",
+                "Performance analytics: strengths, weaknesses, and improvement areas",
+                "Predictive models for identifying at-risk learners",
+                "Designing effective learning analytics visualizations"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 2,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 245,
+          "project_id": 59,
+          "title": "Production Deployment and System Integration",
+          "description": "Deploy the AI learning system to production environments. Integrate all components into a unified platform and ensure system reliability.",
+          "learning_points": [
+            "Deploy AI learning applications with proper infrastructure",
+            "Integrate multiple AI components into a cohesive learning platform",
+            "Implement monitoring, scaling, and maintenance procedures"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 882,
+              "section_id": 245,
+              "title": "Production Deployment Strategies",
+              "description": "Moving AI learning systems from development to production.",
+              "learning_points": [
+                "Containerized deployment with Kubernetes for scalability",
+                "Model serving infrastructure: batch and real-time inference",
+                "Load balancing and caching strategies for AI applications",
+                "Cost optimization for LLM API usage and model hosting"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 883,
+              "section_id": 245,
+              "title": "Platform Integration and APIs",
+              "description": "Unifying all components into a complete learning platform.",
+              "learning_points": [
+                "Frontend-backend integration with REST and GraphQL APIs",
+                "User authentication and role-based access for educational contexts",
+                "Third-party LMS integration (Moodle, Canvas, custom platforms)",
+                "Cross-platform compatibility: web, mobile, and desktop access"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 884,
+              "section_id": 245,
+              "title": "Monitoring, Optimization, and Maintenance",
+              "description": "Ensuring reliable operation and continuous improvement of deployed systems.",
+              "learning_points": [
+                "System health monitoring and alerting for AI service reliability",
+                "A/B testing frameworks for evaluating learning system improvements",
+                "User feedback loops and iterative design processes",
+                "Version management and model updates in production"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 3,
+          "estimated_minutes": 60
+        },
+        {
+          "id": 246,
+          "project_id": 59,
+          "title": "Capstone: Complete AI Learning System Project",
+          "description": "Apply all learned concepts by designing and implementing a complete AI-assisted learning system. Include planning, development, deployment, and evaluation phases.",
+          "learning_points": [
+            "Design a complete AI-assisted learning system for a specific educational domain",
+            "Implement and deploy a functional prototype with all core components",
+            "Evaluate system effectiveness and present recommendations for improvement"
+          ],
+          "resources": [],
+          "sub_nodes": [
+            {
+              "id": 885,
+              "section_id": 246,
+              "title": "System Design and Planning",
+              "description": "Defining the scope, architecture, and implementation plan for the capstone project.",
+              "learning_points": [
+                "Problem definition: identifying target learners and educational goals",
+                "Technical stack selection based on requirements and constraints",
+                "Component design with clear interfaces and data flow",
+                "Project timeline and milestone planning"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 886,
+              "section_id": 246,
+              "title": "Implementation and Deployment",
+              "description": "Building and deploying the complete AI learning system.",
+              "learning_points": [
+                "Agile development with iterative feature implementation",
+                "Integration testing across all system components",
+                "Production deployment with monitoring and logging",
+                "Documentation and user guide preparation"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            },
+            {
+              "id": 887,
+              "section_id": 246,
+              "title": "Evaluation and Presentation",
+              "description": "Assessing system performance and presenting the completed project.",
+              "learning_points": [
+                "Learning outcome measurement and effectiveness analysis",
+                "User experience evaluation through testing and feedback",
+                "Performance benchmarking and optimization recommendations",
+                "Final presentation with system demonstration and documentation"
+              ],
+              "practical_exercise": "",
+              "search_keywords": [],
+              "details": [],
+              "resources": []
+            }
+          ],
+          "order": 4,
+          "estimated_minutes": 60
+        }
+      ],
+      "_raw": {
+        "total_duration_hours": 12.5,
+        "level": "intermediate"
+      },
+      "_from_db": true
+    },
+    "warnings": [
+      "Loaded from DB (ai_path_projects.id=59)"
+    ]
+  },
   "subnode_details": {},
-  "errors": [],
-  "finished_at": null
+  "errors": [
+    {
+      "step": "subnode-detail",
+      "section_title": "AI Foundations and Learning System Architecture",
+      "subnode_id": 873,
+      "subnode_title": "AI Fundamentals for Educational Systems",
+      "error": "timed out"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI Foundations and Learning System Architecture",
+      "subnode_id": 874,
+      "subnode_title": "System Architecture Design",
+      "error": "timed out"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "AI Foundations and Learning System Architecture",
+      "subnode_id": 875,
+      "subnode_title": "Development Environment Setup",
+      "error": "timed out"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Intelligent Tutoring Components Implementation",
+      "subnode_id": 876,
+      "subnode_title": "Building AI Tutoring Agents",
+      "error": "timed out"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Intelligent Tutoring Components Implementation",
+      "subnode_id": 877,
+      "subnode_title": "Automated Assessment and Feedback Systems",
+      "error": "timed out"
+    },
+    {
+      "step": "subnode-detail",
+      "section_title": "Intelligent Tutoring Components Implementation",
+      "subnode_id": 878,
+      "subnode_title": "Adaptive Content Generation",
+      "error": "timed out"
+    }
+  ],
+  "finished_at": null,
+  "english_title": "Building AI-Assisted Learning Systems"
 }
