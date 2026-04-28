@@ -290,6 +290,9 @@ export default function LearningPathDetail() {
   const [aiResourceSummaries, setAiResourceSummaries] = useState<LearningPathAiResourceSummaryItem[]>([]);
   const [aiResourceSummariesLoading, setAiResourceSummariesLoading] = useState(false);
 
+  // Selected resource for detail panel
+  const [selectedModule, setSelectedModule] = useState<Module | null>(null);
+
   const [usingThisPath, setUsingThisPath] = useState(false);
   const [showUseModal, setShowUseModal] = useState(false);
   const [useModalState, setUseModalState] = useState<
@@ -1117,18 +1120,137 @@ export default function LearningPathDetail() {
             </div>
 
             {modules.length ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {modules.map((m) => (
-                  <ResourceCard
-                    key={m.id}
-                    resource={moduleToUiResource(m)}
-                    onOpen={() => openResource(m)}
-                    onAdd={() => {}}
-                    saving={false}
-                    saved={false}
-                    weight={fromManualWeight(m.manualWeight)}
-                  />
-                ))}
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_400px] gap-6">
+                {/* Left: Resource cards grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                  {modules.map((m) => (
+                    <div
+                      key={m.id}
+                      className={`cursor-pointer rounded-md transition-all ${
+                        selectedModule?.id === m.id
+                          ? "ring-2 ring-sky-500 ring-offset-2"
+                          : ""
+                      }`}
+                      onClick={() => setSelectedModule(m)}
+                    >
+                      <ResourceCard
+                        resource={moduleToUiResource(m)}
+                        onOpen={() => setSelectedModule(m)}
+                        onAdd={() => {}}
+                        saving={false}
+                        saved={false}
+                        weight={fromManualWeight(m.manualWeight)}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Right: Detail panel */}
+                <div className="lg:sticky lg:top-4 lg:self-start">
+                  {selectedModule ? (
+                    <div className="rounded-md border border-stone-200 bg-white p-5">
+                      <div className="flex items-start justify-between gap-3 mb-4">
+                        <span className="inline-flex items-center rounded-full bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-700">
+                          {readableType(selectedModule.type)}
+                        </span>
+                        <button
+                          onClick={() => setSelectedModule(null)}
+                          className="text-stone-400 hover:text-stone-600 transition-colors"
+                          aria-label="Close detail"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                        </button>
+                      </div>
+
+                      <h3 className="text-lg font-bold text-stone-900 mb-3">
+                        {selectedModule.title}
+                      </h3>
+
+                      <div className="space-y-4">
+                        {/* Summary */}
+                        <div>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
+                            Summary
+                          </p>
+                          <p className="text-sm leading-6 text-stone-600">
+                            {selectedModule.summary || selectedModule.purpose || "No summary available."}
+                          </p>
+                        </div>
+
+                        {/* Purpose */}
+                        {selectedModule.purpose && (
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
+                              Purpose
+                            </p>
+                            <p className="text-sm leading-6 text-stone-600">
+                              {selectedModule.purpose}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Stage */}
+                        {selectedModule.stage && (
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-wider text-stone-500 mb-2">
+                              Stage
+                            </p>
+                            <p className="text-sm text-stone-600">
+                              {selectedModule.stage}
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Estimated time */}
+                        <div className="flex items-center gap-4 text-sm text-stone-500">
+                          {selectedModule.estimatedTime && (
+                            <span className="inline-flex items-center gap-1">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                              </svg>
+                              {formatMinutes(selectedModule.estimatedTime)}
+                            </span>
+                          )}
+                          <span className="inline-flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                            {selectedModule.level || "Beginner"}
+                          </span>
+                        </div>
+
+                        {/* Open button */}
+                        <button
+                          onClick={() => openResource(selectedModule)}
+                          className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-sky-500 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-sky-600"
+                        >
+                          Open Resource
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-md border border-dashed border-stone-200 bg-stone-50 p-6 text-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="mx-auto text-stone-300 mb-3">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="15"></line>
+                        <line x1="15" y1="9" x2="9" y2="15"></line>
+                      </svg>
+                      <p className="text-sm text-stone-500">
+                        Click a resource card to view details
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="rounded-md border border-dashed border-stone-200 bg-white px-6 py-12 text-center">
