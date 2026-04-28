@@ -1177,7 +1177,7 @@ export default function AIPathDetail() {
               {loadingProject && (
                 <div className="mt-5 inline-flex items-center gap-2 rounded-md border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-medium text-sky-800">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  正在从数据库加载学习路径...
+                  Loading learning path from database...
                 </div>
               )}
               {loadError && (
@@ -1185,7 +1185,7 @@ export default function AIPathDetail() {
                   <div className="flex items-start gap-3">
                     <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-red-500" />
                     <div>
-                      <p className="text-sm font-semibold text-red-900">加载失败</p>
+                      <p className="text-sm font-semibold text-red-900">Load failed</p>
                       <p className="mt-1 text-xs leading-6 text-red-700">{loadError}</p>
                     </div>
                   </div>
@@ -1238,20 +1238,20 @@ export default function AIPathDetail() {
           <div className="rounded-md border border-sky-100 bg-white px-6 py-20 text-center">
             <Loader2 className="mx-auto h-8 w-8 animate-spin text-sky-500" />
             <h2 className="mt-5 text-2xl font-black tracking-tight text-stone-900">
-              正在加载 AI Path
+              Loading AI Path
             </h2>
             <p className="mt-3 text-sm leading-7 text-stone-500">
-              正在从数据库读取章节和知识点。
+              Reading chapters and knowledge points from database.
             </p>
           </div>
         ) : !result ? (
           <div className="rounded-md border border-dashed border-stone-300 bg-white px-6 py-20 text-center">
             <div className="mx-auto max-w-xl">
               <h2 className="text-2xl font-black tracking-tight text-stone-900">
-                还没有 AI Path 结果
+                No AI Path result yet
               </h2>
               <p className="mt-3 text-sm leading-7 text-stone-500">
-                先去 AI Path 页面输入你的学习目标，生成结果后会自动跳转到这里。
+                Go to AI Path page and enter your learning goal. You'll be redirected here after generation.
               </p>
               <Link
                 to="/ai-path"

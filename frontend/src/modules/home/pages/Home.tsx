@@ -324,7 +324,7 @@ export default function Home() {
                 How it works
               </span>
               <h2 className="font-serif text-4xl lg:text-5xl font-bold tracking-tight mb-6 leading-tight">
-                Build your learning path in minutes
+                Learn topics you love with structured paths
               </h2>
               <p className="text-stone-400 leading-relaxed mb-8">
                 Describe what you want to learn. Our AI analyzes the best resources across GitHub, tutorials, and courses — then organizes them into a structured path just for you.
