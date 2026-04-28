@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { X } from "lucide-react";
 import {
   listPublicLearningPaths,
   type PublicLearningPath,
@@ -8,6 +9,8 @@ import { listAiPathProjects } from "@/services/aiPath";
 import { PathCard, type PoolPath } from "@/components/PathCard";
 import { PopularPathCard } from "@/components/PopularPathCard";
 import { LearnPathCard, type LearnPathProject } from "@/components/LearnPathCard";
+
+const WELCOME_MODAL_KEY = "learnpathly_welcome_modal_dismissed_v1";
 
 function mapDbToPool(p: PublicLearningPath): PoolPath {
   const lpType = String(p.type || "").trim().toLowerCase();
@@ -50,6 +53,22 @@ export default function Home() {
   const [aiProjects, setAiProjects] = useState<LearnPathProject[]>([]);
   const [loadingAiProjects, setLoadingAiProjects] = useState(false);
 
+  // Welcome modal state
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+
+  useEffect(() => {
+    // Check if user has dismissed the modal before
+    const dismissed = localStorage.getItem(WELCOME_MODAL_KEY);
+    if (!dismissed) {
+      setShowWelcomeModal(true);
+    }
+  }, []);
+
+  function dismissWelcomeModal() {
+    setShowWelcomeModal(false);
+    localStorage.setItem(WELCOME_MODAL_KEY, "true");
+  }
+
   useEffect(() => {
     async function fetchPaths() {
       setLoading(true);
@@ -89,6 +108,93 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-stone-50">
+      {/* Welcome Modal */}
+      {showWelcomeModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/50 backdrop-blur-sm">
+          <div className="relative w-full max-w-lg bg-white rounded-md border border-stone-200 shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-stone-200">
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-500">
+                  Welcome
+                </span>
+                <h2 className="mt-1 text-lg font-bold text-stone-900">
+                  Getting Started with LearnPathly
+                </h2>
+              </div>
+              <button
+                onClick={dismissWelcomeModal}
+                className="w-8 h-8 rounded-full bg-stone-100 flex items-center justify-center text-stone-400 hover:text-stone-600 hover:bg-stone-200 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="px-5 py-5 space-y-4">
+              <p className="text-sm text-stone-600 leading-relaxed">
+                LearnPathly offers two types of learning paths:
+              </p>
+
+              {/* Resource Path */}
+              <div className="rounded-md border border-stone-200 bg-stone-50 p-4">
+                <h3 className="text-sm font-bold text-stone-900 mb-2">
+                  📚 Resource Path
+                </h3>
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  Curated collections of resources organized into structured paths. Each resource includes detailed descriptions and summaries to help you understand what you'll learn.
+                </p>
+              </div>
+
+              {/* AI Learn Path */}
+              <div className="rounded-md border border-sky-200 bg-sky-50 p-4">
+                <h3 className="text-sm font-bold text-stone-900 mb-2">
+                  🤖 AI Learn Path
+                </h3>
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  AI-generated learning paths based on your input topic. The AI creates an outline with knowledge nodes. When you want to dive deeper into a specific node, click to generate detailed explanations and resources.
+                </p>
+              </div>
+
+              {/* Recommendation */}
+              <div className="rounded-md border border-amber-200 bg-amber-50 p-4">
+                <h3 className="text-sm font-bold text-stone-900 mb-2">
+                  💡 Recommended
+                </h3>
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  Visit the <Link to="/learningpool" className="text-sky-600 font-semibold hover:underline">Pool page</Link> to explore both path types:
+                </p>
+                <ul className="mt-2 text-sm text-stone-600 space-y-1">
+                  <li>• <strong>Resource Path:</strong> Check "Useful UI Skill Collection" for a complete example</li>
+                  <li>• <strong>AI Learn Path:</strong> Look for paths marked as "Completed" for fully generated content</li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-5 py-4 border-t border-stone-200 bg-stone-50 flex items-center justify-between gap-3">
+              <button
+                onClick={dismissWelcomeModal}
+                className="text-xs text-stone-500 hover:text-stone-700 transition-colors"
+              >
+                Don't show again
+              </button>
+              <Link
+                to="/learningpool"
+                onClick={dismissWelcomeModal}
+                className="inline-flex items-center gap-2 bg-sky-500 text-white px-5 py-2.5 rounded-md text-sm font-semibold hover:bg-sky-600 transition-colors"
+              >
+                Explore Paths
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Hero ── */}
       <section className="border-b border-stone-200">
         <div className="grid md:grid-cols-2 min-h-[85vh]">
