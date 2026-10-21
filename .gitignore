@@ -62,3 +62,8 @@ build/
 
 # pytest
 .pytest_cache/
+
+# Supabase CLI 本地缓存（勿提交）
+supabase/.temp/
+backend/supabase/.temp/
+frontend/supabase/.temp/
