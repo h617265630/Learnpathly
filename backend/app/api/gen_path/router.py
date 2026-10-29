@@ -98,7 +98,7 @@ async def create_outline(
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            from gen_path.pipeline.step1_outline import run_step1
+            from ai_path.pipeline.step1_outline import run_step1
             return loop.run_until_complete(
                 run_step1(
                     topic=payload.topic,
