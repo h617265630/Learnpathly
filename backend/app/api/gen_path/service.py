@@ -14,13 +14,18 @@ class GenPathService:
         from app.curd.gen_path_curd import GenPathProject, GenPathSection, GenPathSectionResource
 
         outline = result.get("outline") or {}
+        # run_step1 返回的 outline 是 LearningOutline 对象，不是 dict
+        if hasattr(outline, "model_dump"):
+            outline = outline.model_dump()
+        elif not isinstance(outline, dict):
+            outline = {}
         summaries = result.get("summaries", [])
 
         # Update project outline
         GenPathProject.update_outline(db, project_id, outline)
 
         # Create sections
-        sections_data = outline.get("sections", [])
+        sections_data = outline.get("sections", []) or []
         created_sections = GenPathSection.create_many(db, project_id, sections_data)
 
         # Assign summaries to sections (round-robin)
@@ -30,8 +35,17 @@ class GenPathService:
             # Find matching outline section by title
             matching = [s for s in sections_data if s.get("title") == section_title]
             if matching:
-                suggested = matching[0].get("suggested_resources", [])
+                suggested = matching[0].get("suggested_resources", []) or []
                 for res in suggested:
+                    # suggested_resources 是 List[str]（纯 URL），
+                    # 但 step3 靠 resource_json["url"] 去重，
+                    # 直接存字符串会丢 url 键 → 统一规范成 {"url": ...}
+                    if isinstance(res, str):
+                        res = {"url": res}
+                    elif not isinstance(res, dict):
+                        continue
+                    if not res.get("url"):
+                        continue
                     GenPathSectionResource.add(
                         db, section["id"], res, added_by="ai"
                     )

@@ -4,6 +4,7 @@ FastAPI router for gen_path API.
 
 from __future__ import annotations
 import asyncio
+import json
 import uuid
 from typing import Optional
 
@@ -117,13 +118,25 @@ async def create_outline(
         result = future.result()
 
     # Save outline and sections to DB
-    GenPathService.save_outline(db, project.id, result)
+    GenPathService.save_outline(db, project["id"], result)
+
+    # run_step1 返回的是 outline/search_results/discovered_urls/exclude_urls
+    outline = result.get("outline")
+    if hasattr(outline, "model_dump"):
+        outline = outline.model_dump()
+    search_results = result.get("search_results", []) or []
+    summaries = []
+    for sr in search_results:
+        if hasattr(sr, "model_dump"):
+            summaries.append(sr.model_dump())
+        elif isinstance(sr, dict):
+            summaries.append(sr)
 
     return OutlineResponse(
-        project_id=str(project.id),
-        outline=result["outline"],
-        summaries=result["summaries"],
-        all_urls=result["all_urls"],
+        project_id=str(project["id"]),
+        outline=outline or {},
+        summaries=summaries,
+        all_urls=result.get("discovered_urls", []) or [],
     )
 
 
@@ -169,15 +182,15 @@ async def generate_tutorial(
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            from gen_path.pipeline.step2_tutorial import generate_section_tutorial
+            from app.api.ai_path.service import generate_section_tutorial
             return loop.run_until_complete(
                 generate_section_tutorial(
-                    section_title=section.title,
-                    section_goal=section.description or "",
-                    learning_goals=section.learning_goals,
+                    query=project["topic"],
+                    section_title=section["title"],
+                    section_goal=section["description"] or "",
                     resource_urls=payload.resource_urls,
-                    topic=project.topic,
-                    level=project.level,
+                    level=project["level"],
+                    db=db,
                 )
             )
         finally:
@@ -198,9 +211,9 @@ async def generate_tutorial(
 
     return TutorialResponse(
         section_id=payload.section_id,
-        tutorial=result["tutorial"],
-        key_points=result["key_points"],
-        source_urls=result["source_urls"],
+        tutorial=result.get("tutorial", ""),
+        key_points=result.get("key_points", []) or [],
+        source_urls=result.get("source_urls", []) or payload.resource_urls,
     )
 
 
@@ -222,21 +235,40 @@ async def add_resources(
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Section not found")
 
+    project = GenPathCURD.get_by_id(db, payload.project_id)
+    if not project:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Project not found")
+
     # Get existing resources
     existing = GenPathCURD.get_section_resources(db, payload.section_id)
-    existing_urls = [r.resource_json.get("url", "") for r in existing]
+    # resource_json 在库里是 json.dumps 后的字符串，不是 dict
+    existing_urls = []
+    for r in existing:
+        raw = r.get("resource_json")
+        if not raw:
+            continue
+        try:
+            parsed = json.loads(raw) if isinstance(raw, str) else raw
+        except (TypeError, ValueError):
+            continue
+        if isinstance(parsed, dict):
+            url = parsed.get("url", "")
+            if url:
+                existing_urls.append(url)
 
     def _run():
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            from gen_path.pipeline.step3_resources import search_supplementary_resources
+            from ai_path.pipeline.step3_resources import search_supplementary_resources
             return loop.run_until_complete(
                 search_supplementary_resources(
-                    section_title=section.title,
-                    section_goal=section.description or "",
+                    section_title=section["title"],
+                    section_goal=section["description"] or "",
                     existing_urls=existing_urls,
                     resource_type_filter=payload.resource_type_filter,
+                    topic=project["topic"],
                     max_results=payload.max_results,
                 )
             )
@@ -286,21 +318,21 @@ async def generate_summary(
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
-            from gen_path.pipeline.step4_summary import generate_final_summary
+            from ai_path.pipeline.step4_summary import generate_final_summary
             sections_data = [
                 {
-                    "title": s.title,
-                    "description": s.description or "",
-                    "tutorial_md": s.tutorial_md or "",
+                    "title": s["title"],
+                    "description": s["description"] or "",
+                    "tutorial_md": s["tutorial_md"] or "",
                     "resources": [],
                 }
                 for s in sections
             ]
             return loop.run_until_complete(
                 generate_final_summary(
-                    topic=project.topic,
+                    topic=project["topic"],
                     sections_data=sections_data,
-                    level=project.level,
+                    level=project["level"],
                 )
             )
         finally:

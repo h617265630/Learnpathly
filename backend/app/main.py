@@ -56,6 +56,10 @@ import app.models.ai_path_section
 import app.models.ai_path_subnode
 import app.models.ai_path_subnode_detail
 import app.models.ai_path_subnode_detail_cache
+# gen_path 的三张表（gen_path_projects / gen_path_sections / gen_path_section_resources）
+# 必须在这里 import —— Base.metadata.create_all() 只认已经注册进 metadata 的表，
+# 漏掉这行会让空库启动后 gen_path 全部报表不存在。
+import app.models.gen_path
 
 Base.metadata.create_all(bind=engine)
 

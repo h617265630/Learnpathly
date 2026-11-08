@@ -266,20 +266,26 @@ class GenPathSectionResource:
 
 
 # ── Convenience aliases ────────────────────────────────────────────────────────
+#
+# 注意：这里必须显式包一层 staticmethod。
+# 直接把 GenPathProject.create 塞进 type() 的类字典里，得到的其实是普通函数属性
+# （不是 staticmethod 描述符），Python 3 不会自动做绑定，
+# 结果是 GenPathCURD.create(db, topic=...) 会把 db 塞进第一个位置参数 topic，
+# 报 "got multiple values for argument 'topic'"。
 
 GenPathCURD = type("GenPathCURD", (), {
-    "create": GenPathProject.create,
-    "get_by_id": GenPathProject.get_by_id,
-    "update_outline": GenPathProject.update_outline,
-    "update_final_summary": GenPathProject.update_final_summary,
-    "update_status": GenPathProject.update_status,
-    "list_by_user": GenPathProject.list_by_user,
-    "count_by_user": GenPathProject.count_by_user,
-    "delete": GenPathProject.delete,
-    "get_sections": GenPathSection.get_by_project,
-    "get_section_by_id": GenPathSection.get_by_id,
-    "create_sections": GenPathSection.create_many,
-    "update_section_tutorial": GenPathSection.update_tutorial,
-    "get_section_resources": GenPathSectionResource.get_by_section,
-    "add_section_resource": GenPathSectionResource.add,
+    "create": staticmethod(GenPathProject.create),
+    "get_by_id": staticmethod(GenPathProject.get_by_id),
+    "update_outline": staticmethod(GenPathProject.update_outline),
+    "update_final_summary": staticmethod(GenPathProject.update_final_summary),
+    "update_status": staticmethod(GenPathProject.update_status),
+    "list_by_user": staticmethod(GenPathProject.list_by_user),
+    "count_by_user": staticmethod(GenPathProject.count_by_user),
+    "delete": staticmethod(GenPathProject.delete),
+    "get_sections": staticmethod(GenPathSection.get_by_project),
+    "get_section_by_id": staticmethod(GenPathSection.get_by_id),
+    "create_sections": staticmethod(GenPathSection.create_many),
+    "update_section_tutorial": staticmethod(GenPathSection.update_tutorial),
+    "get_section_resources": staticmethod(GenPathSectionResource.get_by_section),
+    "add_section_resource": staticmethod(GenPathSectionResource.add),
 })()
