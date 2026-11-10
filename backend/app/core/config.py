@@ -99,6 +99,11 @@ class Settings:
 
 	# Runtime
 	APP_DEBUG: bool = os.environ.get("APP_DEBUG", "false").lower() in {"1", "true", "yes", "on"}
+	# Internal debug endpoints (/ai-path/debug/*) call Tavily + LLM for free.
+	# They must stay OFF in production; enable explicitly for local debugging.
+	ENABLE_DEBUG_ENDPOINTS: bool = os.environ.get(
+		"ENABLE_DEBUG_ENDPOINTS", "false"
+	).lower() in {"1", "true", "yes", "on"}
 	CORS_ORIGINS: list[str] = None  # type: ignore[assignment]
 
 	def __post_init__(self):

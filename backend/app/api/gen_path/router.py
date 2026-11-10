@@ -8,12 +8,13 @@ import json
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException
 from pydantic import BaseModel
 
-from app.core.deps import get_db_dep
+from app.core.deps import get_db_dep, get_current_user
 from app.api.gen_path.service import GenPathService
 from app.curd.gen_path_curd import GenPathCURD
+from app.models.rbac.user import User
 
 router = APIRouter(prefix="/gen-path", tags=["gen-path"])
 
@@ -68,11 +69,41 @@ class SummaryResponse(BaseModel):
 
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
+
+def _get_owned_project(db, project_id: str, current_user: User) -> dict:
+    """Fetch a project and make sure it belongs to the caller.
+
+    Projects of other users must be indistinguishable from non-existing ones,
+    so we answer 404 instead of 403 (no id enumeration oracle).
+    """
+    project = GenPathCURD.get_by_id_for_user(db, project_id, current_user.id)
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
+
+
+def _get_owned_section(db, section_id: str, project_id: str, current_user: User) -> dict:
+    """Fetch a section and make sure it belongs to the caller's project.
+
+    `project_id` and `section_id` arrive as two independent request fields, so
+    checking only the project would let a caller point at somebody else's
+    section (read + write). The section must belong to the very project the
+    caller owns.
+    """
+    section = GenPathCURD.get_section_by_id(db, section_id)
+    if not section or str(section.get("project_id")) != str(project_id):
+        raise HTTPException(status_code=404, detail="Section not found")
+    # The owning project must be the caller's, too.
+    _get_owned_project(db, project_id, current_user)
+    return section
+
+
 @router.post("/outline", response_model=OutlineResponse)
 async def create_outline(
     payload: CreateProjectRequest,
     background_tasks: BackgroundTasks,
     db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Step 1: Generate learning path outline.
@@ -92,6 +123,7 @@ async def create_outline(
         learning_depth=payload.learning_depth,
         content_type=payload.content_type,
         practical_ratio=payload.practical_ratio,
+        user_id=current_user.id,
     )
 
     # Run step 1 pipeline in thread pool (it's async but not FastAPI-aware)
@@ -141,12 +173,13 @@ async def create_outline(
 
 
 @router.get("/projects/{project_id}")
-async def get_project(project_id: str, db=Depends(get_db_dep)):
+async def get_project(
+    project_id: str,
+    db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
+):
     """Get project by ID with all sections and resources."""
-    project = GenPathCURD.get_by_id(db, project_id)
-    if not project:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Project not found")
+    project = _get_owned_project(db, project_id, current_user)
     sections = GenPathCURD.get_sections(db, project_id)
     return {
         "project": project,
@@ -159,6 +192,7 @@ async def generate_tutorial(
     payload: TutorialRequest,
     background_tasks: BackgroundTasks,
     db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Step 2: Generate detailed tutorial for a specific section.
@@ -167,15 +201,8 @@ async def generate_tutorial(
     2. LLM generates detailed Markdown tutorial
     3. Save tutorial to DB
     """
-    section = GenPathCURD.get_section_by_id(db, payload.section_id)
-    if not section:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Section not found")
-
-    project = GenPathCURD.get_by_id(db, payload.project_id)
-    if not project:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Project not found")
+    section = _get_owned_section(db, payload.section_id, payload.project_id, current_user)
+    project = _get_owned_project(db, payload.project_id, current_user)
 
     # Run step 2 in thread pool
     def _run():
@@ -221,6 +248,7 @@ async def generate_tutorial(
 async def add_resources(
     payload: ResourcesRequest,
     db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Step 3: Add supplementary resources to a section.
@@ -230,15 +258,8 @@ async def add_resources(
     3. Filter by type (video/article/docs)
     4. Save to DB
     """
-    section = GenPathCURD.get_section_by_id(db, payload.section_id)
-    if not section:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Section not found")
-
-    project = GenPathCURD.get_by_id(db, payload.project_id)
-    if not project:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Project not found")
+    section = _get_owned_section(db, payload.section_id, payload.project_id, current_user)
+    project = _get_owned_project(db, payload.project_id, current_user)
 
     # Get existing resources
     existing = GenPathCURD.get_section_resources(db, payload.section_id)
@@ -298,6 +319,7 @@ async def add_resources(
 async def generate_summary(
     project_id: str,
     db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
 ):
     """
     Step 4: Generate final summary + GitHub projects.
@@ -307,10 +329,7 @@ async def generate_summary(
     3. Search GitHub for relevant projects
     4. Save to DB
     """
-    project = GenPathCURD.get_by_id(db, project_id)
-    if not project:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail="Project not found")
+    project = _get_owned_project(db, project_id, current_user)
 
     sections = GenPathCURD.get_sections(db, project_id)
 
@@ -361,15 +380,22 @@ async def list_projects(
     limit: int = 20,
     offset: int = 0,
     db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
 ):
-    """List user's projects."""
-    projects = GenPathCURD.list_by_user(db, limit=limit, offset=offset)
-    total = GenPathCURD.count_by_user(db)
+    """List the current user's projects only."""
+    projects = GenPathCURD.list_by_user(db, user_id=current_user.id, limit=limit, offset=offset)
+    total = GenPathCURD.count_by_user(db, user_id=current_user.id)
     return {"projects": projects, "total": total}
 
 
 @router.delete("/projects/{project_id}")
-async def delete_project(project_id: str, db=Depends(get_db_dep)):
-    """Delete a project."""
-    GenPathCURD.delete(db, project_id)
+async def delete_project(
+    project_id: str,
+    db=Depends(get_db_dep),
+    current_user: User = Depends(get_current_user),
+):
+    """Delete a project owned by the current user."""
+    deleted = GenPathCURD.delete(db, project_id, user_id=current_user.id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Project not found")
     return {"success": True}

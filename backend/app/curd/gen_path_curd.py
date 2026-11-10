@@ -20,7 +20,7 @@ class GenPathProject:
         learning_depth: str = "standard",
         content_type: str = "mixed",
         practical_ratio: str = "balanced",
-        user_id: str | None = None,
+        user_id: int | None = None,
     ) -> dict:
         """Create a new gen_path project."""
         project_id = db.execute(
@@ -114,14 +114,20 @@ class GenPathProject:
     @staticmethod
     def list_by_user(
         db: Session,
-        user_id: str | None = None,
+        user_id: int,
         limit: int = 20,
         offset: int = 0,
     ) -> List[dict]:
+        """List projects belonging to ONE user.
+
+        user_id is required on purpose: an optional/None value used to expand to
+        `(:user_id IS NULL OR user_id = :user_id)`, which is always true and
+        therefore leaked every user's projects to any caller.
+        """
         rows = db.execute(
             text("""
                 SELECT * FROM gen_path_projects
-                WHERE (:user_id IS NULL OR user_id = :user_id)
+                WHERE user_id = :user_id
                 ORDER BY updated_at DESC
                 LIMIT :limit OFFSET :offset
             """),
@@ -130,23 +136,41 @@ class GenPathProject:
         return [dict(r._mapping) for r in rows]
 
     @staticmethod
-    def count_by_user(db: Session, user_id: str | None = None) -> int:
+    def count_by_user(db: Session, user_id: int) -> int:
         row = db.execute(
             text("""
                 SELECT COUNT(*) FROM gen_path_projects
-                WHERE (:user_id IS NULL OR user_id = :user_id)
+                WHERE user_id = :user_id
             """),
             {"user_id": user_id},
         ).scalar()
         return row or 0
 
     @staticmethod
-    def delete(db: Session, project_id: str) -> None:
-        db.execute(
-            text("DELETE FROM gen_path_projects WHERE id = :id"),
-            {"id": project_id},
+    def get_by_id_for_user(db: Session, project_id: str, user_id: int) -> dict | None:
+        """Fetch a project only if it belongs to the given user."""
+        row = db.execute(
+            text("""
+                SELECT * FROM gen_path_projects
+                WHERE id = :id AND user_id = :user_id
+            """),
+            {"id": project_id, "user_id": user_id},
+        ).fetchone()
+        return dict(row._mapping) if row else None
+
+    @staticmethod
+    def delete(db: Session, project_id: str, user_id: int) -> bool:
+        """Delete a project owned by the given user.
+
+        Returns True when a row was deleted, False when the project does not
+        exist or belongs to somebody else (no cross-user deletion possible).
+        """
+        result = db.execute(
+            text("DELETE FROM gen_path_projects WHERE id = :id AND user_id = :user_id"),
+            {"id": project_id, "user_id": user_id},
         )
         db.commit()
+        return bool(result.rowcount)
 
 
 class GenPathSection:
@@ -276,6 +300,7 @@ class GenPathSectionResource:
 GenPathCURD = type("GenPathCURD", (), {
     "create": staticmethod(GenPathProject.create),
     "get_by_id": staticmethod(GenPathProject.get_by_id),
+    "get_by_id_for_user": staticmethod(GenPathProject.get_by_id_for_user),
     "update_outline": staticmethod(GenPathProject.update_outline),
     "update_final_summary": staticmethod(GenPathProject.update_final_summary),
     "update_status": staticmethod(GenPathProject.update_status),

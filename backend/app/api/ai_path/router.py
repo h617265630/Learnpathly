@@ -13,6 +13,7 @@ if str(_AI_PATH_ROOT) not in sys.path:
     sys.path.insert(0, str(_AI_PATH_ROOT))
 
 from fastapi import APIRouter, Depends, HTTPException, Response
+from app.core.config import settings
 from app.core.deps import get_db_dep
 from pydantic import BaseModel, Field
 from langchain_core.output_parsers import JsonOutputParser
@@ -30,6 +31,22 @@ import hashlib
 
 
 router = APIRouter(prefix="/ai-path", tags=["ai-path"])
+
+
+def require_debug_endpoints() -> None:
+    """Guard for the internal /ai-path/debug/* endpoints.
+
+    Those endpoints call Tavily + LLM directly and are meant for local
+    development only. Without this guard anybody could burn the account
+    quota for free, so they are disabled unless ENABLE_DEBUG_ENDPOINTS is
+    explicitly turned on (default: off, including production).
+    """
+    if not settings.ENABLE_DEBUG_ENDPOINTS:
+        raise HTTPException(
+            status_code=404,
+            detail="Debug endpoints are disabled (set ENABLE_DEBUG_ENDPOINTS=true to enable)",
+        )
+
 
 def _normalise_resource_dict(resource: object, *, learning_stage: str = "") -> dict:
     if not isinstance(resource, dict):
@@ -1647,6 +1664,7 @@ class Step1SearchResponse(BaseModel):
 async def debug_step1_search(
     payload: Step1SearchRequest,
     db=Depends(get_db_dep),
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 1: Search for resources, fetch content, and save summaries to cache.
@@ -1688,6 +1706,7 @@ class Step2OutlineResponse(BaseModel):
 async def debug_step2_outline(
     payload: Step2OutlineRequest,
     db=Depends(get_db_dep),
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 2: Generate learning path outline from cached resources.
@@ -1730,6 +1749,7 @@ class Step3StageDetailResponse(BaseModel):
 async def debug_step3_stage_detail(
     payload: Step3StageDetailRequest,
     db=Depends(get_db_dep),
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 3: Generate detailed knowledge point introduction and resource recommendations
@@ -1775,6 +1795,7 @@ class Step4StageSummaryResponse(BaseModel):
 async def debug_step4_stage_summary(
     payload: Step4StageSummaryRequest,
     db=Depends(get_db_dep),
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 4: Generate a concise summary for the stage and extract GitHub project hints.
@@ -1828,6 +1849,7 @@ class Step5GithubResponse(BaseModel):
 @router.post("/debug/step5-github", response_model=Step5GithubResponse)
 async def debug_step5_github(
     payload: Step5GithubRequest,
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 5: Search GitHub for relevant open-source projects based on topic + summaries + hints.
@@ -2030,6 +2052,7 @@ class CombinedResponse(BaseModel):
 async def debug_combined(
     payload: CombinedRequest,
     db=Depends(get_db_dep),
+    _debug_guard: None = Depends(require_debug_endpoints),
 ):
     """
     Step 1 + Step 2 combined: Search resources, cache, then generate outline.
