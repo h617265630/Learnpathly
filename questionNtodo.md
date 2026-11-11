@@ -30,16 +30,27 @@ TODO:
 
 ## 3) Admin 页面：用户可直接访问
 
+> ✅ **2026-11-11 复核结论：鉴权早已实现，问题前提不成立（疑似已修，非新增风险）**
+> - 前端路由守卫：`frontend/src/routes/common.tsx` → `AdminGuard`，读 `/users/me` 的 `is_superuser`，
+>   非管理员直接 `Navigate to="/home"`；`routes/admin.tsx` 所有 admin 子路由都包在 `AdminGuard` 里
+> - 后端接口校验：`backend/app/api/admin/router.py` → `require_superuser`（`Depends(get_current_user)` + 403），
+>   **13 个 admin 端点全部挂载**（stats/users/toggle-status/toggle-superuser/learning-paths/resources/
+>   analytics/ai-path.generate-outline/categories 增删）
+> - 审计：`audit_admin_action()` 已记录关键操作，但**只写日志**（`logger.info`），无 DB 审计表
+> - 遗留：① 审计落库（表 + 查询页）② 普通用户是否完全看不到 Admin 入口（NavBar 可见性）
+
 Question:
-- 目前用户是否可以直接访问 `/admin`？是否缺少鉴权/权限控制？
+- ~~目前用户是否可以直接访问 `/admin`？是否缺少鉴权/权限控制？~~ → 已确认有鉴权
+- 遗留：Admin 入口在 NavBar 里对普通用户是否可见/需要隐藏？
 
 Impact:
-- 安全风险：未授权用户可能看到或操作管理功能（批量生成、内容管理、发布等）。
+- ~~安全风险：未授权用户可能看到或操作管理功能~~ → 已被前后端双重拦截
+- 剩余影响：仅「审计只落日志、不可检索」这一条运维性缺口
 
 TODO:
-- 加入管理员权限校验（前端路由守卫 + 后端接口权限校验）。
-- 明确 Admin 入口与可见性（是否对普通用户隐藏）。
-- 记录/审计关键操作（生成、发布、删除）。
+- ~~加入管理员权限校验（前端路由守卫 + 后端接口权限校验）~~ ✅ 已完成
+- ~~记录/审计关键操作（生成、发布、删除）~~ ⚠️ 部分完成（log only，缺 DB 审计表）
+- 明确 Admin 入口与可见性（是否对普通用户隐藏）—— 待确认
 
 ## 4) 学习路径制作逻辑需要重新设定
 
