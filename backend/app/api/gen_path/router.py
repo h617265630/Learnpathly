@@ -8,7 +8,7 @@ import json
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, Depends, BackgroundTasks, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.core.deps import get_db_dep, get_current_user
@@ -101,7 +101,6 @@ def _get_owned_section(db, section_id: str, project_id: str, current_user: User)
 @router.post("/outline", response_model=OutlineResponse)
 async def create_outline(
     payload: CreateProjectRequest,
-    background_tasks: BackgroundTasks,
     db=Depends(get_db_dep),
     current_user: User = Depends(get_current_user),
 ):
@@ -144,10 +143,10 @@ async def create_outline(
         finally:
             loop.close()
 
-    import concurrent.futures
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(_run)
-        result = future.result()
+    # NOTE: never call future.result() directly inside async def — it blocks the
+    # event loop for the whole (2-5 min) generation. asyncio.to_thread keeps the
+    # work in a worker thread while the loop stays responsive.
+    result = await asyncio.to_thread(_run)
 
     # Save outline and sections to DB
     GenPathService.save_outline(db, project["id"], result)
@@ -190,7 +189,6 @@ async def get_project(
 @router.post("/tutorial", response_model=TutorialResponse)
 async def generate_tutorial(
     payload: TutorialRequest,
-    background_tasks: BackgroundTasks,
     db=Depends(get_db_dep),
     current_user: User = Depends(get_current_user),
 ):
@@ -223,10 +221,10 @@ async def generate_tutorial(
         finally:
             loop.close()
 
-    import concurrent.futures
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(_run)
-        result = future.result()
+    # NOTE: never call future.result() directly inside async def — it blocks the
+    # event loop for the whole (2-5 min) generation. asyncio.to_thread keeps the
+    # work in a worker thread while the loop stays responsive.
+    result = await asyncio.to_thread(_run)
 
     # Save tutorial to DB
     GenPathCURD.update_section_tutorial(
@@ -296,10 +294,8 @@ async def add_resources(
         finally:
             loop.close()
 
-    import concurrent.futures
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(_run)
-        new_resources = future.result()
+    # See note above: await via to_thread instead of blocking future.result().
+    new_resources = await asyncio.to_thread(_run)
 
     # Save new resources to DB
     for res in new_resources:
@@ -357,10 +353,10 @@ async def generate_summary(
         finally:
             loop.close()
 
-    import concurrent.futures
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future = executor.submit(_run)
-        result = future.result()
+    # NOTE: never call future.result() directly inside async def — it blocks the
+    # event loop for the whole (2-5 min) generation. asyncio.to_thread keeps the
+    # work in a worker thread while the loop stays responsive.
+    result = await asyncio.to_thread(_run)
 
     # Save to DB
     GenPathCURD.update_final_summary(
