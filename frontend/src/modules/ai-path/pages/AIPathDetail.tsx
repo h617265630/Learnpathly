@@ -23,6 +23,7 @@ import {
   getAiPathProject,
   getLatestAiPathProject,
   getSubNodeDetail,
+  publishAiPathProject,
   type SubNodeDetailResponse,
 } from "@/services/aiPath";
 
@@ -835,8 +836,7 @@ async function copySummary(
 }
 
 export default function AIPathDetail() {
-  const [searchParams] = useSearchParams();
-  const [result, setResult] = useState<AiPathGenerateResponse | null>(null);
+  const [searchParams] = useSearchParams();  const [result, setResult] = useState<AiPathGenerateResponse | null>(null);
   const [expandedSubNodes, setExpandedSubNodes] = useState<Record<string, boolean>>({});
   const [subNodeDetails, setSubNodeDetails] = useState<Record<string, SubNodeDetailResponse>>({});
   const [loadingSubNodes, setLoadingSubNodes] = useState<Record<string, boolean>>({});
@@ -845,6 +845,32 @@ export default function AIPathDetail() {
   const [loadError, setLoadError] = useState("");
   const [activeLessonKey, setActiveLessonKey] = useState("");
   const [completedLessons, setCompletedLessons] = useState<Record<string, boolean>>({});
+  const [publishing, setPublishing] = useState(false);
+  const [publishInfo, setPublishInfo] = useState<{ id: number; created: boolean; items: number } | null>(null);
+  const [publishError, setPublishError] = useState("");
+
+  const handlePublish = useCallback(async () => {
+    const projectId = result?.project_id;
+    if (!projectId) {
+      setPublishError("This path has no project id yet - regenerate it first.");
+      return;
+    }
+    setPublishing(true);
+    setPublishError("");
+    try {
+      const response = await publishAiPathProject(projectId, { auto_attach_resources: true });
+      setPublishInfo({
+        id: response.learning_path_id,
+        created: response.created,
+        items: response.path_item_count,
+      });
+    } catch (e: unknown) {
+      const err = e as { response?: { data?: { detail?: string } }; message?: string };
+      setPublishError(String(err.response?.data?.detail || err.message || "Publish failed"));
+    } finally {
+      setPublishing(false);
+    }
+  }, [result?.project_id]);
 
   useEffect(() => {
     const handleCodeCopy = async (event: MouseEvent) => {
@@ -1228,6 +1254,37 @@ export default function AIPathDetail() {
               >
                 Copy guide intro
               </Button>
+              <Button
+                type="button"
+                onClick={handlePublish}
+                disabled={publishing || !result?.project_id}
+                className="rounded-full border border-sky-500 px-6 text-sky-600 hover:bg-sky-50"
+              >
+                {publishing ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Publishing...
+                  </>
+                ) : publishInfo ? (
+                  <>
+                    <CheckCircle2 className="mr-2 h-4 w-4 text-sky-500" />
+                    Published
+                  </>
+                ) : (
+                  "Publish as learning path"
+                )}
+              </Button>
+              {publishInfo && (
+                <Link
+                  to={`/learningpath/${publishInfo.id}`}
+                  className="inline-flex h-10 items-center rounded-full bg-stone-900 px-5 text-sm font-semibold text-white transition-colors hover:bg-stone-700"
+                >
+                  Open learning path
+                </Link>
+              )}
+              {publishError && (
+                <p className="w-full text-xs text-red-600">{publishError}</p>
+              )}
             </div>
           </div>
         </div>

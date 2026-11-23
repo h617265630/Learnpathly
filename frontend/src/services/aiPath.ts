@@ -198,3 +198,40 @@ export function getSubNodeDetail(payload: SubNodeDetailRequest) {
     { timeout: 180000 }
   );
 }
+
+// ── Publish (AI path project -> learning_paths) ─────────────────────────────────
+
+export interface AiPathPublishRequest {
+  category_id?: number | null;
+  title?: string | null;
+  description?: string | null;
+  cover_image_url?: string | null;
+  is_public?: boolean;
+  resource_ids?: number[];
+  auto_attach_resources?: boolean;
+}
+
+export interface AiPathPublishResponse {
+  learning_path_id: number;
+  project_id: number;
+  created: boolean;
+  path_item_count: number;
+  status: string;
+  message: string;
+}
+
+/**
+ * Publish an AI path project into the formal `learning_paths` table.
+ * The endpoint is idempotent: calling it twice returns the same
+ * learning_path_id with `created = false`.
+ */
+export function publishAiPathProject(
+  projectId: number,
+  payload: AiPathPublishRequest = {}
+) {
+  return request.post<AiPathPublishResponse, AiPathPublishResponse>(
+    `/ai-path/projects/${projectId}/publish`,
+    payload,
+    { timeout: 60000 }
+  );
+}
