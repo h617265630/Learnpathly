@@ -2116,3 +2116,12 @@ async def debug_combined(
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Combined failed: {exc}") from exc
+
+
+# ─── publish (AI path project -> learning_paths) ───────────────────────────
+# The write side of the ai_path <-> learning_paths link. Kept in its own
+# module (app/api/ai_path/publish.py) but mounted under the same /ai-path
+# prefix so the public URL is POST /ai-path/projects/{id}/publish.
+from .publish import router as publish_router  # noqa: E402
+
+router.include_router(publish_router)
